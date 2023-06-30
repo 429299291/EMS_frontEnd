@@ -25,8 +25,20 @@ export default [
   {
     path: '/welcome',
     name: 'welcome',
-    icon: 'smile',
+    icon: 'DashboardOutlined',
     component: './Welcome',
+  },
+  {
+    path: '/liveView',
+    name: 'Live View',
+    icon: 'PullRequestOutlined',
+    component: './LiveView',
+  },
+  {
+    path: '/About',
+    name: 'About',
+    icon: 'BulbOutlined',
+    component: './About',
   },
   {
     path: '/admin',
@@ -47,7 +59,7 @@ export default [
   },
   {
     name: 'list.table-list',
-    icon: 'table',
+    icon: 'ApiOutlined',
     path: '/list',
     component: './TableList',
   },

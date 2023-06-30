@@ -1,162 +1,385 @@
+// import { useModel,FormattedMessage } from '@umijs/max';
 import { PageContainer } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
-import { Card, theme } from 'antd';
-import React from 'react';
-
-/**
- * 每个单独的卡片，为了复用样式抽成了组件
- * @param param0
- * @returns
- */
-const InfoCard: React.FC<{
-  title: string;
-  index: number;
-  desc: string;
-  href: string;
-}> = ({ title, href, index, desc }) => {
-  const { useToken } = theme;
-
-  const { token } = useToken();
-
-  return (
-    <div
-      style={{
-        backgroundColor: token.colorBgContainer,
-        boxShadow: token.boxShadow,
-        borderRadius: '8px',
-        fontSize: '14px',
-        color: token.colorTextSecondary,
-        lineHeight: '22px',
-        padding: '16px 19px',
-        minWidth: '220px',
-        flex: 1,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          gap: '4px',
-          alignItems: 'center',
-        }}
-      >
-        <div
-          style={{
-            width: 48,
-            height: 48,
-            lineHeight: '22px',
-            backgroundSize: '100%',
-            textAlign: 'center',
-            padding: '8px 16px 16px 12px',
-            color: '#FFF',
-            fontWeight: 'bold',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/zos/bmw-prod/daaf8d50-8e6d-4251-905d-676a24ddfa12.svg')",
-          }}
-        >
-          {index}
-        </div>
-        <div
-          style={{
-            fontSize: '16px',
-            color: token.colorText,
-            paddingBottom: 8,
-          }}
-        >
-          {title}
-        </div>
-      </div>
-      <div
-        style={{
-          fontSize: '14px',
-          color: token.colorTextSecondary,
-          textAlign: 'justify',
-          lineHeight: '22px',
-          marginBottom: 8,
-        }}
-      >
-        {desc}
-      </div>
-      <a href={href} target="_blank" rel="noreferrer">
-        了解更多 {'>'}
-      </a>
-    </div>
-  );
-};
-
+import { Card, Progress, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
+// import { connect, useDispatch } from '@umijs/plugins/libs/dva';
+import { SunnyWeather } from '@/constants';
+import * as echarts from 'echarts';
+import styles from './Welcome.less';
 const Welcome: React.FC = () => {
-  const { token } = theme.useToken();
-  const { initialState } = useModel('@@initialState');
+  // const dispatch = useDispatch();
+  const [randomNumber, setRandomNumber] = useState(88);
+  let ElectricityConsumptionChart: any;
+  let GaugeChart: any;
+  let DistributionElectricity: any;
+  let weatherHandle: any;
+  useEffect(() => {
+    ElectricityConsumptionChart();
+    GaugeChart();
+    DistributionElectricity();
+    // getDashboard({});
+    weatherHandle();
+    // addDashboard({
+    //   id:1,
+    //   body:{
+    //     page:1,
+    //     pageSize:10
+    //   }
+    // })
+  }, []);
+  const learnInterval: any = setInterval(function () {
+    clearInterval(learnInterval);
+    setRandomNumber(Math.ceil(Math.random() * 10) + 80);
+  }, 5000);
+  ElectricityConsumptionChart = () => {
+    const chartDom: any = document.getElementById('ElectricityConsumption');
+    const myChart = echarts.init(chartDom);
+    let option: any = {};
+    option = {
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        top: '0',
+        left: 'center',
+      },
+      series: [
+        {
+          name: 'Access From',
+          type: 'pie',
+          radius: ['40%', '60%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 5,
+            borderColor: '#fff',
+            borderWidth: 2,
+          },
+          label: {
+            show: false,
+            position: 'center',
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 20,
+              fontWeight: 'bold',
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: [
+            { value: 1048, name: '太阳能' },
+            { value: 735, name: '电池' },
+            { value: 580, name: '充电桩' },
+            { value: 484, name: '市电' },
+            { value: 300, name: '家庭' },
+          ],
+        },
+      ],
+    };
+    myChart.setOption(option);
+  };
+  GaugeChart = () => {
+    const chartDom: any = document.getElementById('Gauge');
+    const myChart = echarts.init(chartDom);
+    let option = {
+      series: [
+        {
+          type: 'gauge',
+          center: ['50%', '70%'],
+          startAngle: 200,
+          endAngle: -20,
+          min: 0,
+          max: 60,
+          splitNumber: 12,
+          itemStyle: {
+            color: '#FFAB91',
+          },
+          progress: {
+            show: true,
+            width: 30,
+          },
+          pointer: {
+            show: false,
+          },
+          axisLine: {
+            lineStyle: {
+              width: 30,
+            },
+          },
+          axisTick: {
+            distance: -45,
+            splitNumber: 5,
+            lineStyle: {
+              width: 2,
+              color: '#999',
+            },
+          },
+          splitLine: {
+            distance: -52,
+            length: 14,
+            lineStyle: {
+              width: 3,
+              color: '#999',
+            },
+          },
+          axisLabel: {
+            distance: -0,
+            color: '#999',
+            fontSize: 10,
+          },
+          anchor: {
+            show: false,
+          },
+          title: {
+            show: false,
+          },
+          detail: {
+            valueAnimation: true,
+            width: '60%',
+            lineHeight: 40,
+            borderRadius: 8,
+            offsetCenter: [0, '-5%'],
+            fontSize: 16,
+            fontWeight: 'bolder',
+            formatter: '{value} °C',
+            color: 'inherit',
+          },
+          data: [
+            {
+              value: 20,
+            },
+          ],
+        },
+        {
+          type: 'gauge',
+          center: ['50%', '70%'],
+          startAngle: 200,
+          endAngle: -20,
+          min: 0,
+          max: 60,
+          itemStyle: {
+            color: '#FD7347',
+          },
+          progress: {
+            show: true,
+            width: 8,
+          },
+          pointer: {
+            show: false,
+          },
+          axisLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+          splitLine: {
+            show: false,
+          },
+          axisLabel: {
+            show: false,
+          },
+          detail: {
+            show: false,
+          },
+          data: [
+            {
+              value: 20,
+            },
+          ],
+        },
+      ],
+    };
+    setInterval(function () {
+      const random = +(Math.random() * 60).toFixed(2);
+      myChart.setOption({
+        series: [
+          {
+            data: [
+              {
+                value: random,
+              },
+            ],
+          },
+          {
+            data: [
+              {
+                value: random,
+              },
+            ],
+          },
+        ],
+      });
+    }, 2000);
+    myChart.setOption(option);
+  };
+  DistributionElectricity = () => {
+    const chartDom: any = document.getElementById('distributionElectricity');
+    const myChart: any = echarts.init(chartDom);
+    let option = {
+      title: {
+        text: 'Distribution of Electricity',
+        subtext: 'Data',
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+        },
+      },
+      // toolbox: {
+      //   show: true,
+      //   feature: {
+      //     saveAsImage: {}
+      //   }
+      // },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        // prettier-ignore
+        data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45'],
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          formatter: '{value} W',
+        },
+        axisPointer: {
+          snap: true,
+        },
+      },
+      visualMap: {
+        show: false,
+        dimension: 0,
+        pieces: [
+          {
+            lte: 6,
+            color: 'green',
+          },
+          {
+            gt: 6,
+            lte: 8,
+            color: 'red',
+          },
+          {
+            gt: 8,
+            lte: 14,
+            color: 'green',
+          },
+          {
+            gt: 14,
+            lte: 17,
+            color: 'red',
+          },
+          {
+            gt: 17,
+            color: 'green',
+          },
+        ],
+      },
+      series: [
+        {
+          name: 'Electricity',
+          type: 'line',
+          smooth: true,
+          // prettier-ignore
+          data: [300, 280, 250, 260, 270, 300, 450, 600, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600, 400],
+          markArea: {
+            itemStyle: {
+              color: 'rgba(255, 173, 177, 0.4)',
+            },
+            data: [
+              [
+                {
+                  name: 'Morning Peak',
+                  xAxis: '07:30',
+                },
+                {
+                  xAxis: '10:00',
+                },
+              ],
+              [
+                {
+                  name: 'Evening Peak',
+                  xAxis: '17:30',
+                },
+                {
+                  xAxis: '21:15',
+                },
+              ],
+            ],
+          },
+        },
+      ],
+    };
+    myChart.setOption(option);
+  };
+  weatherHandle = () => {
+    // getCurrentWeather({
+    //   lat:"22.605824",
+    //   lon:"113.839096",
+    //   api:weatherAPI
+    // })
+  };
   return (
-    <PageContainer>
-      <Card
-        style={{
-          borderRadius: 8,
-        }}
-        bodyStyle={{
-          backgroundImage:
-            initialState?.settings?.navTheme === 'realDark'
-              ? 'background-image: linear-gradient(75deg, #1A1B1F 0%, #191C1F 100%)'
-              : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
-        }}
-      >
-        <div
+    <PageContainer ghost>
+      <div className={styles.container}>
+        {/* <Guide name={trim(name)} /> */}
+        <Row
           style={{
-            backgroundPosition: '100% -30%',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: '274px auto',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')",
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, 50px)',
+            columnGap: '0px',
           }}
         >
-          <div
-            style={{
-              fontSize: '20px',
-              color: token.colorTextHeading,
-            }}
-          >
-            欢迎使用 Ant Design Pro
-          </div>
-          <p
-            style={{
-              fontSize: '14px',
-              color: token.colorTextSecondary,
-              lineHeight: '22px',
-              marginTop: 16,
-              marginBottom: 32,
-              width: '65%',
-            }}
-          >
-            Ant Design Pro 是一个整合了 umi，Ant Design 和 ProComponents
-            的脚手架方案。致力于在设计规范和基础组件的基础上，继续向上构建，提炼出典型模板/业务组件/配套设计资源，进一步提升企业级中后台产品设计研发过程中的『用户』和『设计者』的体验。
-          </p>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 16,
-            }}
-          >
-            <InfoCard
-              index={1}
-              href="https://umijs.org/docs/introduce/introduce"
-              title="了解 umi"
-              desc="umi 是一个可扩展的企业级前端应用框架,umi 以路由为基础的，同时支持配置式路由和约定式路由，保证路由的功能完备，并以此进行功能扩展。"
-            />
-            <InfoCard
-              index={2}
-              title="了解 ant design"
-              href="https://ant.design"
-              desc="antd 是基于 Ant Design 设计体系的 React UI 组件库，主要用于研发企业级中后台产品。"
-            />
-            <InfoCard
-              index={3}
-              title="了解 Pro Components"
-              href="https://procomponents.ant.design"
-              desc="ProComponents 是一个基于 Ant Design 做了更高抽象的模板组件，以 一个组件就是一个页面为开发理念，为中后台开发带来更好的体验。"
-            />
-          </div>
+          <span>Sunny</span>
+          <SunnyWeather type="icon-sun" style={{ fontSize: 18 }} />
+          <span style={{ marginLeft: '1rem' }}>26°C</span>
+        </Row>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridColumnGap: '1rem' }}>
+          <Card title="Electricity consumption" extra={<a href="#">More</a>}>
+            <div
+              id="ElectricityConsumption"
+              style={{ width: 'auto', height: '14rem', alignItems: 'center' }}
+            ></div>
+          </Card>
+          <Card title="Default size card" extra={<a href="#">More</a>}>
+            <p>In your system everything is working fine</p>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginTop: '1rem',
+              }}
+            >
+              <Progress
+                type="circle"
+                percent={randomNumber}
+                strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
+              />
+              <p style={{ marginTop: '1rem' }}>Self-sufficiency today</p>
+            </div>
+          </Card>
+          <Card title="Default card" extra={<a href="#">More</a>}>
+            {/* <p>Approx. Price optimization savings for the day</p> */}
+            <div
+              id="Gauge"
+              style={{ width: 'auto', height: '8rem', alignItems: 'center', margin: '2rem 0 0' }}
+            ></div>
+          </Card>
         </div>
-      </Card>
+        <br></br>
+        <div
+          id="distributionElectricity"
+          style={{ width: 'auto', height: '25rem', alignItems: 'center' }}
+        ></div>
+        {/* <img src={home}></img>
+      <img src={grid}></img> */}
+      </div>
     </PageContainer>
   );
 };

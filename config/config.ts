@@ -14,7 +14,7 @@ export default defineConfig({
    * @doc https://umijs.org/docs/api/config#hash
    */
   hash: true,
-
+  dva: {},
   /**
    * @name 兼容性设置
    * @description 设置 ie11 不一定完美兼容，需要检查自己使用的所有依赖
@@ -30,6 +30,7 @@ export default defineConfig({
    */
   // umi routes: https://umijs.org/docs/routing
   routes,
+  // Routes: ['src/pages/Authorized'],//权限控制
   /**
    * @name 主题的配置
    * @description 虽然叫主题，但是其实只是 less 的变量设置
@@ -76,7 +77,7 @@ export default defineConfig({
    * @name layout 插件
    * @doc https://umijs.org/docs/max/layout-menu
    */
-  title: 'Ant Design Pro',
+  title: 'EMS',
   layout: {
     locale: true,
     ...defaultSettings,
