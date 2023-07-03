@@ -64,7 +64,7 @@ export const Weather = () => {
           paddingTop: '10px',
         }}
       >
-        <p>05:58</p>
+        <p>18:37</p>
         <p>Sunset</p>
       </div>
       <WeatherIcon style={{ fontSize: 40, padding: '0 1rem' }} type="icon-xiaoyu" />

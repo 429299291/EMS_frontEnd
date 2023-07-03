@@ -324,17 +324,30 @@ const Welcome: React.FC = () => {
             ></div>
           </Card>
           <Card
-            title="Inverter Power"
+            title="CO2 savings of the system"
             style={{
               backgroundImage:
                 "url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E6%A0%91%E5%8F%B6')",
-              backgroundPosition: '-50% 50%',
-              backgroundSize: '80%',
+              backgroundPosition: '-20% 50%',
+              backgroundSize: '60%',
               backgroundRepeat: 'no-repeat',
               gridArea: 'ee',
             }}
             extra={<a href="#">More</a>}
-          ></Card>
+          >
+            <div className={styles.co2}>
+              <div className={styles.co2div}>
+                <p className={styles.title}>2.7 kg CO2</p>
+                <p className={styles.p}>Corresponds to 32 Car km</p>
+                <p className={styles.des}>Savings today</p>
+              </div>
+              <div className={styles.co2div}>
+                <p className={styles.title}>1.1 t CO2</p>
+                <p className={styles.p}>Corresponds to 9.616 Car km</p>
+                <p className={styles.des}>SavInas since installation</p>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
     </PageContainer>
