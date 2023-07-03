@@ -4,11 +4,15 @@ import { Card, Progress, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import { connect, useDispatch } from '@umijs/plugins/libs/dva';
 import { SunnyWeather } from '@/constants';
+import { SmileOutlined } from '@ant-design/icons';
 import * as echarts from 'echarts';
 import styles from './Welcome.less';
 const Welcome: React.FC = () => {
   // const dispatch = useDispatch();
-  const [randomNumber, setRandomNumber] = useState(88);
+  const [
+    randomNumber,
+    // , setRandomNumber
+  ] = useState(68);
   let ElectricityConsumptionChart: any;
   let GaugeChart: any;
   let DistributionElectricity: any;
@@ -27,10 +31,10 @@ const Welcome: React.FC = () => {
     //   }
     // })
   }, []);
-  const learnInterval: any = setInterval(function () {
-    clearInterval(learnInterval);
-    setRandomNumber(Math.ceil(Math.random() * 10) + 80);
-  }, 5000);
+  // const learnInterval: any = setInterval(function () {
+  //   clearInterval(learnInterval);
+  //   setRandomNumber(Math.ceil(Math.random() * 10) + 80);
+  // }, 5000);
   ElectricityConsumptionChart = () => {
     const chartDom: any = document.getElementById('ElectricityConsumption');
     const myChart = echarts.init(chartDom);
@@ -45,7 +49,7 @@ const Welcome: React.FC = () => {
       },
       series: [
         {
-          name: 'Access From',
+          name: "Today's details",
           type: 'pie',
           radius: ['40%', '60%'],
           avoidLabelOverlap: false,
@@ -69,11 +73,12 @@ const Welcome: React.FC = () => {
             show: false,
           },
           data: [
-            { value: 1048, name: '太阳能' },
-            { value: 735, name: '电池' },
-            { value: 580, name: '充电桩' },
-            { value: 484, name: '市电' },
-            { value: 300, name: '家庭' },
+            { value: 1048, name: 'Grid' },
+            { value: 735, name: 'Battery' },
+            { value: 580, name: 'Solar' },
+            { value: 580, name: 'Solar2' },
+            { value: 580, name: 'Solar3' },
+            { value: 580, name: 'Solar4' },
           ],
         },
       ],
@@ -91,8 +96,8 @@ const Welcome: React.FC = () => {
           startAngle: 200,
           endAngle: -20,
           min: 0,
-          max: 60,
-          splitNumber: 12,
+          max: 10,
+          splitNumber: 10,
           itemStyle: {
             color: '#FFAB91',
           },
@@ -121,12 +126,12 @@ const Welcome: React.FC = () => {
             length: 14,
             lineStyle: {
               width: 3,
-              color: '#999',
+              color: '#333',
             },
           },
           axisLabel: {
             distance: -0,
-            color: '#999',
+            color: '#ff6666',
             fontSize: 10,
           },
           anchor: {
@@ -137,14 +142,14 @@ const Welcome: React.FC = () => {
           },
           detail: {
             valueAnimation: true,
-            width: '60%',
+            width: '30%',
             lineHeight: 40,
             borderRadius: 8,
             offsetCenter: [0, '-5%'],
-            fontSize: 16,
+            fontSize: 13,
             fontWeight: 'bolder',
-            formatter: '{value} °C',
-            color: 'inherit',
+            formatter: '{value} kw',
+            color: '#ff3333',
           },
           data: [
             {
@@ -158,7 +163,7 @@ const Welcome: React.FC = () => {
           startAngle: 200,
           endAngle: -20,
           min: 0,
-          max: 60,
+          max: 10,
           itemStyle: {
             color: '#FD7347',
           },
@@ -193,7 +198,7 @@ const Welcome: React.FC = () => {
       ],
     };
     setInterval(function () {
-      const random = +(Math.random() * 60).toFixed(2);
+      const random = +(Math.random() * 5 + 3).toFixed(2);
       myChart.setOption({
         series: [
           {
@@ -212,7 +217,7 @@ const Welcome: React.FC = () => {
           },
         ],
       });
-    }, 2000);
+    }, 3000);
     myChart.setOption(option);
   };
   DistributionElectricity = () => {
@@ -345,7 +350,7 @@ const Welcome: React.FC = () => {
               style={{ width: 'auto', height: '14rem', alignItems: 'center' }}
             ></div>
           </Card>
-          <Card title="Default size card" extra={<a href="#">More</a>}>
+          <Card title="Self-sufficiency" extra={<a href="#">More</a>}>
             <p>In your system everything is working fine</p>
             <div
               style={{
@@ -361,15 +366,14 @@ const Welcome: React.FC = () => {
                 percent={randomNumber}
                 strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
               />
-              <p style={{ marginTop: '1rem' }}>Self-sufficiency today</p>
+              <p style={{ marginTop: '2rem' }}>
+                you can be stronger <SmileOutlined style={{ color: '#13c2c2' }} />
+              </p>
             </div>
           </Card>
-          <Card title="Default card" extra={<a href="#">More</a>}>
+          <Card title="Inverter Power" extra={<a href="#">More</a>}>
             {/* <p>Approx. Price optimization savings for the day</p> */}
-            <div
-              id="Gauge"
-              style={{ width: 'auto', height: '8rem', alignItems: 'center', margin: '2rem 0 0' }}
-            ></div>
+            <div id="Gauge" style={{ width: '100%', height: '12rem', alignItems: 'center' }}></div>
           </Card>
         </div>
         <br></br>
