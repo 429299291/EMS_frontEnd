@@ -30,13 +30,13 @@ export default [
   },
   {
     path: '/liveView',
-    name: 'Live View',
+    name: 'liveView',
     icon: 'PullRequestOutlined',
     component: './LiveView',
   },
   {
-    path: '/About',
-    name: 'About',
+    path: '/about',
+    name: 'about',
     icon: 'BulbOutlined',
     component: './About',
   },

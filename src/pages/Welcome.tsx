@@ -52,6 +52,10 @@ const Welcome: React.FC = () => {
           type: 'pie',
           radius: ['40%', '60%'],
           avoidLabelOverlap: false,
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)',
+          },
           itemStyle: {
             borderRadius: 5,
             borderColor: '#fff',
@@ -165,8 +169,8 @@ const Welcome: React.FC = () => {
     const myChart: any = echarts.init(chartDom);
     let option = {
       title: {
-        text: 'Distribution of Electricity',
-        subtext: 'Data',
+        // text: 'All consumption details of the day',
+        subtext: 'All consumption details of the day',
       },
       tooltip: {
         trigger: 'axis',
@@ -180,8 +184,13 @@ const Welcome: React.FC = () => {
       //     saveAsImage: {}
       //   }
       // },
+      grid: {
+        // left:'5%',
+        right: 0,
+      },
       xAxis: {
         type: 'category',
+        offset: 0,
         boundaryGap: false,
         // prettier-ignore
         // data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45'],
@@ -317,7 +326,11 @@ const Welcome: React.FC = () => {
           <Card title="Inverter Power" style={{ gridArea: 'cc' }} extra={<a href="#">More</a>}>
             <div id="Gauge" style={{ width: '100%', height: '13rem', alignItems: 'center' }}></div>
           </Card>
-          <Card title="Inverter Power" style={{ gridArea: 'dd' }} extra={<a href="#">More</a>}>
+          <Card
+            title="Distribution of Electricity"
+            style={{ gridArea: 'dd' }}
+            extra={<a href="#">More</a>}
+          >
             <div
               id="distributionElectricity"
               style={{ width: 'auto', height: '25rem', alignItems: 'center' }}
@@ -344,7 +357,7 @@ const Welcome: React.FC = () => {
               <div className={styles.co2div}>
                 <p className={styles.title}>1.1 t CO2</p>
                 <p className={styles.p}>Corresponds to 9.616 Car km</p>
-                <p className={styles.des}>SavInas since installation</p>
+                <p className={styles.des}>EMS since installation</p>
               </div>
             </div>
           </Card>
