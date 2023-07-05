@@ -1,71 +1,166 @@
-.max {
-  // background-color: #ccc;
-  // background: linear-gradient(rgba(0,0,0,.5), hsla(0,0%,100%,.5), rgba(0,0,0,.5));
-  .line {
-    position: relative;
-    height: 2px;
-    height: calc(1.4142 * 20px);
-    background: repeating-linear-gradient(
-      45deg,
-      teal,
-      teal 10px,
-      transparent 11px,
-      transparent 19px,
-      teal 20px
-    );
-    background-clip: content-box;
-    // padding-right: 30%;
-    transform: scale(1);
-    animation: twill 1s linear infinite;
-  }
-  .line::before {
+.box {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  p {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), hsla(0, 0%, 100%, 0.5), rgba(0, 0, 0, 0.5));
-    content: '';
+    bottom: -3rem;
+    left: 0;
+    color: #333;
+    font-size: 1rem;
   }
-  @keyframes twill {
-    from {
-      background-position: 0 0;
-    }
-    to {
-      background-position: 0 calc(-1 * 1.4142 * 40px);
-    }
-  }
-
-  .line2 {
-    position: relative;
-    height: 2px;
-    height: calc(1.4142 * 20px);
-    margin-top: 397px;
-    margin-left: 500px;
-    padding-right: 30%;
-    background: repeating-linear-gradient(
-      45deg,
-      teal,
-      teal 10px,
-      transparent 11px,
-      transparent 19px,
-      teal 20px
-    );
-    background-clip: content-box;
-    transform: rotate(90deg);
-    animation: twill 1s linear infinite;
-  }
-  .line2::before {
+  span {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), hsla(0, 0%, 100%, 0.5), rgba(0, 0, 0, 0.5));
-    content: '';
+    bottom: -4rem;
+    left: 0;
+    color: #24d081;
+    font-size: 1.5rem;
   }
-  @keyframes twill {
-    from {
-      background-position: 0 0;
+  .solar {
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    width: 6rem;
+    height: 6rem;
+    background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E5%85%89%E4%BC%8F.png')
+      no-repeat center/100%;
+  }
+  .battery {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 6rem;
+    height: 6rem;
+    background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/battery.png') no-repeat
+      center/60%;
+    transform: translate(0, -50%);
+  }
+  .ev {
+    position: absolute;
+    bottom: 15%;
+    left: 10%;
+    width: 6rem;
+    height: 6rem;
+    background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E5%85%89%E4%BC%8F.png')
+      no-repeat center/100%;
+  }
+  .home {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    width: 6rem;
+    height: 6rem;
+    background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E5%85%89%E4%BC%8F.png')
+      no-repeat center/100%;
+    transform: translate(-50%, -50%);
+  }
+  .grid {
+    position: absolute;
+    top: 20%;
+    right: 20%;
+    width: 6rem;
+    height: 6rem;
+    background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E5%85%89%E4%BC%8F.png')
+      no-repeat center/100%;
+  }
+  .house {
+    position: absolute;
+    right: 20%;
+    bottom: 20%;
+    width: 6rem;
+    height: 6rem;
+    background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E5%85%89%E4%BC%8F.png')
+      no-repeat center/100%;
+  }
+  .one {
+    position: absolute;
+    top: 25%;
+    left: 22%;
+    width: 3rem;
+    height: 4px;
+    background-color: #ccc;
+    border-radius: 2px;
+    .ball {
+      position: absolute;
+      z-index: 88;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(at 3.5px 3.5px, #fff, rgba(36, 208, 129, 0.5), #ccc);
+      border-radius: 5px;
+      box-shadow: 0px 0px 8px 2px #24d081;
+      transform: translate(0, -2px);
+      animation: reverseMove1 2s linear infinite;
     }
-    to {
-      background-position: 0 calc(-1 * 1.4142 * 40px);
+  }
+  .two {
+    position: absolute;
+    top: 25%;
+    left: 18%;
+    width: 11.5rem;
+    height: 4px;
+    background-color: #ccc;
+    border-radius: 2px;
+    transform: rotate(90deg) translate(5.6rem, -0.7rem);
+    .ball {
+      position: absolute;
+      z-index: 1;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(at 3.5px 3.5px, #fff, rgba(36, 208, 129, 0.5), #ccc);
+      border-radius: 5px;
+      box-shadow: 0px 0px 8px 2px #24d081;
+      transform: translate(0, -2px);
+      opacity: 0;
+      animation: reverseMove2 2s linear 1s infinite;
+    }
+  }
+  .three {
+    position: absolute;
+    top: 50%;
+    left: 22%;
+    z-index: 2;
+    width: 12rem;
+    height: 4px;
+    background-color: #ccc;
+    border-radius: 2px;
+    .ball {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(at 3.5px 3.5px, #fff, rgba(36, 208, 129, 0.5), #ccc);
+      border-radius: 5px;
+      box-shadow: 0px 0px 8px 2px #24d081;
+      transform: translate(0, -2px);
+      opacity: 0;
+      animation: reverseMove2 2s linear 2.5s infinite;
+    }
+  }
+  @keyframes reverseMove1 {
+    0% {
+      left: 0;
+      opacity: 1;
+    }
+    50% {
+      left: (100%-4px);
+      opacity: 1;
+    }
+    51% {
+      left: (100%-4px);
+      opacity: 0;
+    }
+    100% {
+      left: (100%-4px);
+      opacity: 0;
+    }
+  }
+  @keyframes reverseMove2 {
+    0% {
+      left: 0;
+      opacity: 1;
+    }
+    100% {
+      left: 97%;
+      opacity: 1;
     }
   }
 }

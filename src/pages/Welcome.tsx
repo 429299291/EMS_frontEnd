@@ -310,13 +310,13 @@ const Welcome: React.FC = () => {
                 justifyContent: 'space-between',
                 flexDirection: 'column',
                 alignItems: 'center',
-                marginTop: '1rem',
               }}
             >
               <Progress
                 type="circle"
+                strokeWidth={15}
                 percent={randomNumber}
-                strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
+                strokeColor={{ '0%': '#ccc', '100%': '#24d081' }}
               />
               <p style={{ marginTop: '2rem' }}>
                 you can be stronger <SmileOutlined style={{ color: '#13c2c2' }} />
