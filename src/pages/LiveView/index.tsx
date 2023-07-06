@@ -26,29 +26,29 @@ const LiveView: React.FC = () => {
       >
         <div className={styles.solar}>
           <p>Solar</p>
-          <span>6.8kw</span>
+          <span>13.8kw</span>
         </div>
         <div className={styles.battery}>
           <p>Battery</p>
-          <span>1.9kw</span>
+          <span>10kw</span>
         </div>
         <div className={styles.ev}>
           <p>EV</p>
-          <span>3.7kw</span>
+          <span>20kw</span>
         </div>
         <div className={styles.home}>
-          <span>Home</span>
+          <span></span>
           <span></span>
         </div>
         <div className={styles.grid}>
           <p>Grid</p>
-          <span>1.2kw</span>
+          <span>1.8kw</span>
         </div>
         <div className={styles.house}>
           <p>House</p>
-          <span>2.5kw</span>
+          <span>5.6kw</span>
         </div>
-        {/* <div className={styles.line}> */}
+        {/* left line flow */}
         <div className={styles.one}>
           <div className={styles.ball}></div>
         </div>
@@ -58,11 +58,28 @@ const LiveView: React.FC = () => {
         <div className={styles.three}>
           <div className={styles.ball}></div>
         </div>
-        <div className={styles.four}></div>
-        <div className={styles.five}></div>
-        <div className={styles.six}></div>
-        <div className={styles.seven}></div>
-        {/* </div> */}
+        <div className={styles.four}>
+          <div className={styles.ball}></div>
+        </div>
+        <div className={styles.five}>
+          <div className={styles.ball}></div>
+        </div>
+        {/* right line flow */}
+        <div className={styles.six}>
+          <div className={styles.ball}></div>
+        </div>
+        <div className={styles.seven}>
+          <div className={styles.ball}></div>
+        </div>
+        <div className={styles.eight}>
+          <div className={styles.ball}></div>
+        </div>
+        <div className={styles.nine}>
+          <div className={styles.ball}></div>
+        </div>
+        <div className={styles.ten}>
+          <div className={styles.ball}></div>
+        </div>
       </Card>
     </PageContainer>
   );
