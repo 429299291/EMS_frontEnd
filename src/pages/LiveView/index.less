@@ -1,8 +1,8 @@
-@lineColor: #ccc;
+@linecolor:linear-gradient (to top, #ccc,#fff,#ddd);
 .line() {
   position: absolute;
   height: 4px;
-  background-color: @lineColor;
+  background: @lineColor;
   border-radius: 2px;
 }
 .ball() {
@@ -10,9 +10,9 @@
   z-index: 88;
   width: 10px;
   height: 10px;
-  background: radial-gradient(at 3.5px 3.5px, #fff, rgba(36, 208, 129, 0.5), #ccc);
+  background: radial-gradient(at 3.5px 3.5px, #fff, rgba(36, 208, 129, 0.6), #ccc);
   border-radius: 5px;
-  box-shadow: 0px 0px 8px 2px #24d081;
+  box-shadow: 0px 0px 8px 1px #24d081;
   transform: translate(0, -2px);
   opacity: 0;
 }
@@ -64,10 +64,11 @@
   .home {
     position: absolute;
     top: 50%;
-    left: 45%;
+    left: 44%;
+    z-index: 88;
     width: 15rem;
     height: 15rem;
-    background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/home') no-repeat center/100%;
+    background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/home.png') no-repeat center/100%;
     transform: translate(-50%, -50%);
   }
   .grid {
@@ -93,7 +94,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMove1 2s linear infinite;
+      animation: reverseMove1 4s linear infinite;
     }
   }
   .two {
@@ -104,7 +105,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMove2 2s linear 1s infinite;
+      animation: reverseMove2 4s linear infinite;
     }
   }
   .three {
@@ -114,7 +115,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMove2 2s linear 0.4s infinite;
+      animation: reverseMove2 4s linear 3.4s infinite;
     }
   }
   .four {
@@ -124,7 +125,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMoveOut1 2s linear 1s infinite;
+      animation: reverseMoveOut1 2s linear infinite;
     }
   }
   .five {
@@ -135,7 +136,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMoveOut2 2s linear 1s infinite;
+      animation: reverseMoveOut2 2s linear infinite;
     }
   }
   .six {
@@ -145,7 +146,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMoveOut1 4s linear infinite;
+      animation: reverseMoveOut1 4s linear 2s infinite;
     }
   }
   .seven {
@@ -156,7 +157,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMove2 2s linear 2s infinite;
+      animation: reverseMove2 4s linear 2s infinite;
     }
   }
   .eight {
@@ -166,7 +167,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMove2 2s linear 2s infinite;
+      animation: reverseMove2 4s linear 2s infinite;
     }
   }
   .nine {
@@ -187,7 +188,7 @@
     .line();
     .ball {
       .ball();
-      animation: reverseMoveOut2 2s linear 2s infinite;
+      animation: reverseMoveOut1 4s linear 2s infinite;
     }
   }
   @keyframes reverseMove1 {
@@ -196,15 +197,13 @@
       opacity: 1;
     }
     50% {
-      left: (100%-4px);
+      left: 100%-4px;
       opacity: 1;
     }
     51% {
-      left: (100%-4px);
       opacity: 0;
     }
     100% {
-      left: (100%);
       opacity: 0;
     }
   }
@@ -213,11 +212,11 @@
       left: 0;
       opacity: 0;
     }
-    1% {
+    50% {
       left: 0;
       opacity: 0;
     }
-    2% {
+    51% {
       left: 0;
       opacity: 1;
     }
@@ -236,11 +235,9 @@
       opacity: 1;
     }
     51% {
-      right: (100%-4px);
       opacity: 0;
     }
     100% {
-      right: (100%-4px);
       opacity: 0;
     }
   }
