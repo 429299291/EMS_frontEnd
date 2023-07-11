@@ -106,7 +106,7 @@ const Login: React.FC = () => {
     try {
       // 登录
       const msg = await login({ ...values, type });
-      if (msg) {
+      if (msg.code === 200) {
         // if (msg.status !== 'ok') {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
@@ -117,8 +117,9 @@ const Login: React.FC = () => {
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
         return;
+      } else {
+        message.error('帐号或者密码错误!');
       }
-      console.log(msg);
       // 如果失败去设置用户错误信息
       setUserLoginState(msg);
     } catch (error) {
