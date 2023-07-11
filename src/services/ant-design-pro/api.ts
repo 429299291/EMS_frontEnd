@@ -32,13 +32,13 @@ export async function outLogin(options?: { [key: string]: any }) {
 //   });
 // }
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-  return request<API.LoginResult>('https://jsonplaceholder.typicode.com/todos/1', {
-    method: 'GET',
+  return request<API.LoginResult>('/api/user/login', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    // data: body,
-    // ...(options || {}),
+    data: body,
+    ...(options || {}),
   });
 }
 

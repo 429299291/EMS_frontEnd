@@ -120,6 +120,8 @@ export default {
   'POST /api/login/account': async (req: Request, res: Response) => {
     const { password, username, type } = req.body;
     await waitTime(2000);
+    console.log('mock');
+
     if (password === 'ant.design' && username === 'admin') {
       res.send({
         status: 'ok',
