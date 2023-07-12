@@ -37,6 +37,7 @@ export default [
   {
     path: '/about',
     name: 'about',
+    access: 'canAdmin',
     icon: 'BulbOutlined',
     component: './About',
   },

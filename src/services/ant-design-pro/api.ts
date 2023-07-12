@@ -3,12 +3,20 @@
 import { request } from '@umijs/max';
 
 /** 获取当前的用户 GET /api/currentUser */
-export async function currentUser(options?: { [key: string]: any }) {
+// export async function currentUser(options?: { [key: string]: any }) {
+//   return request<{
+//     data: API.CurrentUser;
+//   }>('/api/currentUser', {
+//     method: 'GET',
+//     ...(options || {}),
+//   });
+// }
+export async function currentUser(options: any) {
+  // const email = options.values.values
   return request<{
     data: API.CurrentUser;
-  }>('/api/currentUser', {
+  }>(`/api/user/currentUser/${options.values.values.email}`, {
     method: 'GET',
-    ...(options || {}),
   });
 }
 
@@ -32,7 +40,7 @@ export async function outLogin(options?: { [key: string]: any }) {
 //   });
 // }
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-  return request<API.LoginResult>('/api/user/login', {
+  return request<API.LoginResult>('/api/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

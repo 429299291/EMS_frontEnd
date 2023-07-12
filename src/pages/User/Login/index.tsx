@@ -90,9 +90,13 @@ const Login: React.FC = () => {
 
   const intl = useIntl();
 
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
+  const fetchUserInfo = async (values: any) => {
+    const userInfo = await initialState?.fetchUserInfo?.(values);
     if (userInfo) {
+      console.log('9999');
+
+      console.log(userInfo);
+
       flushSync(() => {
         setInitialState((s) => ({
           ...s,
@@ -113,7 +117,7 @@ const Login: React.FC = () => {
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
+        await fetchUserInfo({ values });
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
         return;
