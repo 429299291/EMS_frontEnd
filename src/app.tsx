@@ -26,11 +26,7 @@ export async function getInitialState(): Promise<{
         skipErrorHandler: true,
         values,
       });
-      console.log('===');
-
-      console.log(msg);
-
-      return msg.data;
+      return msg;
     } catch (error) {
       history.push(loginPath);
     }
@@ -69,15 +65,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       },
     },
     waterMarkProps: {
-      content: initialState?.currentUser?.name,
+      content: initialState?.currentUser?.identity === 'visitor' ? '旭衡科技' : '',
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      // const { location } = history;
+      const { location } = history;
       // 如果没有登录，重定向到 login 重要
-      // if (!initialState?.currentUser && location.pathname !== loginPath) {
-      //   history.push(loginPath);
-      // }
+      if (!initialState?.currentUser && location.pathname !== loginPath) {
+        history.push(loginPath);
+      }
     },
     layoutBgImgList: [
       {

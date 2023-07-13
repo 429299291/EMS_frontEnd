@@ -26,18 +26,19 @@ export default [
     path: '/welcome',
     name: 'welcome',
     icon: 'DashboardOutlined',
+    access: 'canDashboard',
     component: './Welcome',
   },
   {
     path: '/liveView',
     name: 'liveView',
     icon: 'PullRequestOutlined',
+    access: 'canLiveView',
     component: './LiveView',
   },
   {
     path: '/about',
     name: 'about',
-    access: 'canAdmin',
     icon: 'BulbOutlined',
     component: './About',
   },
@@ -61,6 +62,7 @@ export default [
   {
     name: 'list.table-list',
     icon: 'ApiOutlined',
+    access: 'canSuperAdmin',
     path: '/list',
     component: './TableList',
   },
