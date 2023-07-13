@@ -1,9 +1,9 @@
 import Footer from '@/components/Footer';
 import { Location, SelectLang, Weather } from '@/components/RightContent';
+import { currentWeather } from '@/services/weather/api';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
+import { history, Link, RunTimeLayoutConfig } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestErrorConfig';
@@ -26,6 +26,10 @@ export async function getInitialState(): Promise<{
         skipErrorHandler: true,
         values,
       });
+      currentWeather({ lat: '22.543096', lon: '114.057865' }).then((data) => {
+        console.log(data);
+      });
+
       return msg;
     } catch (error) {
       history.push(loginPath);

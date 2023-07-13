@@ -272,7 +272,7 @@ const Welcome: React.FC = () => {
     };
     myChart.setOption(option);
   };
-  weatherHandle = () => {
+  weatherHandle = async () => {
     // getCurrentWeather({
     //   lat:"22.605824",
     //   lon:"113.839096",

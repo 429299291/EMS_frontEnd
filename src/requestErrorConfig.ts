@@ -88,8 +88,15 @@ export const errorConfig: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
+      let url;
       // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token = 123');
+      if (config.url?.includes('/api/auth/login') || config.url?.includes('https://')) {
+        url = config?.url;
+        return { ...config, url };
+      } else {
+        // url = config?.url?.concat('?token = 123');
+        return { ...config, headers: { ...config.headers, Authorization: '33333' } };
+      }
       return { ...config, url };
     },
   ],
