@@ -1,8 +1,10 @@
 import { WeatherIcon } from '@/constants';
+import { currentWeather } from '@/services/weather/api';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { SelectLang as UmiSelectLang } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Dropdown } from 'antd';
+import { useEffect, useState } from 'react';
 export type SiderTheme = 'light' | 'dark';
 
 export const SelectLang = () => {
@@ -42,7 +44,7 @@ const items: MenuProps['items'] = [
         <span>Solar Irradiance:87</span>
       </p>
     ),
-    icon: <WeatherIcon type="icon-sun" style={{ fontSize: 40 }} />,
+    icon: <WeatherIcon type="icon-Clear" style={{ fontSize: 40 }} />,
   },
   {
     key: '2',
@@ -52,7 +54,7 @@ const items: MenuProps['items'] = [
         <span>Solar Irradiance:42</span>
       </p>
     ),
-    icon: <WeatherIcon type="icon-yin" style={{ fontSize: 40 }} />,
+    icon: <WeatherIcon type="icon-Clouds" style={{ fontSize: 40 }} />,
   },
   {
     key: '3',
@@ -62,7 +64,7 @@ const items: MenuProps['items'] = [
         <span>Solar Irradiance:22</span>
       </p>
     ),
-    icon: <WeatherIcon type="icon-xiaoyu" style={{ fontSize: 40 }} />,
+    icon: <WeatherIcon type="icon-Rain" style={{ fontSize: 40 }} />,
   },
   {
     key: '4',
@@ -91,6 +93,14 @@ const items: MenuProps['items'] = [
   // },
 ];
 export const Weather = () => {
+  const [currentWeatherData, setCurrentWeatherData]: any = useState();
+  useEffect(() => {
+    currentWeather({ lat: '22.543096', lon: '114.057865' }).then((data) => {
+      console.log(data);
+
+      setCurrentWeatherData(data);
+    });
+  }, []);
   return (
     <>
       <Dropdown menu={{ items }}>
@@ -132,8 +142,15 @@ export const Weather = () => {
             <p>Sunset</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', margin: '0 0 0 3rem' }}>
-            <WeatherIcon style={{ fontSize: 36 }} type="icon-xiaoyu" />
-            <span style={{ fontSize: '1rem', marginLeft: '0.5rem' }}>Light Rain</span>
+            {/* <WeatherIcon style={{ fontSize: 36 }} type={`icon-${currentData.main}`} /> */}
+            <img
+              className="img-fluid"
+              style={{ transform: 'scale(0.8)' }}
+              src={`http://openweathermap.org/img/w/${currentWeatherData?.weather[0]?.icon}.png`}
+            />
+            <span style={{ fontSize: '1rem', marginLeft: '0.5rem' }}>
+              {currentWeatherData?.weather[0]?.main}
+            </span>
           </div>
         </div>
       </Dropdown>

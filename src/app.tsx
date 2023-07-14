@@ -1,6 +1,6 @@
 import Footer from '@/components/Footer';
+// import { useState,useEffect } from 'react'
 import { Location, SelectLang, Weather } from '@/components/RightContent';
-import { currentWeather } from '@/services/weather/api';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { history, Link, RunTimeLayoutConfig } from '@umijs/max';
@@ -25,9 +25,6 @@ export async function getInitialState(): Promise<{
       const msg = await queryCurrentUser({
         skipErrorHandler: true,
         values,
-      });
-      currentWeather({ lat: '22.543096', lon: '114.057865' }).then((data) => {
-        console.log(data);
       });
 
       return msg;
