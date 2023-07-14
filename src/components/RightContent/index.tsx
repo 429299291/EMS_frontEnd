@@ -1,10 +1,12 @@
 import { WeatherIcon } from '@/constants';
-import { currentWeather } from '@/services/weather/api';
+import { currentWeather, day5Weather } from '@/services/weather/api';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { SelectLang as UmiSelectLang } from '@umijs/max';
 import type { MenuProps } from 'antd';
-import { Dropdown } from 'antd';
+import { Badge, Dropdown } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
+
 export type SiderTheme = 'light' | 'dark';
 
 export const SelectLang = () => {
@@ -35,70 +37,38 @@ export const Question = () => {
     </div>
   );
 };
-const items: MenuProps['items'] = [
-  {
-    key: '1',
-    label: (
-      <p style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
-        <span>7月5日 Sunny</span>
-        <span>Solar Irradiance:87</span>
-      </p>
-    ),
-    icon: <WeatherIcon type="icon-Clear" style={{ fontSize: 40 }} />,
-  },
-  {
-    key: '2',
-    label: (
-      <p style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
-        <span>7月6日 Overcast</span>
-        <span>Solar Irradiance:42</span>
-      </p>
-    ),
-    icon: <WeatherIcon type="icon-Clouds" style={{ fontSize: 40 }} />,
-  },
-  {
-    key: '3',
-    label: (
-      <p style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
-        <span>7月7日 Rainy</span>
-        <span>Solar Irradiance:22</span>
-      </p>
-    ),
-    icon: <WeatherIcon type="icon-Rain" style={{ fontSize: 40 }} />,
-  },
-  {
-    key: '4',
-    label: (
-      <p style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
-        <span>7月8日 Snow</span>
-        <span>Solar Irradiance:13</span>
-      </p>
-    ),
-    icon: <WeatherIcon type="icon-eizhenyu" style={{ fontSize: 40 }} />,
-  },
-  {
-    key: '5',
-    label: (
-      <p style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
-        <span>7月9日 Cloudy</span>
-        <span>Solar Irradiance:58</span>
-      </p>
-    ),
-    icon: <WeatherIcon type="icon-duoyun" style={{ fontSize: 40 }} />,
-  },
-  // {
-  //   key: '5',
-  //   danger: true,
-  //   label: 'a danger item',
-  // },
-];
 export const Weather = () => {
   const [currentWeatherData, setCurrentWeatherData]: any = useState();
+  const [day5WeatherData, setDay5WeatherData]: any = useState();
+  const items: MenuProps['items'] = day5WeatherData?.list.map((data: any, index: number) => {
+    if (!((index - 2) % 8)) {
+      return {
+        key: index,
+        label: (
+          <p style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
+            <span>{moment(data.dt_txt).format('YYYY-MM-DD')}</span>
+            <Badge count={100 - data.clouds.all} color="rgba(36, 208, 129, 0.7)"></Badge>
+            <span>{data.weather[0].description.toUpperCase()}</span>
+          </p>
+        ),
+        icon: (
+          <img
+            className="img-fluid"
+            style={{ transform: 'scale(0.8)' }}
+            src={`http://openweathermap.org/img/w/${data?.weather[0]?.icon}.png`}
+          />
+        ),
+      };
+    } else {
+      return false;
+    }
+  });
   useEffect(() => {
     currentWeather({ lat: '22.543096', lon: '114.057865' }).then((data) => {
-      console.log(data);
-
       setCurrentWeatherData(data);
+    });
+    day5Weather({ lat: '22.543096', lon: '114.057865' }).then((data) => {
+      setDay5WeatherData(data);
     });
   }, []);
   return (

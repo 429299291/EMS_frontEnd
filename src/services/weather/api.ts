@@ -19,3 +19,11 @@ export async function currentWeather(params: API.CurrentWeather) {
     },
   );
 }
+export async function day5Weather(params: API.CurrentWeather) {
+  return request<Record<string, any>>(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${params.lat}&lon=${params.lon}&appid=${weatherAPI}`,
+    {
+      method: 'GET',
+    },
+  );
+}
