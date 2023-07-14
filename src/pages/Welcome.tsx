@@ -1,5 +1,4 @@
 // import { useModel,FormattedMessage } from '@umijs/max';
-import { PageContainer } from '@ant-design/pro-components';
 import { Card, Progress } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import { connect, useDispatch } from '@umijs/plugins/libs/dva';
@@ -280,90 +279,90 @@ const Welcome: React.FC = () => {
     // })
   };
   return (
-    <PageContainer ghost>
-      <div className={styles.container}>
-        {/* <Guide name={trim(name)} /> */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr',
-            gridTemplateAreas: `"aa aa aa bb bb bb cc cc cc"
+    // <PageContainer ghost>
+    <div className={styles.container}>
+      {/* <Guide name={trim(name)} /> */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+          gridTemplateAreas: `"aa aa aa bb bb bb cc cc cc"
         "dd dd dd dd dd dd ee ee ee"`,
-            gridGap: '1rem',
-          }}
+          gridGap: '1rem',
+        }}
+      >
+        <Card
+          title="Electricity consumption"
+          style={{ gridArea: 'aa' }}
+          extra={<a href="#">More</a>}
         >
-          <Card
-            title="Electricity consumption"
-            style={{ gridArea: 'aa' }}
-            extra={<a href="#">More</a>}
-          >
-            <div
-              id="ElectricityConsumption"
-              style={{ width: 'auto', height: '14rem', alignItems: 'center' }}
-            ></div>
-          </Card>
-          <Card title="Self-sufficiency" style={{ gridArea: 'bb' }} extra={<a href="#">More</a>}>
-            <p>In your system everything is working fine</p>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Progress
-                type="circle"
-                strokeWidth={15}
-                percent={randomNumber}
-                strokeColor={{ '0%': '#ccc', '100%': '#24d081' }}
-              />
-              <p style={{ marginTop: '2rem' }}>
-                you can be stronger <SmileOutlined style={{ color: '#13c2c2' }} />
-              </p>
-            </div>
-          </Card>
-          <Card title="Inverter Power" style={{ gridArea: 'cc' }} extra={<a href="#">More</a>}>
-            <div id="Gauge" style={{ width: '100%', height: '13rem', alignItems: 'center' }}></div>
-          </Card>
-          <Card
-            title="Distribution of Electricity"
-            style={{ gridArea: 'dd' }}
-            extra={<a href="#">More</a>}
-          >
-            <div
-              id="distributionElectricity"
-              style={{ width: 'auto', height: '25rem', alignItems: 'center' }}
-            ></div>
-          </Card>
-          <Card
-            title="CO2 savings of the system"
+          <div
+            id="ElectricityConsumption"
+            style={{ width: 'auto', height: '14rem', alignItems: 'center' }}
+          ></div>
+        </Card>
+        <Card title="Self-sufficiency" style={{ gridArea: 'bb' }} extra={<a href="#">More</a>}>
+          <p>In your system everything is working fine</p>
+          <div
             style={{
-              backgroundImage:
-                "url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E6%A0%91%E5%8F%B6')",
-              backgroundPosition: '-20% 50%',
-              backgroundSize: '60%',
-              backgroundRepeat: 'no-repeat',
-              gridArea: 'ee',
+              display: 'flex',
+              justifyContent: 'space-between',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
-            extra={<a href="#">More</a>}
           >
-            <div className={styles.co2}>
-              <div className={styles.co2div}>
-                <p className={styles.title}>2.7 kg CO2</p>
-                <p className={styles.p}>Corresponds to 32 Car km</p>
-                <p className={styles.des}>Savings today</p>
-              </div>
-              <div className={styles.co2div}>
-                <p className={styles.title}>1.1 t CO2</p>
-                <p className={styles.p}>Corresponds to 9.616 Car km</p>
-                <p className={styles.des}>EMS since installation</p>
-              </div>
+            <Progress
+              type="circle"
+              strokeWidth={15}
+              percent={randomNumber}
+              strokeColor={{ '0%': '#ccc', '100%': '#24d081' }}
+            />
+            <p style={{ marginTop: '2rem' }}>
+              you can be stronger <SmileOutlined style={{ color: '#13c2c2' }} />
+            </p>
+          </div>
+        </Card>
+        <Card title="Inverter Power" style={{ gridArea: 'cc' }} extra={<a href="#">More</a>}>
+          <div id="Gauge" style={{ width: '100%', height: '13rem', alignItems: 'center' }}></div>
+        </Card>
+        <Card
+          title="Distribution of Electricity"
+          style={{ gridArea: 'dd' }}
+          extra={<a href="#">More</a>}
+        >
+          <div
+            id="distributionElectricity"
+            style={{ width: 'auto', height: '25rem', alignItems: 'center' }}
+          ></div>
+        </Card>
+        <Card
+          title="CO2 savings of the system"
+          style={{
+            backgroundImage:
+              "url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E6%A0%91%E5%8F%B6')",
+            backgroundPosition: '-20% 50%',
+            backgroundSize: '60%',
+            backgroundRepeat: 'no-repeat',
+            gridArea: 'ee',
+          }}
+          extra={<a href="#">More</a>}
+        >
+          <div className={styles.co2}>
+            <div className={styles.co2div}>
+              <p className={styles.title}>2.7 kg CO2</p>
+              <p className={styles.p}>Corresponds to 32 Car km</p>
+              <p className={styles.des}>Savings today</p>
             </div>
-          </Card>
-        </div>
+            <div className={styles.co2div}>
+              <p className={styles.title}>1.1 t CO2</p>
+              <p className={styles.p}>Corresponds to 9.616 Car km</p>
+              <p className={styles.des}>EMS since installation</p>
+            </div>
+          </div>
+        </Card>
       </div>
-    </PageContainer>
+    </div>
+    // </PageContainer>
   );
 };
 

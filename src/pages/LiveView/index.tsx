@@ -1,4 +1,3 @@
-import { PageContainer } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
 import { Card } from 'antd';
 import React from 'react';
@@ -8,13 +7,14 @@ const LiveView: React.FC = () => {
   //   const { token } = theme.useToken();
   const { initialState } = useModel('@@initialState');
   return (
-    <PageContainer
-      content=""
-      header={{
-        title: 'Live view',
-        breadcrumb: {},
-      }}
-    >
+    // <PageContainer
+    //   content=""
+    //   header={{
+    //     title: 'Live view',
+    //     breadcrumb: {},
+    //   }}
+    // >
+    <>
       <Card
         className={styles.box}
         bodyStyle={{
@@ -81,7 +81,7 @@ const LiveView: React.FC = () => {
           <div className={styles.ball}></div>
         </div>
       </Card>
-    </PageContainer>
+    </>
   );
 };
 

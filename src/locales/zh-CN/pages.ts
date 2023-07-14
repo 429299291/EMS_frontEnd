@@ -1,5 +1,5 @@
 export default {
-  'pages.layouts.userLayout.title': 'Always control 为您提供最完整的多场景产品解决方案',
+  'pages.layouts.userLayout.title': '旭衡电子为您提供最完整的多场景产品解决方案',
   'pages.login.accountLogin.tab': '账户密码登录',
   'pages.login.accountLogin.errorMessage': '错误的用户名和密码',
   'pages.login.failure': '登录失败，请重试！',
