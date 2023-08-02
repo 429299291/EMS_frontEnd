@@ -9,14 +9,19 @@ declare namespace API {
     email?: string;
     signature?: string;
     identity?: string;
+    phone?: string;
     accessPermissions?: string[];
+    balance: number;
     title?: string;
     group?: string;
     tags?: { key?: string; label?: string }[];
-    notifyCount?: number;
-    unreadCount?: number;
+    // notifyCount?: number;
+    // unreadCount?: number;
     country?: string;
     access?: string;
+    location?: {
+      location: string;
+    };
     geographic?: {
       province?: { label?: string; key?: string };
       city?: { label?: string; key?: string };

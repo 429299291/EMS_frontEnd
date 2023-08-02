@@ -302,7 +302,7 @@ const Welcome: React.FC = () => {
           ></div>
         </Card>
         <Card title="Self-sufficiency" style={{ gridArea: 'bb' }} extra={<a href="#">More</a>}>
-          <p>In your system everything is working fine</p>
+          <p>Everything is working fine in your system</p>
           <div
             style={{
               display: 'flex',

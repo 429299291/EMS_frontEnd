@@ -1,4 +1,4 @@
-import { GithubOutlined } from '@ant-design/icons';
+import { IeOutlined } from '@ant-design/icons';
 import { DefaultFooter } from '@ant-design/pro-components';
 import { useIntl } from '@umijs/max';
 import React from 'react';
@@ -27,8 +27,8 @@ const Footer: React.FC = () => {
         // },
         {
           key: 'github',
-          title: <GithubOutlined />,
-          href: 'https://zhudd.vip',
+          title: <IeOutlined />,
+          href: 'https://www.alwayscontrol.com.cn/',
           blankTarget: true,
         },
         // {

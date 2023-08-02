@@ -54,7 +54,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
     actionsRender: () => [
       <Weather key="doc" />,
-      <Location key="location" />,
+      <Location currentUser={initialState?.currentUser} key="location" />,
       <SelectLang key="SelectLang" />,
     ],
     // actionsRender: () => [<Weather key="doc" />,<Location key="location"/>],
