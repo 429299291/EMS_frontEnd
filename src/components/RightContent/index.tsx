@@ -1,5 +1,5 @@
 import { WeatherIcon } from '@/constants';
-import { currentGeo, currentWeather, day5Weather } from '@/services/weather/api';
+import { currentWeather, day5Weather } from '@/services/weather/api';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { SelectLang as UmiSelectLang } from '@umijs/max';
 import type { MenuProps } from 'antd';
@@ -84,11 +84,11 @@ export const Location = (currentUser: any) => {
       ],
     },
   ];
-  const locationOnChange = (value: string[]) => {
-    const data = value.pop();
-    currentGeo(data).then((item) => {
-      console.log(item);
-    });
+  const locationOnChange = () => {
+    // const data = value.pop();
+    // currentGeo(data).then((item) => {
+    //   console.log(item);
+    // });
   };
   return (
     <Cascader
