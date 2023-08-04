@@ -11,7 +11,7 @@ const Welcome: React.FC = () => {
     randomNumber,
     // , setRandomNumber
   ] = useState(68);
-  const [electricityChangeValue, setElectricityChangeValue] = useState(4);
+  const [electricityChangeValue, setElectricityChangeValue] = useState(1);
   const [seeElectricity, setSeeElectricity] = useState(false);
   let ElectricityConsumptionChart: any;
   let GaugeChart: any;
@@ -168,17 +168,6 @@ const Welcome: React.FC = () => {
   DistributionElectricity = (index: number) => {
     const chartDom: any = document.getElementById('distributionElectricity');
     const myChart: any = echarts.init(chartDom);
-    let data: any = [
-      ['06:11', 0],
-      ['06:12', 33],
-      ['06:13', 26],
-      ['06:14', 29],
-      ['06:15', 24],
-      ['06:16', 0],
-      ['06:17', 0],
-      ['06:18', 0],
-      ['06:19', 0],
-    ];
     let option = {
       tooltip: {
         order: 'valueDesc',
@@ -219,8 +208,17 @@ const Welcome: React.FC = () => {
               },
             ]),
           },
-          // data: [['06:11',0],['06:12',0],['06:13',27],['06:14',20],['06:15',0],['06:16',0],['06:17',26],['06:18',22],['06:19',31]]
-          data: data,
+          data: [
+            ['06:11', 0],
+            ['06:12', 0],
+            ['06:13', 27],
+            ['06:14', 20],
+            ['06:15', 0],
+            ['06:16', 0],
+            ['06:17', 26],
+            ['06:18', 22],
+            ['06:19', 31],
+          ],
         },
         {
           name: 'PV',
@@ -315,8 +313,17 @@ const Welcome: React.FC = () => {
               },
             ]),
           },
-          // data: [['06:11',0],['06:12',33],['06:13',26],['06:14',29],['06:15',24],['06:16',0],['06:17',0],['06:18',0],['06:19',0]]
-          data: data,
+          data: [
+            ['06:11', 0],
+            ['06:12', 33],
+            ['06:13', 26],
+            ['06:14', 29],
+            ['06:15', 24],
+            ['06:16', 0],
+            ['06:17', 0],
+            ['06:18', 0],
+            ['06:19', 0],
+          ],
         },
         {
           name: 'Grid',
@@ -355,13 +362,14 @@ const Welcome: React.FC = () => {
         },
       ],
     };
-
-    if (index) {
-      option.series = [option.series[index - 1]];
+    let optiondata = option;
+    if (index > 0) {
+      optiondata.series = [option.series[index - 1]];
+      myChart.clear();
+      myChart.setOption(optiondata);
     } else {
       myChart.setOption(option);
     }
-    myChart.setOption(option);
   };
   weatherHandle = async () => {
     // getCurrentWeather({
@@ -432,6 +440,7 @@ const Welcome: React.FC = () => {
                   onChange={electricityChange}
                   bordered={false}
                   options={[
+                    { value: 0, label: 'All' },
                     { value: 1, label: 'Home' },
                     { value: 2, label: 'PV' },
                     { value: 3, label: 'EV' },
@@ -446,6 +455,7 @@ const Welcome: React.FC = () => {
                 shape="circle"
                 onClick={() => {
                   setSeeElectricity(!seeElectricity);
+                  setElectricityChangeValue(1);
                 }}
                 icon={
                   seeElectricity ? (
