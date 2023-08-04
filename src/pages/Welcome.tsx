@@ -440,7 +440,7 @@ const Welcome: React.FC = () => {
                   onChange={electricityChange}
                   bordered={false}
                   options={[
-                    { value: 0, label: 'All' },
+                    { value: 0, label: 'Flow' },
                     { value: 1, label: 'Home' },
                     { value: 2, label: 'PV' },
                     { value: 3, label: 'EV' },
