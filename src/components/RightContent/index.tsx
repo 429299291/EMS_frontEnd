@@ -84,18 +84,18 @@ export const Location = (currentUser: any) => {
       ],
     },
   ];
-  const locationOnChange = () => {
-    // const data = value.pop();
-    // currentGeo(data).then((item) => {
-    //   console.log(item);
-    // });
-  };
+  // const locationOnChange = (value:string[]) => {
+  //   const data = value.pop();
+  //   currentGeo(data).then((item) => {
+  //     console.log(item);
+  //   });
+  // };
   return (
     <Cascader
       style={{ width: 100 }}
       defaultValue={currentUser.currentUser.location.location}
       options={options}
-      onChange={locationOnChange}
+      // onChange={locationOnChange}
       displayRender={displayRender}
       expandTrigger="hover"
       placeholder="Select"
