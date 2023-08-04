@@ -1,5 +1,5 @@
 import { request } from '@umijs/max';
-import { baiduAK, weatherAPI } from '../../constants/index';
+import { weatherAPI } from '../../constants/index';
 
 export async function currentUser(options: any) {
   // const email = options.values.values
@@ -13,7 +13,7 @@ export async function currentUser(options: any) {
 /** 退出登录接口 POST /api/login/outLogin */
 export async function currentGeo(params: string) {
   return request<Record<string, any>>(
-    `https://api.map.baidu.com/geocoding/v3/?address=${params}&output=json&ak=${baiduAK}`,
+    `https://api.map.baidu.com/geocoding/v3/?address=${params}&output=json&ak=${params}`,
     // `https://api.map.baidu.com/geocoder?address=${params}&output=json&key=${baiduAK}`,
     {
       method: 'GET',
