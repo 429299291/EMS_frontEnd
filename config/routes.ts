@@ -43,9 +43,16 @@ export default [
     component: './About',
   },
   {
+    path: '/account',
+    name: 'account',
+    icon: 'TeamOutlined',
+    access: 'canSuperAdmin',
+    component: './Account',
+  },
+  {
     path: '/admin',
     name: 'admin',
-    icon: 'crown',
+    icon: 'CodeSandboxOutlined',
     access: 'canAdmin',
     routes: [
       {
