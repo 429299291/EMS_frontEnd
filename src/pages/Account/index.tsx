@@ -301,6 +301,10 @@ const Account: React.FC = () => {
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
+        pagination={{
+          pageSize: 10,
+          defaultCurrent: 0,
+        }}
         request={account}
         columns={columns}
         rowSelection={{
