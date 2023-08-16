@@ -15,7 +15,7 @@ const Settings: ProLayoutProps & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'EMS',
+  title: 'Neuron',
   pwa: true,
   logo: 'https://ems-public.oss-cn-beijing.aliyuncs.com/logo-len.png',
   iconfontUrl: '',
