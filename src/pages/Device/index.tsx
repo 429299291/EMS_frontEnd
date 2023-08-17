@@ -1,6 +1,7 @@
-import { account } from '@/services/ant-design-pro/account';
+import { deviceStatus, WorkingModeStatus } from '@/constants';
 import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
-import { CloseCircleOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
+import { device } from '@/services/ant-design-pro/device';
+import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -13,6 +14,7 @@ import {
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl } from '@umijs/max';
 import { Button, Drawer, message, Tag } from 'antd';
+import moment from 'moment';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
@@ -127,14 +129,28 @@ const Account: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.identity" defaultMessage="Identity" />,
-      dataIndex: 'identity',
+      title: <FormattedMessage id="pages.account.WorkingMode" defaultMessage="WorkingMode" />,
+      dataIndex: 'WorkingMode',
+      render: (val: any) => {
+        // return WorkingModeStatus[val]
+        return (
+          <Tag color={val === 0 ? 'green' : val === 1 ? 'gold' : 'blue'}>
+            {WorkingModeStatus[val] + '模式'}
+          </Tag>
+        );
+      },
+    },
+    {
+      title: <FormattedMessage id="pages.account.identity" defaultMessage="Id" />,
+      dataIndex: 'deviceId',
       valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.account.email" defaultMessage="Email" />,
-      dataIndex: 'email',
-      valueType: 'textarea',
+      title: <FormattedMessage id="pages.account.email" defaultMessage="Status" />,
+      dataIndex: 'status',
+      render: (val: any) => {
+        return deviceStatus[val];
+      },
     },
     {
       title: <FormattedMessage id="pages.account.location" defaultMessage="Location" />,
@@ -145,114 +161,18 @@ const Account: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.devices" defaultMessage="Devices" />,
-      dataIndex: 'devices',
-      render: (dom: any) => {
-        return dom.map((data: any) => {
-          return (
-            <Tag
-              icon={data.status === 0 ? <SyncOutlined spin /> : <CloseCircleOutlined />}
-              color={data.status === 0 ? 'blue' : 'error'}
-              key={data.id}
-            >
-              {data.name}
-            </Tag>
-          );
-        });
-      },
+      title: <FormattedMessage id="pages.account.supplier" defaultMessage="Supplier" />,
+      dataIndex: 'supplier',
+      valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.account.accessPermissions" defaultMessage="Permissions" />,
-      dataIndex: 'accessPermissions',
-      // valueType: 'textarea',
+      title: <FormattedMessage id="pages.account.supplier" defaultMessage="Time" />,
+      dataIndex: 'date',
       render: (dom: any) => {
-        return dom.map((data: any) => {
-          return <Tag key={data}>{data}</Tag>;
-        });
+        // return dom
+        return moment(dom).format('YYYY-MM-DD HH:mm:ss');
       },
     },
-    // {
-    //   title: (
-    //     <FormattedMessage
-    //       id="pages.searchTable.titleCallNo"
-    //       defaultMessage="Number of service calls"
-    //     />
-    //   ),
-    //   dataIndex: 'callNo',
-    //   sorter: true,
-    //   hideInForm: true,
-    //   renderText: (val: string) =>
-    //     `${val}${intl.formatMessage({
-    //       id: 'pages.searchTable.tenThousand',
-    //       defaultMessage: ' 万 ',
-    //     })}`,
-    // },
-    // {
-    //   title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
-    //   dataIndex: 'status',
-    //   hideInForm: true,
-    //   valueEnum: {
-    //     0: {
-    //       text: (
-    //         <FormattedMessage
-    //           id="pages.searchTable.nameStatus.default"
-    //           defaultMessage="Shut down"
-    //         />
-    //       ),
-    //       status: 'Default',
-    //     },
-    //     1: {
-    //       text: (
-    //         <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
-    //       ),
-    //       status: 'Processing',
-    //     },
-    //     2: {
-    //       text: (
-    //         <FormattedMessage id="pages.searchTable.nameStatus.online" defaultMessage="Online" />
-    //       ),
-    //       status: 'Success',
-    //     },
-    //     3: {
-    //       text: (
-    //         <FormattedMessage
-    //           id="pages.searchTable.nameStatus.abnormal"
-    //           defaultMessage="Abnormal"
-    //         />
-    //       ),
-    //       status: 'Error',
-    //     },
-    //   },
-    // },
-    // {
-    //   title: (
-    //     <FormattedMessage
-    //       id="pages.searchTable.titleUpdatedAt"
-    //       defaultMessage="Last scheduled time"
-    //     />
-    //   ),
-    //   sorter: true,
-    //   dataIndex: 'updatedAt',
-    //   valueType: 'dateTime',
-    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
-    //     const status = form.getFieldValue('status');
-    //     if (`${status}` === '0') {
-    //       return false;
-    //     }
-    //     if (`${status}` === '3') {
-    //       return (
-    //         <Input
-    //           {...rest}
-    //           placeholder={intl.formatMessage({
-    //             id: 'pages.searchTable.exception',
-    //             defaultMessage: 'Please enter the reason for the exception!',
-    //           })}
-    //         />
-    //       );
-    //     }
-    //     return defaultRender(item);
-    //   },
-    // },
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
       dataIndex: 'option',
@@ -276,8 +196,6 @@ const Account: React.FC = () => {
       ],
     },
   ];
-  console.log(account);
-
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
@@ -305,7 +223,7 @@ const Account: React.FC = () => {
           pageSize: 10,
           defaultCurrent: 0,
         }}
-        request={account}
+        request={device}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {

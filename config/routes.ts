@@ -43,6 +43,13 @@ export default [
     component: './About',
   },
   {
+    path: '/device',
+    name: 'device',
+    icon: 'HddOutlined',
+    access: 'canSuperAdmin',
+    component: './Device',
+  },
+  {
     path: '/account',
     name: 'account',
     icon: 'TeamOutlined',

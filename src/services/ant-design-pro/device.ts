@@ -11,7 +11,7 @@ import { request } from '@umijs/max';
 //     ...(options || {}),
 //   });
 // }
-export async function account(
+export async function device(
   // params: {
   //   // query
   //   /** 当前的页码 */
@@ -21,15 +21,8 @@ export async function account(
   // },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/user/getUsers', {
+  return request<API.RuleList>('/api/device/devices', {
     method: 'POST',
     data: options,
-  });
-}
-/** 退出登录接口 POST /api/login/outLogin */
-export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/login/outLogin', {
-    method: 'POST',
-    ...(options || {}),
   });
 }

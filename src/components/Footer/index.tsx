@@ -1,7 +1,6 @@
 import { DefaultFooter } from '@ant-design/pro-components';
 import { useIntl } from '@umijs/max';
 import React from 'react';
-
 const Footer: React.FC = () => {
   const intl = useIntl();
   const defaultMessage = intl.formatMessage({
@@ -17,28 +16,34 @@ const Footer: React.FC = () => {
         background: 'none',
       }}
       copyright={`${currentYear} ${defaultMessage}`}
-      links={
-        [
-          // {
-          //   key: 'Ant Design Pro',
-          //   title: 'Ant Design Pro',
-          //   href: 'https://pro.ant.design',
-          //   blankTarget: true,
-          // },
-          // {
-          //   key: 'github',
-          //   title: <p><CopyrightOutlined /> 2023 旭衡科技出品</p>,
-          //   href: 'https://www.alwayscontrol.com.cn/',
-          //   blankTarget: true,
-          // },
-          // {
-          //   key: 'Ant Design',
-          //   title: 'Ant Design',
-          //   href: 'https://ant.design',
-          //   blankTarget: true,
-          // },
-        ]
-      }
+      links={[
+        // {
+        //   key: 'Ant Design Pro',
+        //   title: 'Ant Design Pro',
+        //   href: 'https://pro.ant.design',
+        //   blankTarget: true,
+        // },
+        {
+          key: 'github',
+          title: (
+            <p>
+              <img
+                style={{ height: '20px', paddingRight: '5px' }}
+                src="https://ems-public.oss-cn-beijing.aliyuncs.com/logo-len.png"
+              ></img>
+              旭衡科技出品
+            </p>
+          ),
+          href: 'https://www.alwayscontrol.com.cn/',
+          blankTarget: true,
+        },
+        // {
+        //   key: 'Ant Design',
+        //   title: 'Ant Design',
+        //   href: 'https://ant.design',
+        //   blankTarget: true,
+        // },
+      ]}
     />
   );
 };

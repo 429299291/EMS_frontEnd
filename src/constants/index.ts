@@ -5,6 +5,8 @@ export const weatherAPI = '5c5a26bbbb29040a2e583f0943111ede';
 export const WeatherIcon = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_4138863_sdutv2oe6j.js', // weather icon
 });
+export const deviceStatus = ['正常', '故障', '修复中', '离线'];
+export const WorkingModeStatus = ['自发自用', '经济', '应急'];
 export const GRIDdata = [
   ['00:00', 0.48],
   ['00:05', 0.45],
