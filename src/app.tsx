@@ -1,6 +1,6 @@
 import Footer from '@/components/Footer';
 // import { useState,useEffect } from 'react'
-import { Location, SelectLang, Weather } from '@/components/RightContent';
+import { Location, Weather } from '@/components/RightContent';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { history, Link, RunTimeLayoutConfig } from '@umijs/max';
@@ -55,7 +55,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     actionsRender: () => [
       <Weather key="doc" />,
       <Location currentUser={initialState?.currentUser} key="location" />,
-      <SelectLang key="SelectLang" />,
+      // <SelectLang key="SelectLang" />,   国际化
     ],
     // actionsRender: () => [<Weather key="doc" />,<Location key="location"/>],
     avatarProps: {
