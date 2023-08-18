@@ -3,7 +3,7 @@ import { currentWeather, day5Weather } from '@/services/weather/api';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { SelectLang as UmiSelectLang } from '@umijs/max';
 import type { MenuProps } from 'antd';
-import { Badge, Cascader, Dropdown } from 'antd';
+import { Badge, Dropdown, Select } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 export type SiderTheme = 'light' | 'dark';
@@ -17,88 +17,32 @@ export const SelectLang = () => {
   );
 };
 export const Location = (currentUser: any) => {
-  const displayRender = (labels: string[]) => labels[labels.length - 1];
-  const options = [
-    {
-      value: '中国',
-      label: '中国',
-      children: [
-        {
-          value: '广东',
-          label: '广东',
-          children: [
-            {
-              value: '深圳',
-              label: '深圳',
-            },
-            {
-              value: '广州',
-              label: '广州',
-            },
-            {
-              value: '珠海',
-              label: '珠海',
-            },
-            {
-              value: '汕头',
-              label: '汕头',
-            },
-          ],
-        },
-        {
-          value: '江西',
-          label: '江西',
-          children: [
-            {
-              value: '南昌',
-              label: '南昌',
-            },
-            {
-              value: '九江',
-              label: '九江',
-            },
-            {
-              value: '景德镇',
-              label: '景德镇',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      value: '美国',
-      label: 'USA',
-      children: [
-        {
-          value: '纽约',
-          label: 'New York',
-        },
-        {
-          value: '芝加哥',
-          label: 'Chicago',
-        },
-        {
-          value: '休士敦',
-          label: 'Houston',
-        },
-      ],
-    },
-  ];
-  // const locationOnChange = (value:string[]) => {
-  //   const data = value.pop();
-  //   currentGeo(data).then((item) => {
-  //     console.log(item);
-  //   });
-  // };
+  let options: any[] = [];
+  currentUser.currentUser.devices.map((data: any) => {
+    return options.push({
+      value: `lat:${data.location.lat},lng:${data.location.lng}`,
+      label: data.location.location,
+    });
+  });
+
+  const locationHandleChange = () => {
+    // currentGeo(data).then((item) => {
+    //   console.log(item);
+    // });
+  };
   return (
-    <Cascader
-      style={{ width: 100 }}
-      defaultValue={currentUser.currentUser.location.location}
+    <Select
+      defaultValue={`lat:${currentUser.currentUser.devices[0].location.lat},lng:${currentUser.currentUser.devices[0].location.lng}`}
+      style={{ width: 120 }}
+      // bordered={false}
+      onChange={locationHandleChange}
       options={options}
-      // onChange={locationOnChange}
-      displayRender={displayRender}
-      expandTrigger="hover"
-      placeholder="Select"
+      // {[
+      //   { value: 0, label: '深圳' },
+      //   { value: 1, label: '北京' },
+      //   { value: 2, label: '台湾' },
+      //   { value: 3, label: 'New York' },
+      // ]}
     />
   );
   // return <span style={{ padding: '1rem', lineHeight: '100%' }}>{currentUser.currentUser.location.location}</span>;
