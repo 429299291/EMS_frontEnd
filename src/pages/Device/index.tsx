@@ -1,4 +1,4 @@
-import { deviceStatus, WorkingModeStatus } from '@/constants';
+import { deviceStatus, WorkingModeStatus, WorkingModeStatusColor } from '@/constants';
 import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
 import { device } from '@/services/ant-design-pro/device';
 import { PlusOutlined } from '@ant-design/icons';
@@ -134,7 +134,15 @@ const Account: React.FC = () => {
       render: (val: any) => {
         // return WorkingModeStatus[val]
         return (
-          <Tag color={val === 0 ? 'green' : val === 1 ? 'gold' : 'blue'}>
+          <Tag
+            color={
+              val === 0
+                ? WorkingModeStatusColor[0]
+                : val === 1
+                ? WorkingModeStatusColor[1]
+                : WorkingModeStatusColor[2]
+            }
+          >
             {WorkingModeStatus[val] + '模式'}
           </Tag>
         );

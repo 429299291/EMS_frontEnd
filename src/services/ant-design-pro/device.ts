@@ -26,3 +26,9 @@ export async function device(
     data: options,
   });
 }
+export async function command(options?: { [key: string]: any }) {
+  return request<API.RuleList>('/api/ems', {
+    method: 'POST',
+    data: options,
+  });
+}

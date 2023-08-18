@@ -7,6 +7,7 @@ export const WeatherIcon = createFromIconfontCN({
 });
 export const deviceStatus = ['正常', '故障', '修复中', '离线'];
 export const WorkingModeStatus = ['自发自用', '经济', '应急'];
+export const WorkingModeStatusColor = ['green', 'gold', 'blue'];
 export const GRIDdata = [
   ['00:00', 0.48],
   ['00:05', 0.45],

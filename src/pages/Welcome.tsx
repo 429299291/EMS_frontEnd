@@ -1,9 +1,15 @@
 // import { useModel,FormattedMessage } from '@umijs/max';
-import { BATdata, EVdata, GRIDdata, HOMEdata, PVdata } from '@/constants';
+import { BATdata, EVdata, GRIDdata, HOMEdata, PVdata, WorkingModeStatusColor } from '@/constants';
 import { Button, Card, Progress, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import { connect, useDispatch } from '@umijs/plugins/libs/dva';
-import { EyeInvisibleOutlined, EyeOutlined, SmileOutlined } from '@ant-design/icons';
+import { command } from '@/services/ant-design-pro/device';
+import {
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  SettingTwoTone,
+  SmileOutlined,
+} from '@ant-design/icons';
 import * as echarts from 'echarts';
 import styles from './Welcome.less';
 const Welcome: React.FC = () => {
@@ -14,6 +20,7 @@ const Welcome: React.FC = () => {
   ] = useState(68);
   const [electricityChangeValue, setElectricityChangeValue] = useState(1);
   const [seeElectricity, setSeeElectricity] = useState(false);
+  const [workingModeData, setWorkingModeData] = useState(0);
   let ElectricityConsumptionChart: any;
   let GaugeChart: any;
   let DistributionElectricity: any;
@@ -368,6 +375,12 @@ const Welcome: React.FC = () => {
   const electricityChange = (index: number) => {
     setElectricityChangeValue(index);
   };
+  const modelHandleChange = (val: number) => {
+    setWorkingModeData(val);
+    command({
+      WorkingMode: val,
+    });
+  };
   return (
     // <PageContainer ghost>
     <div className={styles.container}>
@@ -391,7 +404,26 @@ const Welcome: React.FC = () => {
             style={{ width: 'auto', height: '14rem', alignItems: 'center' }}
           ></div>
         </Card>
-        <Card title="Self-sufficiency" style={{ gridArea: 'bb' }} extra={<a href="#">More</a>}>
+        <Card
+          title="Self-sufficiency"
+          style={{ gridArea: 'bb' }}
+          extra={
+            <>
+              <SettingTwoTone spin twoToneColor={WorkingModeStatusColor[workingModeData]} />
+              <Select
+                defaultValue={0}
+                style={{ width: 100 }}
+                bordered={false}
+                onChange={modelHandleChange}
+                options={[
+                  { value: 0, label: '自发自用' },
+                  { value: 1, label: '经济' },
+                  { value: 2, label: '应急' },
+                ]}
+              />
+            </>
+          }
+        >
           <p>Everything is working fine in your system</p>
           <div
             style={{
