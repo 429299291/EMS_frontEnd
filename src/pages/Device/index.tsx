@@ -131,6 +131,7 @@ const Account: React.FC = () => {
     {
       title: <FormattedMessage id="pages.account.WorkingMode" defaultMessage="WorkingMode" />,
       dataIndex: 'WorkingMode',
+      search: false,
       render: (val: any) => {
         // return WorkingModeStatus[val]
         return (
@@ -156,6 +157,7 @@ const Account: React.FC = () => {
     {
       title: <FormattedMessage id="pages.account.email" defaultMessage="Status" />,
       dataIndex: 'status',
+      search: false,
       render: (val: any) => {
         return deviceStatus[val];
       },
@@ -172,10 +174,12 @@ const Account: React.FC = () => {
       title: <FormattedMessage id="pages.account.supplier" defaultMessage="Supplier" />,
       dataIndex: 'supplier',
       valueType: 'textarea',
+      search: false,
     },
     {
       title: <FormattedMessage id="pages.account.supplier" defaultMessage="Time" />,
       dataIndex: 'date',
+      search: false,
       render: (dom: any) => {
         // return dom
         return moment(dom).format('YYYY-MM-DD HH:mm:ss');
@@ -214,8 +218,13 @@ const Account: React.FC = () => {
         actionRef={actionRef}
         rowKey="key"
         search={{
-          labelWidth: 120,
+          labelWidth: 'auto',
         }}
+        // toolbar={{
+        //   title: '这里是标题',
+        //   subTitle: '这里是子标题',
+        //   tooltip: '这是一个段描述',
+        // }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -233,11 +242,11 @@ const Account: React.FC = () => {
         }}
         request={device}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
-          },
-        }}
+        // rowSelection={{
+        //   onChange: (_, selectedRows) => {
+        //     setSelectedRows(selectedRows);
+        //   },
+        // }}
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar

@@ -129,6 +129,7 @@ const Account: React.FC = () => {
     {
       title: <FormattedMessage id="pages.account.identity" defaultMessage="Identity" />,
       dataIndex: 'identity',
+      search: false,
       valueType: 'textarea',
     },
     {
@@ -140,6 +141,7 @@ const Account: React.FC = () => {
       title: <FormattedMessage id="pages.account.location" defaultMessage="Location" />,
       dataIndex: 'location',
       valueType: 'textarea',
+      search: false,
       render: (dom: any) => {
         return <span>{dom.location}</span>;
       },
@@ -147,6 +149,7 @@ const Account: React.FC = () => {
     {
       title: <FormattedMessage id="pages.account.devices" defaultMessage="Devices" />,
       dataIndex: 'devices',
+      search: false,
       render: (dom: any) => {
         return dom.map((data: any) => {
           return (
@@ -164,6 +167,7 @@ const Account: React.FC = () => {
     {
       title: <FormattedMessage id="pages.account.accessPermissions" defaultMessage="Permissions" />,
       dataIndex: 'accessPermissions',
+      search: false,
       // valueType: 'textarea',
       render: (dom: any) => {
         return dom.map((data: any) => {
@@ -288,7 +292,7 @@ const Account: React.FC = () => {
         actionRef={actionRef}
         rowKey="key"
         search={{
-          labelWidth: 120,
+          labelWidth: 'auto',
         }}
         toolBarRender={() => [
           <Button
@@ -307,11 +311,11 @@ const Account: React.FC = () => {
         }}
         request={account}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
-          },
-        }}
+        // rowSelection={{
+        //   onChange: (_, selectedRows) => {
+        //     setSelectedRows(selectedRows);
+        //   },
+        // }}
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
