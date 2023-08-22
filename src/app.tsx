@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-// import { useState,useEffect } from 'react'
+import { useState } from 'react'
 import { Location, Weather } from '@/components/RightContent';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
@@ -51,10 +51,11 @@ export async function getInitialState(): Promise<{
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
+  const [locationIndex, setLocationIndex]: any = useState(0);  
   return {
     actionsRender: () => [
-      <Weather key="doc" />,
-      <Location currentUser={initialState?.currentUser} key="location" />,
+      <Weather key="doc" locationIndex={locationIndex} sunrise={initialState?.currentUser?.devices}/>,
+      <Location currentUser={initialState?.currentUser} setLocationIndex={setLocationIndex} key="location" />,
       // <SelectLang key="SelectLang" />,   国际化
     ],
     // actionsRender: () => [<Weather key="doc" />,<Location key="location"/>],

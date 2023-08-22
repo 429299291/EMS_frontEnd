@@ -25,7 +25,7 @@ declare namespace API {
   //     phone?: string;
   //     };
   type CurrentWeather = {
-    lat: string;
-    lon: string;
+    lat: number;
+    lon: number;
   };
 }

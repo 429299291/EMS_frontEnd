@@ -21,6 +21,10 @@ export async function currentUser(options: any) {
 //   );
 // }
 export async function currentWeather(params: API.CurrentWeather) {
+  console.log(params);
+  if(!params) return
+  console.log('===');
+  
   return request<Record<string, any>>(
     `https://api.openweathermap.org/data/2.5/weather?lat=${params.lat}&lon=${params.lon}&appid=${weatherAPI}`,
     {

@@ -16,28 +16,36 @@ export const SelectLang = () => {
     />
   );
 };
+let locationData:[]=[]
 export const Location = (currentUser: any) => {
+  // const [locationData, setLocationData]: any = useState([]);
+  if(!currentUser.currentUser) {return false}
   let options: any[] = [];
-  currentUser.currentUser.devices.map((data: any) => {
+  locationData = []
+  currentUser.currentUser.devices.map((data:any,index:number) => {
+    // setLocationData([...locationData,{lat:data.location.lat,lng:data.location.lng}])    
+    locationData.push({lat:data.location.lat,lon:data.location.lng})
     return options.push({
-      value: `lat:${data.location.lat},lng:${data.location.lng}`,
+      // value: `lat:${data.location.lat},lon:${data.location.lng}`,
+      value: index,
       label: data.location.location,
-    });
-  });
-
-  const locationHandleChange = () => {
+    });  
+  });  
+  const locationHandleChange = (val:number) => {
+    currentUser.setLocationIndex(val)
     // currentGeo(data).then((item) => {
     //   console.log(item);
     // });
   };
   return (
     <Select
-      defaultValue={`lat:${currentUser.currentUser.devices[0].location.lat},lng:${currentUser.currentUser.devices[0].location.lng}`}
+      // defaultValue={`lat:${currentUser.currentUser.devices[0].location.lat},lng:${currentUser.currentUser.devices[0].location.lng}`}
+      defaultValue={0}
       style={{ width: 120 }}
       // bordered={false}
       onChange={locationHandleChange}
       options={options}
-      // {[
+      // options={[
       //   { value: 0, label: '深圳' },
       //   { value: 1, label: '北京' },
       //   { value: 2, label: '台湾' },
@@ -63,7 +71,7 @@ export const Question = () => {
     </div>
   );
 };
-export const Weather = () => {
+export const Weather = (props) => {
   const [currentWeatherData, setCurrentWeatherData]: any = useState();
   const [day5WeatherData, setDay5WeatherData]: any = useState();
   const items: MenuProps['items'] = day5WeatherData?.list.map((data: any, index: number) => {
@@ -90,13 +98,13 @@ export const Weather = () => {
     }
   });
   useEffect(() => {
-    currentWeather({ lat: '22.543096', lon: '114.057865' }).then((data) => {
-      setCurrentWeatherData(data);
-    });
-    day5Weather({ lat: '22.543096', lon: '114.057865' }).then((data) => {
-      setDay5WeatherData(data);
-    });
-  }, []);
+      currentWeather(locationData[props.locationIndex]).then((data) => {
+        setCurrentWeatherData(data);
+      });
+      day5Weather(locationData[props.locationIndex]).then((data) => {
+        setDay5WeatherData(data);
+      });
+  }, [props.locationIndex]);
   return (
     <>
       <Dropdown menu={{ items }}>
@@ -119,7 +127,7 @@ export const Weather = () => {
               paddingTop: '10px',
             }}
           >
-            <p>05:58</p>
+            <p>{props.sunrise[props.locationIndex].location.sunrise}</p>
             <p>Sunrise</p>
           </div>
           <WeatherIcon type="icon-richu" style={{ fontSize: 40, padding: '0 2rem' }} />
@@ -134,7 +142,7 @@ export const Weather = () => {
               paddingTop: '10px',
             }}
           >
-            <p>18:37</p>
+            <p>{props.sunrise[props.locationIndex].location.sunset}</p>
             <p>Sunset</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', margin: '0 0 0 3rem' }}>
