@@ -1,3 +1,4 @@
+import { WorkingModeStatus } from '@/constants';
 import { useModel } from '@umijs/max';
 import { Card, Popover } from 'antd';
 import moment from 'moment';
@@ -9,6 +10,7 @@ interface mqttDto {
   name: string;
   id: string;
   timeStamp: number;
+  WorkingMode: number;
   PV: [
     {
       id: string;
@@ -69,9 +71,7 @@ const LiveView: React.FC = () => {
     clientId: 'EMS-12345',
   });
   client.on('connect', function () {
-    client.subscribe(`HEMS`, function (err) {
-      console.log(err);
-
+    client.subscribe(`EMS/client`, function () {
       // if (!err) {
       //     client.publish(`HEMS/${(Math.random()*100000).toFixed(0)}`,JSON.stringify({
       //       name:`EMS-23`,
@@ -126,10 +126,18 @@ const LiveView: React.FC = () => {
       </div>
     );
   };
+  const contentMaster = (liveViewData: mqttDto) => {
+    return (
+      <div>
+        <p>ID:{liveViewData.id}</p>
+        <p>主机名:{liveViewData.name}</p>
+        <p>时间:{moment(liveViewData.timeStamp * 1000).format('YYYY-MM-DD hh:mm:ss')}</p>
+      </div>
+    );
+  };
   const contentHOME = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>主机名:{liveViewData.name}kw</p>
         <p>功率:{liveViewData.HOME[0].power}kw</p>
         <p>电压:{liveViewData.HOME[0].volt + 'v'}</p>
       </div>
@@ -140,18 +148,6 @@ const LiveView: React.FC = () => {
       <div>
         <p>功率:{liveViewData.GRID[0].power}kw</p>
         <p>电压:{liveViewData.GRID[0].volt + 'v'}</p>
-      </div>
-    );
-  };
-  const contentINV = (liveViewData: mqttDto) => {
-    return (
-      <div>
-        <p>ID:{liveViewData.id}</p>
-        <p>Name:{liveViewData.name}</p>
-        {/* <p>ID:{liveViewData.INV[0].id}</p>
-    <p>功率:{liveViewData.INV[0].power}kw</p>
-    <p>电压:{liveViewData.INV[0].volt+"v"}</p> */}
-        <p>时间:{moment(liveViewData.timeStamp * 1000).format('YYYY-MM-DD hh:mm:ss')}</p>
       </div>
     );
   };
@@ -193,10 +189,10 @@ const LiveView: React.FC = () => {
           </Popover>
         )}
         {liveViewData && liveViewData.HOME && (
-          <Popover content={contentINV(liveViewData)} title="Home">
+          <Popover content={contentMaster(liveViewData)} title="Home">
             <div className={styles.home}>
-              <p>INV</p>
-              <span>{liveViewData.INV[0].power}kw</span>
+              <p>HOME</p>
+              <span>{WorkingModeStatus[liveViewData.WorkingMode]}</span>
             </div>
           </Popover>
         )}

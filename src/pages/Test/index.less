@@ -1,0 +1,25 @@
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  text-align: center;
+  background: #333;
+}
+.wrapper {
+  position: relative;
+  top: 50%;
+  width: 320px;
+  height: 60px;
+  margin: 0 auto;
+  transform: translateY(-50%);
+}
+.borderrect {
+  transition: all linear 1s;
+  fill: transparent;
+  stroke: #d20be4;
+  stroke-width: 5;
+  stroke-dasharray: 270 300;
+}
+.wrapper:hover .borderrect {
+  stroke-dashoffset: 170;
+}

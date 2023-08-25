@@ -43,6 +43,12 @@ export default [
     component: './About',
   },
   {
+    path: '/test',
+    name: 'test',
+    icon: 'AppleFilled',
+    component: './Test',
+  },
+  {
     path: '/device',
     name: 'device',
     icon: 'HddOutlined',

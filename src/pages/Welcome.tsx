@@ -198,12 +198,12 @@ const Welcome: React.FC = () => {
       // legend: {
       //   data: ['06:00', '12:00', '18:00']
       // },
-      grid: {
-        left: '0',
-        right: '3%',
-        bottom: '0',
-        containLabel: true,
-      },
+      // grid: {
+      //   left: 0,
+      //   right: '5%',
+      //   bottom: 0,
+      //   containLabel: true,
+      // },
       xAxis: {
         type: 'category',
         nameLocation: 'middle',
@@ -456,7 +456,6 @@ const Welcome: React.FC = () => {
                 <Select
                   defaultValue={electricityChangeValue}
                   style={{ width: 100 }}
-                  disabled={true}
                   onChange={electricityChange}
                   bordered={false}
                   options={[
@@ -472,7 +471,7 @@ const Welcome: React.FC = () => {
                 type="text"
                 size="small"
                 shape="circle"
-                disabled={true}
+                disabled={electricityChangeValue !== 1}
                 onClick={() => {
                   setSeeElectricity(!seeElectricity);
                 }}
