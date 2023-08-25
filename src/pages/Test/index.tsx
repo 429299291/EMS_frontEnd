@@ -11,14 +11,33 @@ const Test: React.FC = () => {
   return (
     <>
       <div className={styles.wrapper}>
-        <svg height="500" width="500">
-          <polyline
-            className={styles.borderrect}
-            points="0,0 250,0 250,250 0,250 0,0"
-            style={{ fill: 'none', strokeWidth: '5' }}
-          />
+        <svg height="275px">
+          <path
+            fill="transparent"
+            stroke="#ccc"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M10 80 210 80, 210 280 "
+            className={styles.path}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="green"
+            strokeLinecap="round"
+            stopColor="#000"
+            strokeWidth="10"
+            d="M10 80 210 80, 210 280 "
+            className={styles.line2}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#ccc"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M10 80 210 80, 210 280 "
+            className={styles.line1}
+          ></path>
         </svg>
-        <div className={styles.wrapper}>Check it!</div>
       </div>
     </>
   );

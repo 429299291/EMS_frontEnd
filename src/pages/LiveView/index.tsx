@@ -164,22 +164,18 @@ const LiveView: React.FC = () => {
               : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
         }}
       >
-        {liveViewData && liveViewData.PV && (
-          <Popover content={contentPV(liveViewData)} title="Solar">
-            <div className={styles.solar}>
-              <p>Solar</p>
-              <span>{liveViewData.PV[0].power}kw</span>
-            </div>
-          </Popover>
-        )}
-        {liveViewData && liveViewData.BAT && (
-          <Popover content={contentBAT(liveViewData)} title="Battery">
-            <div className={styles.battery}>
-              <p>Battery</p>
-              <span>{liveViewData.BAT[0].power}kw</span>
-            </div>
-          </Popover>
-        )}
+        <Popover content={liveViewData ? contentPV(liveViewData) : null} title="Solar">
+          <div className={styles.solar}>
+            <p>Solar</p>
+            <span>{liveViewData ? liveViewData.PV[0].power : null}kw</span>
+          </div>
+        </Popover>
+        <Popover content={liveViewData ? contentBAT(liveViewData) : null} title="Battery">
+          <div className={styles.battery}>
+            <p>Battery</p>
+            <span>{liveViewData ? liveViewData.BAT[0].power : null}kw</span>
+          </div>
+        </Popover>
         {liveViewData && liveViewData.EV && (
           <Popover content={contentEV(liveViewData)} title="EV">
             <div className={styles.ev}>
@@ -188,66 +184,63 @@ const LiveView: React.FC = () => {
             </div>
           </Popover>
         )}
-        {liveViewData && liveViewData.HOME && (
-          <Popover content={contentMaster(liveViewData)} title="Home">
-            <div className={styles.home}>
-              <p>HOME</p>
-              <span>{WorkingModeStatus[liveViewData.WorkingMode]}</span>
-            </div>
-          </Popover>
-        )}
-        {liveViewData && liveViewData.GRID && (
-          <Popover content={contentGRID(liveViewData)} title="Grid">
-            <div className={styles.grid}>
-              <p>Grid</p>
-              <span>{liveViewData.GRID[0].power}kw</span>
-            </div>
-          </Popover>
-        )}
-        {liveViewData && liveViewData.HOME && (
-          <Popover content={contentHOME(liveViewData)} title="House">
-            <div className={styles.house}>
-              <p>House</p>
-              <span>{liveViewData.HOME[0].power}kw</span>
-            </div>
-          </Popover>
-        )}
+        <Popover content={liveViewData ? contentMaster(liveViewData) : null} title="Home">
+          <div className={styles.home}>
+            <p>HOME</p>
+            <span>{liveViewData ? WorkingModeStatus[liveViewData.WorkingMode] : null}</span>
+          </div>
+        </Popover>
+        <Popover content={liveViewData ? contentGRID(liveViewData) : null} title="Grid">
+          <div className={styles.grid}>
+            <p>Grid</p>
+            <span>{liveViewData ? liveViewData.GRID[0].power : null}kw</span>
+          </div>
+        </Popover>
+        <Popover content={liveViewData ? contentHOME(liveViewData) : null} title="House">
+          <div className={styles.house}>
+            <p>House</p>
+            <span>{liveViewData ? liveViewData.HOME[0].power : null}kw</span>
+          </div>
+        </Popover>
         {/* <div className={styles.battery}>
           <p>Battery</p>
           <span>10kw</span>
         </div> */}
         {/* left line flow */}
-        <div className={styles.one}>
-          <div className={styles.ball}></div>
-        </div>
-        <div className={styles.two}>
-          <div className={styles.ball}></div>
-        </div>
-        <div className={styles.three}>
-          <div className={styles.ball}></div>
-        </div>
-        <div className={styles.four}>
-          <div className={styles.ball}></div>
-        </div>
-        <div className={styles.five}>
-          <div className={styles.ball}></div>
-        </div>
-        {/* right line flow */}
-        <div className={styles.six}>
-          <div className={styles.ball}></div>
-        </div>
-        <div className={styles.seven}>
-          <div className={styles.ball}></div>
-        </div>
-        <div className={styles.eight}>
-          <div className={styles.ball}></div>
-        </div>
-        <div className={styles.nine}>
-          <div className={styles.ball}></div>
-        </div>
-        <div className={styles.ten}>
-          <div className={styles.ball}></div>
-        </div>
+        {liveViewData && liveViewData.PV && (
+          <svg className={styles.solarlive}>
+            <path
+              fill="transparent"
+              stroke="#ddd"
+              strokeLinecap="round"
+              strokeWidth="10"
+              d="M0 80 350 80, 350 280 "
+              className={styles.path}
+            ></path>
+            <path
+              fill="transparent"
+              stroke="#24d081"
+              strokeLinecap="round"
+              stopColor="#000"
+              strokeWidth="10"
+              d="M0 80 350 80, 350 280 "
+              className={styles.line2}
+            ></path>
+            <path
+              fill="transparent"
+              stroke="#ddd"
+              strokeLinecap="round"
+              strokeWidth="10"
+              d="M0 80 350 80, 350 280 "
+              className={styles.line1}
+            ></path>
+          </svg>
+        )}
+        {/* {liveViewData && liveViewData.BAT&&<svg className={styles.solarlive}>
+          <path fill="transparent" stroke="#ddd" strokeLinecap='round' strokeWidth="10" d="M0 80 220 80 " className={styles.path}></path>
+          <path fill="transparent" stroke="#24d081" strokeLinecap='round' stopColor='#000' strokeWidth="10" d="M0 80 220 80" className={styles.line4}></path>
+          <path fill="transparent" stroke="#ddd" strokeLinecap='round' strokeWidth="10" d="M0 80 220 80 " className={styles.line3}></path>
+        </svg>} */}
       </Card>
     </>
   );

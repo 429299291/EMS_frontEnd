@@ -1,21 +1,3 @@
-.line() {
-  position: absolute;
-  height: 4px;
-  // background: linear-gradient (to top, #ccc,#fff,#ddd);
-  background: #eee;
-  border-radius: 2px;
-}
-.ball() {
-  position: absolute;
-  z-index: 7;
-  width: 10px;
-  height: 10px;
-  background: radial-gradient(at 3.5px 3.5px, #fff, rgba(36, 208, 129, 0.6), #ccc);
-  border-radius: 5px;
-  box-shadow: 0px 0px 8px 1px #24d081;
-  transform: translate(-5px, -2px);
-  opacity: 0;
-}
 .box {
   position: relative;
   width: 1370px;
@@ -86,168 +68,65 @@
     height: 10rem;
     background: url('https://ems-public.oss-cn-beijing.aliyuncs.com/house%20') no-repeat center/100%;
   }
-  .one {
-    top: 25%;
-    left: 22%;
-    width: 3rem;
-    .line();
-    .ball {
-      .ball();
-      animation: reverseMove1 4s linear infinite;
+  //
+  .solarlive {
+    width: 500px;
+    height: 200px;
+    margin-top: 50px;
+    margin-left: 220px;
+  }
+  .path {
+  }
+  .line1 {
+    animation: dash 5s linear infinite;
+    stroke-dasharray: 680;
+    stroke-dashoffset: 80;
+  }
+  .line2 {
+    animation: dash2 5s linear infinite;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+  }
+  @keyframes dash {
+    from {
+      stroke-dashoffset: 740;
+    }
+    to {
+      stroke-dashoffset: 80;
     }
   }
-  .two {
-    top: 25%;
-    left: 18%;
-    width: 12rem;
-    transform: rotate(90deg) translate(5.9rem, -0.4rem);
-    .line();
-    .ball {
-      .ball();
-      animation: reverseMove2 4s linear infinite;
+  @keyframes dash2 {
+    from {
+      stroke-dashoffset: 600;
+    }
+    to {
+      stroke-dashoffset: -60;
     }
   }
-  .three {
-    top: 50%;
-    left: 22%;
-    width: 10rem;
-    .line();
-    .ball {
-      .ball();
-      animation: reverseMove2 4s linear 3.4s infinite;
+  .line3 {
+    animation: dash3 5s linear infinite;
+    stroke-dasharray: 220;
+    stroke-dashoffset: 80;
+  }
+  .line4 {
+    animation: dash4 5s linear infinite;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 180;
+  }
+  @keyframes dash3 {
+    from {
+      stroke-dashoffset: 260;
+    }
+    to {
+      stroke-dashoffset: 80;
     }
   }
-  .four {
-    bottom: 25%;
-    left: 22%;
-    width: 3rem;
-    .line();
-    .ball {
-      .ball();
-      animation: reverseMoveOut1 2s linear infinite;
+  @keyframes dash4 {
+    from {
+      stroke-dashoffset: 200;
     }
-  }
-  .five {
-    bottom: 25%;
-    left: 18%;
-    width: 12rem;
-    transform: rotate(270deg) translate(5.9rem, 0.4rem);
-    .line();
-    .ball {
-      .ball();
-      animation: reverseMoveOut2 2s linear infinite;
-    }
-  }
-  .six {
-    top: 25%;
-    right: 35%;
-    width: 3rem;
-    .line();
-    // .ball {
-    //   .ball();
-    //   animation: reverseMoveOut1 4s linear 2s infinite;
-    // }
-  }
-  .seven {
-    top: 25%;
-    right: 35%;
-    width: 12rem;
-    transform: rotate(90deg) translate(6rem, -3.1rem);
-    .line();
-    // .ball {
-    //   .ball();
-    //   animation: reverseMove2 4s linear 2s infinite;
-    // }
-  }
-  .eight {
-    top: 50%;
-    right: 38.3%;
-    width: 6rem;
-    .line();
-    .ball {
-      .ball();
-      animation: reverseMove2 4s linear 2s infinite;
-    }
-  }
-  .nine {
-    right: 35%;
-    bottom: 25%;
-    width: 3rem;
-    .line();
-    .ball {
-      .ball();
-      animation: reverseMove1 2s linear infinite;
-    }
-  }
-  .ten {
-    right: 35%;
-    bottom: 25%;
-    width: 12rem;
-    transform: rotate(270deg) translate(5.9rem, 3.1rem);
-    .line();
-    .ball {
-      .ball();
-      animation: reverseMoveOut1 4s linear 2s infinite;
-    }
-  }
-  @keyframes reverseMove1 {
-    0% {
-      left: 0;
-      opacity: 1;
-    }
-    50% {
-      left: 100%;
-      opacity: 1;
-    }
-    51% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-  @keyframes reverseMove2 {
-    0% {
-      left: 0;
-      opacity: 0;
-    }
-    50% {
-      left: 0;
-      opacity: 0;
-    }
-    51% {
-      left: 0;
-      opacity: 1;
-    }
-    100% {
-      left: 100%;
-      opacity: 1;
-    }
-  }
-  @keyframes reverseMoveOut1 {
-    0% {
-      right: 0;
-      opacity: 1;
-    }
-    50% {
-      right: 100%;
-      opacity: 1;
-    }
-    51% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-  @keyframes reverseMoveOut2 {
-    0% {
-      right: 0;
-      opacity: 1;
-    }
-    100% {
-      right: 100%;
-      opacity: 1;
+    to {
+      stroke-dashoffset: -60;
     }
   }
 }

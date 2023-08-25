@@ -1,25 +1,28 @@
-html,
-body {
-  height: 100%;
-  overflow: hidden;
-  text-align: center;
-  background: #333;
+.path {
 }
-.wrapper {
-  position: relative;
-  top: 50%;
-  width: 320px;
-  height: 60px;
-  margin: 0 auto;
-  transform: translateY(-50%);
+.line1 {
+  animation: dash 2s linear infinite;
+  stroke-dasharray: 340;
+  stroke-dashoffset: 300;
 }
-.borderrect {
-  transition: all linear 1s;
-  fill: transparent;
-  stroke: #d20be4;
-  stroke-width: 5;
-  stroke-dasharray: 270 300;
+.line2 {
+  animation: dash2 2s linear infinite;
+  stroke-dasharray: 320;
+  stroke-dashoffset: 440;
 }
-.wrapper:hover .borderrect {
-  stroke-dashoffset: 170;
+@keyframes dash {
+  from {
+    stroke-dashoffset: 360;
+  }
+  to {
+    stroke-dashoffset: 40;
+  }
+}
+@keyframes dash2 {
+  from {
+    stroke-dashoffset: 280;
+  }
+  to {
+    stroke-dashoffset: -40;
+  }
 }
