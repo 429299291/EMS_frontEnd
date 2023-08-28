@@ -1,7 +1,7 @@
 import { WeatherIcon } from '@/constants';
 import { currentWeather, day5Weather } from '@/services/weather/api';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { SelectLang as UmiSelectLang } from '@umijs/max';
+import { SelectLang as UmiSelectLang, useModel } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Badge, Dropdown, Select } from 'antd';
 import moment from 'moment';
@@ -16,23 +16,29 @@ export const SelectLang = () => {
     />
   );
 };
-let locationData:[]=[]
+let locationData: [] = [];
 export const Location = (currentUser: any) => {
   // const [locationData, setLocationData]: any = useState([]);
-  if(!currentUser.currentUser) {return false}
+  const { initialState, setInitialState } = useModel('@@initialState');
+  if (!currentUser.currentUser) {
+    return false;
+  }
   let options: any[] = [];
-  locationData = []
-  currentUser.currentUser.devices.map((data:any,index:number) => {
-    // setLocationData([...locationData,{lat:data.location.lat,lng:data.location.lng}])    
-    locationData.push({lat:data.location.lat,lon:data.location.lng})
+  locationData = [];
+  currentUser.currentUser.devices.map((data: any, index: number) => {
+    // setLocationData([...locationData,{lat:data.location.lat,lng:data.location.lng}])
+    locationData.push({ lat: data.location.lat, lon: data.location.lng });
     return options.push({
       // value: `lat:${data.location.lat},lon:${data.location.lng}`,
       value: index,
       label: data.location.location,
-    });  
-  });  
-  const locationHandleChange = (val:number) => {
-    currentUser.setLocationIndex(val)
+    });
+  });
+  const locationHandleChange = (val: number) => {
+    setInitialState({
+      ...initialState,
+      locationIndex: val,
+    });
     // currentGeo(data).then((item) => {
     //   console.log(item);
     // });
@@ -74,6 +80,7 @@ export const Question = () => {
 export const Weather = (props) => {
   const [currentWeatherData, setCurrentWeatherData]: any = useState();
   const [day5WeatherData, setDay5WeatherData]: any = useState();
+  const { initialState } = useModel('@@initialState');
   const items: MenuProps['items'] = day5WeatherData?.list.map((data: any, index: number) => {
     if (!((index - 2) % 8)) {
       return {
@@ -98,13 +105,18 @@ export const Weather = (props) => {
     }
   });
   useEffect(() => {
-      currentWeather(locationData[props.locationIndex]).then((data) => {
-        setCurrentWeatherData(data);
-      });
-      day5Weather(locationData[props.locationIndex]).then((data) => {
+    currentWeather(
+      locationData[initialState?.locationIndex ? initialState?.locationIndex : 0],
+    ).then((data) => {
+      setCurrentWeatherData(data);
+    });
+    day5Weather(locationData[initialState?.locationIndex ? initialState.locationIndex : 0]).then(
+      (data) => {
         setDay5WeatherData(data);
-      });
-  }, [props.locationIndex]);
+      },
+    );
+  }, [initialState?.locationIndex]);
+
   return (
     <>
       <Dropdown menu={{ items }}>
@@ -127,7 +139,12 @@ export const Weather = (props) => {
               paddingTop: '10px',
             }}
           >
-            <p>{props.sunrise[props.locationIndex].location.sunrise}</p>
+            <p>
+              {
+                props.sunrise[initialState?.locationIndex ? initialState?.locationIndex : 0]
+                  .location.sunrise
+              }
+            </p>
             <p>Sunrise</p>
           </div>
           <WeatherIcon type="icon-richu" style={{ fontSize: 40, padding: '0 2rem' }} />
@@ -142,7 +159,12 @@ export const Weather = (props) => {
               paddingTop: '10px',
             }}
           >
-            <p>{props.sunrise[props.locationIndex].location.sunset}</p>
+            <p>
+              {
+                props.sunrise[initialState?.locationIndex ? initialState.locationIndex : 0].location
+                  .sunset
+              }
+            </p>
             <p>Sunset</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', margin: '0 0 0 3rem' }}>
