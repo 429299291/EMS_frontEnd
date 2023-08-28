@@ -1,5 +1,5 @@
-// import { useModel,FormattedMessage } from '@umijs/max';
 import { BATdata, EVdata, GRIDdata, HOMEdata, PVdata, WorkingModeStatusColor } from '@/constants';
+import { useModel } from '@umijs/max';
 import { Button, Card, Progress, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import { connect, useDispatch } from '@umijs/plugins/libs/dva';
@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons';
 import * as echarts from 'echarts';
 import styles from './Welcome.less';
+
 const Welcome: React.FC = () => {
   // const dispatch = useDispatch();
   const [
@@ -21,6 +22,8 @@ const Welcome: React.FC = () => {
   const [electricityChangeValue, setElectricityChangeValue] = useState(1);
   const [seeElectricity, setSeeElectricity] = useState(false);
   const [workingModeData, setWorkingModeData] = useState(0);
+  const { initialState } = useModel('@@initialState');
+  const { currentUser, locationIndex } = initialState;
   let ElectricityConsumptionChart: any;
   let GaugeChart: any;
   let DistributionElectricity: any;
@@ -379,6 +382,7 @@ const Welcome: React.FC = () => {
     setWorkingModeData(val);
     command({
       WorkingMode: val,
+      deviceId: currentUser.devices[locationIndex ? locationIndex : 0].deviceId,
     });
   };
   return (

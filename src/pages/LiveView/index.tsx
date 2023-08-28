@@ -74,7 +74,7 @@ const LiveView: React.FC = () => {
       `EMS/client/${
         initialState?.currentUser?.devices[
           initialState.locationIndex ? initialState.locationIndex : 0
-        ].id
+        ].deviceId
       }`,
       function () {
         // if (!err) {
@@ -94,7 +94,7 @@ const LiveView: React.FC = () => {
   client.on('message', (topic, message) => {
     // message is Buffer
     // console.log(message);
-    console.log(JSON.parse(message.toString()));
+    // console.log(JSON.parse(message.toString()));
 
     setLiveViewData(JSON.parse(message.toString()));
     // client.end()
@@ -251,6 +251,8 @@ const LiveView: React.FC = () => {
               strokeWidth="10"
               d="M0 80 259 80 "
               className={styles.path}
+              // style={{animationDirection:"reverse"}}  反向流转
+              // style={{animationDirection:(liveViewData&&liveViewData[0]?.volt>=0)?"reverse":"reverse"}}
             ></path>
             <path
               fill="transparent"
