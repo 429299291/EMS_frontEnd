@@ -1,4 +1,3 @@
-import { WorkingModeStatus } from '@/constants';
 import { useModel } from '@umijs/max';
 import { Card, Popover } from 'antd';
 import moment from 'moment';
@@ -167,54 +166,83 @@ const LiveView: React.FC = () => {
         <Popover content={liveViewData ? contentPV(liveViewData) : null} title="Solar">
           <div className={styles.solar}>
             <p>Solar</p>
-            <span>{liveViewData ? liveViewData.PV[0].power : null}kw</span>
+            <span>{liveViewData ? liveViewData.PV[0].power + 'kw' : null}</span>
           </div>
         </Popover>
         <Popover content={liveViewData ? contentBAT(liveViewData) : null} title="Battery">
-          <div className={styles.battery}>
+          <div
+            className={liveViewData && liveViewData.EV ? styles.battery : styles.ev}
+            style={{
+              width: '6rem',
+              background:
+                "url('https://ems-public.oss-cn-beijing.aliyuncs.com/battery.png') no-repeat center/60%",
+            }}
+          >
             <p>Battery</p>
-            <span>{liveViewData ? liveViewData.BAT[0].power : null}kw</span>
+            <span>{liveViewData ? liveViewData.BAT[0].power + 'kw' : null}</span>
           </div>
         </Popover>
         {liveViewData && liveViewData.EV && (
           <Popover content={contentEV(liveViewData)} title="EV">
             <div className={styles.ev}>
               <p>EV</p>
-              <span>{liveViewData.EV[0].power}kw</span>
+              <span>{liveViewData.EV[0].power + 'kw'}</span>
             </div>
           </Popover>
         )}
         <Popover content={liveViewData ? contentMaster(liveViewData) : null} title="Home">
           <div className={styles.home}>
-            <p>HOME</p>
-            <span>{liveViewData ? WorkingModeStatus[liveViewData.WorkingMode] : null}</span>
+            {/* <p>HOME</p>
+            <span>{liveViewData ? WorkingModeStatus[liveViewData.WorkingMode] : null}</span> */}
           </div>
         </Popover>
         <Popover content={liveViewData ? contentGRID(liveViewData) : null} title="Grid">
           <div className={styles.grid}>
             <p>Grid</p>
-            <span>{liveViewData ? liveViewData.GRID[0].power : null}kw</span>
+            <span>{liveViewData ? liveViewData.GRID[0].power + 'kw' : null}</span>
           </div>
         </Popover>
         <Popover content={liveViewData ? contentHOME(liveViewData) : null} title="House">
           <div className={styles.house}>
             <p>House</p>
-            <span>{liveViewData ? liveViewData.HOME[0].power : null}kw</span>
+            <span>{liveViewData ? liveViewData.HOME[0].power + 'kw' : null}</span>
           </div>
         </Popover>
-        {/* <div className={styles.battery}>
-          <p>Battery</p>
-          <span>10kw</span>
-        </div> */}
-        {/* left line flow */}
-        {liveViewData && liveViewData.PV && (
-          <svg className={styles.solarlive}>
+        <svg className={styles.solarlive}>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M0 80 350 80, 350 190 "
+            className={styles.path}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#24d081"
+            strokeLinecap="round"
+            stopColor="#000"
+            strokeWidth="10"
+            d="M0 80 350 80, 350 190 "
+            className={liveViewData && liveViewData.PV ? styles.line2 : null}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M0 80 350 80, 350 190 "
+            className={liveViewData && liveViewData.PV ? styles.line1 : null}
+          ></path>
+        </svg>
+        {liveViewData && liveViewData.EV && (
+          <svg className={styles.batterylive}>
             <path
               fill="transparent"
               stroke="#ddd"
               strokeLinecap="round"
               strokeWidth="10"
-              d="M0 80 350 80, 350 280 "
+              d="M0 80 259 80 "
               className={styles.path}
             ></path>
             <path
@@ -223,24 +251,100 @@ const LiveView: React.FC = () => {
               strokeLinecap="round"
               stopColor="#000"
               strokeWidth="10"
-              d="M0 80 350 80, 350 280 "
-              className={styles.line2}
+              d="M0 80 259 80 "
+              className={liveViewData && liveViewData.PV ? styles.line2 : null}
             ></path>
             <path
               fill="transparent"
               stroke="#ddd"
               strokeLinecap="round"
               strokeWidth="10"
-              d="M0 80 350 80, 350 280 "
-              className={styles.line1}
+              d="M0 80 259 80 "
+              className={liveViewData && liveViewData.PV ? styles.line1 : null}
             ></path>
           </svg>
         )}
-        {/* {liveViewData && liveViewData.BAT&&<svg className={styles.solarlive}>
-          <path fill="transparent" stroke="#ddd" strokeLinecap='round' strokeWidth="10" d="M0 80 220 80 " className={styles.path}></path>
-          <path fill="transparent" stroke="#24d081" strokeLinecap='round' stopColor='#000' strokeWidth="10" d="M0 80 220 80" className={styles.line4}></path>
-          <path fill="transparent" stroke="#ddd" strokeLinecap='round' strokeWidth="10" d="M0 80 220 80 " className={styles.line3}></path>
-        </svg>} */}
+        <svg className={styles.evlive}>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M0 180 350 180,350 60 "
+            className={styles.path}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#24d081"
+            strokeLinecap="round"
+            stopColor="#000"
+            strokeWidth="10"
+            d="M0 180 350 180,350 60"
+            className={liveViewData && liveViewData.PV ? styles.line2 : null}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M0 180 350 180,350 60"
+            className={liveViewData && liveViewData.PV ? styles.line1 : null}
+          ></path>
+        </svg>
+        <svg className={styles.gridlive}>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M450 80 10 80,10 190 "
+            className={styles.path}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#24d081"
+            strokeLinecap="round"
+            stopColor="#000"
+            strokeWidth="10"
+            d="M450 80 10 80,10 190"
+            className={liveViewData && liveViewData.PV ? styles.line2 : null}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M450 80 10 80,10 190"
+            className={liveViewData && liveViewData.PV ? styles.line1 : null}
+          ></path>
+        </svg>
+        <svg className={styles.houselive}>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M450 180 10 180,10 60 "
+            className={styles.path}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#24d081"
+            strokeLinecap="round"
+            stopColor="#000"
+            strokeWidth="10"
+            d="M450 180 10 180,10 60"
+            className={liveViewData && liveViewData.PV ? styles.line2 : null}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M450 180 10 180,10 60"
+            className={liveViewData && liveViewData.PV ? styles.line1 : null}
+          ></path>
+        </svg>
       </Card>
     </>
   );
