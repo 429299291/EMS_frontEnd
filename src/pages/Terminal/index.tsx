@@ -151,7 +151,7 @@ const Terminal: React.FC = () => {
     },
     {
       title: <FormattedMessage id="pages.account.identity" defaultMessage="Id" />,
-      dataIndex: 'terminalID',
+      dataIndex: 'id',
       valueType: 'textarea',
     },
     {

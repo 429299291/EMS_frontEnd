@@ -382,7 +382,7 @@ const Welcome: React.FC = () => {
     setWorkingModeData(val);
     command({
       WorkingMode: val,
-      terminalID: currentUser.terminals[locationIndex ? locationIndex : 0].terminalID,
+      id: currentUser.terminals[locationIndex ? locationIndex : 0].id,
     });
   };
   return (
@@ -421,11 +421,11 @@ const Welcome: React.FC = () => {
                   ].WorkingMode
                 }
                 style={{ width: 100 }}
-                value={
-                  initialState?.currentUser.terminals[
-                    initialState.locationIndex ? initialState.locationIndex : 0
-                  ].WorkingMode
-                }
+                // value={
+                //   initialState?.currentUser.terminals[
+                //     initialState.locationIndex ? initialState.locationIndex : 0
+                //   ].WorkingMode
+                // }
                 bordered={false}
                 onChange={modelHandleChange}
                 options={[

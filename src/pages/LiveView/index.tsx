@@ -1,10 +1,12 @@
 import { WorkingModeStatus } from '@/constants';
+import { DollarTwoTone } from '@ant-design/icons';
 import { useModel } from '@umijs/max';
 import { Card, Popover } from 'antd';
 import moment from 'moment';
 import * as mqtt from 'mqtt';
 import React, { useState } from 'react';
 import styles from './index.less';
+
 interface mqttDto {
   name: string;
   id: string;
@@ -62,8 +64,6 @@ const LiveView: React.FC = () => {
   //   const { token } = theme.useToken();
   const [liveViewData, setLiveViewData] = useState<mqttDto>();
   const { initialState } = useModel('@@initialState');
-  console.log(initialState);
-  console.log(liveViewData);
 
   const client = mqtt.connect('mqtt://47.106.120.119:8083', {
     username: 'ems',
@@ -76,7 +76,7 @@ const LiveView: React.FC = () => {
       `EMS/client/${
         initialState?.currentUser?.terminals[
           initialState.locationIndex ? initialState.locationIndex : 0
-        ].terminalID
+        ].id
       }`,
       function () {
         // if (!err) {
@@ -138,7 +138,7 @@ const LiveView: React.FC = () => {
     return (
       <div>
         {/* <p>ID:{liveViewData.id}</p> */}
-        <p>终端ID:{initialState?.currentUser?.terminals[initialState.locationIndex].terminalID}</p>
+        <p>终端ID:{initialState?.currentUser?.terminals[initialState.locationIndex].id}</p>
         <p>主机名:{liveViewData.name}</p>
         <p>
           模式:
@@ -151,6 +151,7 @@ const LiveView: React.FC = () => {
         <p>
           电价:
           {initialState?.currentUser?.terminals[initialState.locationIndex].location.electrovalency}
+          <DollarTwoTone style={{ marginLeft: '3px' }} />
         </p>
         <p>供应商:{initialState?.currentUser?.terminals[initialState.locationIndex].supplier}</p>
         <p>时间:{moment(liveViewData.timeStamp * 1000).format('YYYY-MM-DD hh:mm:ss')}</p>
