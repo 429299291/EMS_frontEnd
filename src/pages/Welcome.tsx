@@ -415,8 +415,17 @@ const Welcome: React.FC = () => {
             <>
               <SettingTwoTone spin twoToneColor={WorkingModeStatusColor[workingModeData]} />
               <Select
-                defaultValue={0}
+                defaultValue={
+                  initialState?.currentUser.terminals[
+                    initialState.locationIndex ? initialState.locationIndex : 0
+                  ].WorkingMode
+                }
                 style={{ width: 100 }}
+                value={
+                  initialState?.currentUser.terminals[
+                    initialState.locationIndex ? initialState.locationIndex : 0
+                  ].WorkingMode
+                }
                 bordered={false}
                 onChange={modelHandleChange}
                 options={[

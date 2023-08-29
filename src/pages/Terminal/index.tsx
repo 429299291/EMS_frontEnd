@@ -86,7 +86,7 @@ const handleRemove = async (selectedRows: API.RuleListItem[]) => {
   }
 };
 
-const Account: React.FC = () => {
+const Terminal: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
    * @zh-CN 新建窗口的弹窗
@@ -370,4 +370,4 @@ const Account: React.FC = () => {
   );
 };
 
-export default Account;
+export default Terminal;

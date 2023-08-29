@@ -116,8 +116,6 @@ export const Weather = (props) => {
       },
     );
   }, [initialState?.locationIndex]);
-  console.log(props);
-
   return (
     <>
       <Dropdown menu={{ items }}>
@@ -141,8 +139,8 @@ export const Weather = (props) => {
             }}
           >
             <p>
-              {props.sunrise &&
-                props.sunrise[initialState?.locationIndex ? initialState?.locationIndex : 0]
+              {props.terminals &&
+                props.terminals[initialState?.locationIndex ? initialState?.locationIndex : 0]
                   .location.sunrise}
             </p>
             <p>Sunrise</p>
@@ -160,9 +158,9 @@ export const Weather = (props) => {
             }}
           >
             <p>
-              {props.sunrise &&
-                props.sunrise[initialState?.locationIndex ? initialState.locationIndex : 0].location
-                  .sunset}
+              {props.terminals &&
+                props.terminals[initialState?.locationIndex ? initialState.locationIndex : 0]
+                  .location.sunset}
             </p>
             <p>Sunset</p>
           </div>

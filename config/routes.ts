@@ -49,11 +49,11 @@ export default [
     component: './Test',
   },
   {
-    path: '/device',
-    name: 'device',
+    path: '/terminal',
+    name: 'terminal',
     icon: 'HddOutlined',
     access: 'canSuperAdmin',
-    component: './Device',
+    component: './Terminal',
   },
   {
     path: '/account',
