@@ -58,7 +58,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       <Weather
         key="doc"
         locationIndex={initialState?.locationIndex}
-        sunrise={initialState?.currentUser?.devices}
+        sunrise={initialState?.currentUser?.terminals}
       />,
       <Location currentUser={initialState?.currentUser} key="location" />,
       // <SelectLang key="SelectLang" />,   国际化

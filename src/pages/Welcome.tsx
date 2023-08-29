@@ -382,7 +382,7 @@ const Welcome: React.FC = () => {
     setWorkingModeData(val);
     command({
       WorkingMode: val,
-      deviceId: currentUser.devices[locationIndex ? locationIndex : 0].deviceId,
+      terminalID: currentUser.terminals[locationIndex ? locationIndex : 0].terminalID,
     });
   };
   return (

@@ -147,8 +147,8 @@ const Account: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.devices" defaultMessage="Devices" />,
-      dataIndex: 'devices',
+      title: <FormattedMessage id="pages.account.devices" defaultMessage="Terminal" />,
+      dataIndex: 'terminals',
       search: false,
       render: (dom: any) => {
         return dom.map((data: any) => {

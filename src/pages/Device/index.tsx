@@ -151,7 +151,7 @@ const Account: React.FC = () => {
     },
     {
       title: <FormattedMessage id="pages.account.identity" defaultMessage="Id" />,
-      dataIndex: 'deviceId',
+      dataIndex: 'terminalID',
       valueType: 'textarea',
     },
     {

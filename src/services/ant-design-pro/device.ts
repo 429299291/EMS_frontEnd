@@ -21,7 +21,7 @@ export async function device(
   // },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/device/devices', {
+  return request<API.RuleList>('/api/terminal/terminals', {
     method: 'POST',
     data: options,
   });

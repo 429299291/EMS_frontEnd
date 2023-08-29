@@ -25,7 +25,7 @@ export const Location = (currentUser: any) => {
   }
   let options: any[] = [];
   locationData = [];
-  currentUser.currentUser.devices.map((data: any, index: number) => {
+  currentUser.currentUser.terminals.map((data: any, index: number) => {
     // setLocationData([...locationData,{lat:data.location.lat,lng:data.location.lng}])
     locationData.push({ lat: data.location.lat, lon: data.location.lng });
     return options.push({
@@ -116,6 +116,7 @@ export const Weather = (props) => {
       },
     );
   }, [initialState?.locationIndex]);
+  console.log(props);
 
   return (
     <>
@@ -140,10 +141,9 @@ export const Weather = (props) => {
             }}
           >
             <p>
-              {
+              {props.sunrise &&
                 props.sunrise[initialState?.locationIndex ? initialState?.locationIndex : 0]
-                  .location.sunrise
-              }
+                  .location.sunrise}
             </p>
             <p>Sunrise</p>
           </div>
@@ -160,10 +160,9 @@ export const Weather = (props) => {
             }}
           >
             <p>
-              {
+              {props.sunrise &&
                 props.sunrise[initialState?.locationIndex ? initialState.locationIndex : 0].location
-                  .sunset
-              }
+                  .sunset}
             </p>
             <p>Sunset</p>
           </div>

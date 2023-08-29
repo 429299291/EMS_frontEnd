@@ -72,9 +72,9 @@ const LiveView: React.FC = () => {
   client.on('connect', function () {
     client.subscribe(
       `EMS/client/${
-        initialState?.currentUser?.devices[
+        initialState?.currentUser?.terminals[
           initialState.locationIndex ? initialState.locationIndex : 0
-        ].deviceId
+        ].terminalID
       }`,
       function () {
         // if (!err) {
