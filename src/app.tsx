@@ -18,6 +18,7 @@ export async function getInitialState(): Promise<{
   currentUser?: API.CurrentUser;
   loading?: boolean;
   locationIndex: number;
+  liveView: any;
   fetchUserInfo?: (values?: any) => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async (values?: any) => {
@@ -26,7 +27,6 @@ export async function getInitialState(): Promise<{
         skipErrorHandler: true,
         values,
       });
-
       return msg;
     } catch (error) {
       history.push(loginPath);

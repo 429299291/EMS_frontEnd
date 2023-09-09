@@ -1,10 +1,11 @@
 import { WorkingModeStatus } from '@/constants';
+import { getMQTT } from '@/tools/mqttclient';
 import { DollarTwoTone } from '@ant-design/icons';
 import { useModel } from '@umijs/max';
-import { Card, Popover } from 'antd';
+import { Card, message, Popover } from 'antd';
 import moment from 'moment';
 import * as mqtt from 'mqtt';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './index.less';
 
 interface mqttDto {
@@ -39,19 +40,20 @@ interface mqttDto {
       status: number;
     },
   ];
-  HOME: [
-    {
-      id: string;
+  HOME: {
+    home: {
       power: number;
       volt: number;
-    },
-  ];
-  GRID: [
-    {
+    };
+    critical: {
       power: number;
       volt: number;
-    },
-  ];
+    };
+  };
+  GRID: {
+    power: number;
+    volt: number;
+  };
   INV: [
     {
       id: string;
@@ -63,43 +65,50 @@ interface mqttDto {
 const LiveView: React.FC = () => {
   //   const { token } = theme.useToken();
   const [liveViewData, setLiveViewData] = useState<mqttDto>();
-  const { initialState } = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
+  let client: any;
+  useEffect(() => {
+    // 在组件加载后执行的代码
+    return () => {
+      //销毁执行代码
+      message.destroy();
+    };
+  }, []);
+  useEffect(() => {
+    // 在组件加载后执行的代码
 
-  const client = mqtt.connect('mqtt://47.106.120.119:8083', {
+    return () => {
+      //销毁执行代码
+    };
+  }, [initialState?.locationIndex]);
+  getMQTT(initialState, mqtt);
+  client = mqtt.connect('mqtt://47.106.120.119:8083', {
     username: 'ems',
     password: 'xuheng8888',
     protocolId: 'MQTT',
     clientId: 'EMS-12345',
   });
-  client.on('connect', function () {
-    client.subscribe(
+
+  client.on('connect', () => {
+    client.subscribeAsync(
       `EMS/client/${
         initialState?.currentUser?.terminals[
           initialState.locationIndex ? initialState.locationIndex : 0
         ].id
       }`,
-      function () {
-        // if (!err) {
-        //     client.publish(`HEMS/${(Math.random()*100000).toFixed(0)}`,JSON.stringify({
-        //       name:`EMS-23`,
-        //       userId:'1b68ccbb-f276-4a98-9523-156fc412ab51',  //终端所有权ID
-        //       id:(Math.random()*100000).toFixed(0),//终端识别ID
-        //       timeStamp:Math.floor(new Date().getTime()/1000),
-        //       location:"深圳",
-        //       supplier:'voltronicpower',
-        //       WorkingMode:Math.ceil(Math.random()*4-1),
-        //     }),{qos:1,retain:true})
-        // }
+      (err: any) => {
+        console.log(err);
       },
     );
   });
   client.on('message', (topic, message) => {
     // message is Buffer
-    // console.log(message);
-    // console.log(JSON.parse(message.toString()));
-
+    console.log('第一接收信息' + JSON.parse(message.toString()));
+    setInitialState({ ...initialState, liveView: JSON.parse(message.toString()) });
     setLiveViewData(JSON.parse(message.toString()));
-    // client.end()
+    client.end();
+
+    // client.unsubscribeAsync()
   });
   const contentPV = (liveViewData: mqttDto) => {
     return (
@@ -154,26 +163,43 @@ const LiveView: React.FC = () => {
           <DollarTwoTone style={{ marginLeft: '3px' }} />
         </p>
         <p>供应商:{initialState?.currentUser?.terminals[initialState.locationIndex].supplier}</p>
-        <p>时间:{moment(liveViewData.timeStamp * 1000).format('YYYY-MM-DD hh:mm:ss')}</p>
+        <p>时间:{moment(liveViewData.timeStamp * 1000).format('YYYY-MM-DD HH:mm:ss')}</p>
       </div>
     );
   };
   const contentHOME = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>功率:{liveViewData.HOME[0].power}kw</p>
-        <p>电压:{liveViewData.HOME[0].volt + 'v'}</p>
+        <p>Critical功率:{liveViewData.HOME.critical.power}kw</p>
+        <p>Critical电压:{liveViewData.HOME.critical.volt + 'v'}</p>
+        <p>家庭功率:{liveViewData.HOME.home.power}kw</p>
+        <p>家庭电压:{liveViewData.HOME.home.volt + 'v'}</p>
       </div>
     );
   };
   const contentGRID = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>功率:{liveViewData.GRID[0].power}kw</p>
-        <p>电压:{liveViewData.GRID[0].volt + 'v'}</p>
+        <p>功率:{liveViewData.GRID.power}kw</p>
+        <p>电压:{liveViewData.GRID.volt + 'v'}</p>
       </div>
     );
   };
+  if (!liveViewData) {
+    message.destroy();
+    message.loading(
+      `${
+        initialState?.currentUser?.terminals[
+          initialState.locationIndex ? initialState.locationIndex : 0
+        ].location.location
+      }  数据加载中...`,
+      0,
+    );
+  } else {
+    message.destroy();
+  }
+  console.log('live view data' + liveViewData);
+
   return (
     <>
       <Card
@@ -193,7 +219,7 @@ const LiveView: React.FC = () => {
         </Popover>
         <Popover content={liveViewData ? contentBAT(liveViewData) : null} title="Battery">
           <div
-            className={liveViewData && liveViewData.EV ? styles.battery : styles.ev}
+            className={styles.battery}
             style={{
               width: '6rem',
               background:
@@ -204,14 +230,12 @@ const LiveView: React.FC = () => {
             <span>{liveViewData ? liveViewData.BAT[0].power + 'kw' : null}</span>
           </div>
         </Popover>
-        {liveViewData && liveViewData.EV && (
-          <Popover content={contentEV(liveViewData)} title="EV">
-            <div className={styles.ev}>
-              <p>EV</p>
-              <span>{liveViewData.EV[0].power + 'kw'}</span>
-            </div>
-          </Popover>
-        )}
+        <Popover content={liveViewData?.EV ? contentEV(liveViewData) : null} title="EV">
+          <div className={styles.ev} style={{ opacity: liveViewData?.EV ? '1' : '0.3' }}>
+            <p>EV</p>
+            <span>{liveViewData?.EV && liveViewData.EV[0].power + 'kw'}</span>
+          </div>
+        </Popover>
         <Popover content={liveViewData ? contentMaster(liveViewData) : null} title="Terminal">
           <div className={styles.home}>
             {/* <p>HOME</p>
@@ -221,20 +245,26 @@ const LiveView: React.FC = () => {
         <Popover content={liveViewData ? contentGRID(liveViewData) : null} title="Grid">
           <div className={styles.grid}>
             <p>Grid</p>
-            <span>{liveViewData ? liveViewData.GRID[0].power + 'kw' : null}</span>
+            <span>{liveViewData ? liveViewData.GRID.power + 'kw' : null}</span>
           </div>
         </Popover>
         <Popover content={liveViewData ? contentHOME(liveViewData) : null} title="House">
           <div className={styles.house}>
             <p>House</p>
-            <span>{liveViewData ? liveViewData.HOME[0].power + 'kw' : null}</span>
+            <span>
+              {liveViewData && liveViewData.HOME
+                ? (liveViewData.HOME.home.power + liveViewData.HOME.critical.power).toFixed(3) +
+                  'kw'
+                : null}
+            </span>
           </div>
         </Popover>
-        <svg className={styles.solarlive}>
+        <svg className={liveViewData?.PV ? styles.solarlive : styles.solarlivenone}>
           <path
             fill="transparent"
             stroke="#ddd"
             strokeLinecap="round"
+            name="光伏"
             strokeWidth="10"
             d="M0 80 350 80, 350 190 "
             className={styles.path}
@@ -246,7 +276,9 @@ const LiveView: React.FC = () => {
             stopColor="#000"
             strokeWidth="10"
             d="M0 80 350 80, 350 190 "
-            className={liveViewData && liveViewData.PV ? styles.line2 : null}
+            className={
+              liveViewData && liveViewData.PV && liveViewData.PV[0].power ? styles.line2 : null
+            }
           ></path>
           <path
             fill="transparent"
@@ -254,47 +286,19 @@ const LiveView: React.FC = () => {
             strokeLinecap="round"
             strokeWidth="10"
             d="M0 80 350 80, 350 190 "
-            className={liveViewData && liveViewData.PV ? styles.line1 : null}
+            className={
+              liveViewData && liveViewData.PV && liveViewData.PV[0].power ? styles.line1 : null
+            }
           ></path>
         </svg>
-        {liveViewData && liveViewData.EV && (
-          <svg className={styles.batterylive}>
-            <path
-              fill="transparent"
-              stroke="#ddd"
-              strokeLinecap="round"
-              strokeWidth="10"
-              d="M0 80 259 80 "
-              className={styles.path}
-              // style={{animationDirection:"reverse"}}  反向流转
-              // style={{animationDirection:(liveViewData&&liveViewData[0]?.volt>=0)?"reverse":"reverse"}}
-            ></path>
-            <path
-              fill="transparent"
-              stroke="#24d081"
-              strokeLinecap="round"
-              stopColor="#000"
-              strokeWidth="10"
-              d="M0 80 259 80 "
-              className={liveViewData && liveViewData.PV ? styles.line2 : null}
-            ></path>
-            <path
-              fill="transparent"
-              stroke="#ddd"
-              strokeLinecap="round"
-              strokeWidth="10"
-              d="M0 80 259 80 "
-              className={liveViewData && liveViewData.PV ? styles.line1 : null}
-            ></path>
-          </svg>
-        )}
-        <svg className={styles.evlive}>
+        <svg className={liveViewData?.BAT ? styles.batterylive : styles.batterylivenone}>
           <path
             fill="transparent"
             stroke="#ddd"
+            name="左中"
             strokeLinecap="round"
             strokeWidth="10"
-            d="M0 180 350 180,350 60 "
+            d={liveViewData && liveViewData.BAT[0].power > 0 ? 'M0 80 259 80 ' : 'M259 80 0 80'}
             className={styles.path}
           ></path>
           <path
@@ -303,25 +307,34 @@ const LiveView: React.FC = () => {
             strokeLinecap="round"
             stopColor="#000"
             strokeWidth="10"
-            d="M0 180 350 180,350 60"
-            className={liveViewData && liveViewData.PV ? styles.line2 : null}
+            d={liveViewData && liveViewData.BAT[0].power > 0 ? 'M0 80 259 80 ' : 'M259 80 0 80'}
+            className={
+              liveViewData && liveViewData.BAT && liveViewData.BAT[0].power ? styles.line2 : null
+            }
           ></path>
           <path
             fill="transparent"
             stroke="#ddd"
             strokeLinecap="round"
             strokeWidth="10"
-            d="M0 180 350 180,350 60"
-            className={liveViewData && liveViewData.PV ? styles.line1 : null}
+            d={liveViewData && liveViewData.BAT[0].power > 0 ? 'M0 80 259 80 ' : 'M259 80 0 80'}
+            className={
+              liveViewData && liveViewData.BAT && liveViewData.BAT[0].power ? styles.line1 : null
+            }
           ></path>
         </svg>
-        <svg className={styles.gridlive}>
+        <svg className={liveViewData?.EV ? styles.evlive : styles.evlivenone}>
           <path
             fill="transparent"
             stroke="#ddd"
+            name="左下角"
             strokeLinecap="round"
             strokeWidth="10"
-            d="M450 80 10 80,10 190 "
+            d={
+              liveViewData?.EV && liveViewData?.EV[0]?.power > 0
+                ? 'M0 180 350 180,350 60 '
+                : 'M350 60 350 180,0 180 '
+            }
             className={styles.path}
           ></path>
           <path
@@ -330,25 +343,42 @@ const LiveView: React.FC = () => {
             strokeLinecap="round"
             stopColor="#000"
             strokeWidth="10"
-            d="M450 80 10 80,10 190"
-            className={liveViewData && liveViewData.PV ? styles.line2 : null}
+            d={
+              liveViewData?.EV && liveViewData?.EV[0]?.power > 0
+                ? 'M0 180 350 180,350 60'
+                : 'M350 60 350 180,0 180'
+            }
+            className={
+              liveViewData && liveViewData.EV && liveViewData.EV[0].power ? styles.line2 : null
+            }
           ></path>
           <path
             fill="transparent"
             stroke="#ddd"
             strokeLinecap="round"
             strokeWidth="10"
-            d="M450 80 10 80,10 190"
-            className={liveViewData && liveViewData.PV ? styles.line1 : null}
+            d={
+              liveViewData?.EV && liveViewData?.EV[0]?.power > 0
+                ? 'M0 180 350 180,350 60'
+                : 'M350 60 350 180,0 180'
+            }
+            className={
+              liveViewData && liveViewData.EV && liveViewData.EV[0].power ? styles.line1 : null
+            }
           ></path>
         </svg>
-        <svg className={styles.houselive}>
+        <svg className={liveViewData?.GRID ? styles.gridlive : styles.gridlivenone}>
           <path
             fill="transparent"
             stroke="#ddd"
+            name="右上角"
             strokeLinecap="round"
             strokeWidth="10"
-            d="M450 180 10 180,10 60 "
+            d={
+              liveViewData && liveViewData?.GRID?.power > 0
+                ? 'M450 80 10 80,10 190 '
+                : 'M10 190 10 80,450 80 '
+            }
             className={styles.path}
           ></path>
           <path
@@ -357,16 +387,53 @@ const LiveView: React.FC = () => {
             strokeLinecap="round"
             stopColor="#000"
             strokeWidth="10"
-            d="M450 180 10 180,10 60"
-            className={liveViewData && liveViewData.PV ? styles.line2 : null}
+            d={
+              liveViewData && liveViewData?.GRID.power > 0
+                ? 'M450 80 10 80,10 190'
+                : 'M10 190 10 80,450 80'
+            }
+            // d={liveViewData?.GRID?.power>0?"M450 80 10 80,10 190":"M10 190 10 80,450 80"}
+            className={liveViewData && liveViewData.GRID.power ? styles.line2 : null}
           ></path>
           <path
             fill="transparent"
             stroke="#ddd"
             strokeLinecap="round"
             strokeWidth="10"
-            d="M450 180 10 180,10 60"
-            className={liveViewData && liveViewData.PV ? styles.line1 : null}
+            d={
+              liveViewData && liveViewData?.GRID?.power > 0
+                ? 'M450 80 10 80,10 190'
+                : 'M10 190 10 80,450 80'
+            }
+            className={liveViewData && liveViewData.GRID.power ? styles.line1 : null}
+          ></path>
+        </svg>
+        <svg className={liveViewData?.HOME ? styles.houselive : styles.houselivenone}>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            name="右下角"
+            strokeWidth="10"
+            d="M10 60 10 180,450 180 "
+            className={styles.path}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#24d081"
+            strokeLinecap="round"
+            stopColor="#000"
+            strokeWidth="10"
+            d="M10 60 10 180,450 180"
+            className={liveViewData && liveViewData.HOME.critical.power ? styles.line2 : null}
+          ></path>
+          <path
+            fill="transparent"
+            stroke="#ddd"
+            strokeLinecap="round"
+            strokeWidth="10"
+            d="M10 60 10 180,450 180"
+            className={liveViewData && liveViewData.HOME.critical.power ? styles.line1 : null}
           ></path>
         </svg>
       </Card>

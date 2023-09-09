@@ -94,8 +94,12 @@ export const errorConfig: RequestConfig = {
         url = config?.url;
         return { ...config, url };
       } else {
+        const token = localStorage.getItem('token');
+
         // url = config?.url?.concat('?token = 123');
-        return { ...config, headers: { ...config.headers, Authorization: '33333' } };
+        console.log(config);
+
+        return { ...config, headers: { ...config.headers, Authorization: `Bearer ${token}` } };
       }
       return { ...config, url };
     },

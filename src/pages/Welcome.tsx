@@ -1,4 +1,5 @@
 import { BATdata, EVdata, GRIDdata, HOMEdata, PVdata, WorkingModeStatusColor } from '@/constants';
+import { getHomeElectricity } from '@/services/dashboard/dashboard';
 import { useModel } from '@umijs/max';
 import { Button, Card, Progress, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -11,6 +12,7 @@ import {
   SmileOutlined,
 } from '@ant-design/icons';
 import * as echarts from 'echarts';
+import moment from 'moment';
 import styles from './Welcome.less';
 
 const Welcome: React.FC = () => {
@@ -20,10 +22,11 @@ const Welcome: React.FC = () => {
     // , setRandomNumber
   ] = useState(68);
   const [electricityChangeValue, setElectricityChangeValue] = useState(1);
+  const [historyChangeValue, setHistoryChangeValue] = useState(1);
   const [seeElectricity, setSeeElectricity] = useState(false);
   const [workingModeData, setWorkingModeData] = useState(0);
   const { initialState } = useModel('@@initialState');
-  const { currentUser, locationIndex } = initialState;
+  // const { currentUser, locationIndex } = initialState;
   let ElectricityConsumptionChart: any;
   let GaugeChart: any;
   let DistributionElectricity: any;
@@ -32,19 +35,19 @@ const Welcome: React.FC = () => {
     // ElectricityConsumptionChart();
     // GaugeChart();
     DistributionElectricity(electricityChangeValue);
-    // getDashboard({});
-    // weatherHandle();
-    // addDashboard({
-    //   id:1,
-    //   body:{
-    //     page:1,
-    //     pageSize:10
-    //   }
-    // })
   }, [electricityChangeValue, seeElectricity]);
   useEffect(() => {
+    getHomeElectricity({
+      id: initialState?.currentUser?.terminals[
+        initialState.locationIndex ? initialState.locationIndex : 0
+      ].id,
+      startTime: parseInt(moment().startOf('day').format('X')),
+      endTime: parseInt(moment().endOf('day').format('X')),
+    });
+  }, [initialState?.locationIndex]);
+  useEffect(() => {
     ElectricityConsumptionChart();
-    GaugeChart();
+    GaugeChart(initialState?.liveView?.PV[0].power);
     // DistributionElectricity(electricityChangeValue);
     // getDashboard({});
     weatherHandle();
@@ -111,7 +114,7 @@ const Welcome: React.FC = () => {
     };
     myChart.setOption(option);
   };
-  GaugeChart = () => {
+  GaugeChart = (val: number = 0) => {
     const chartDom: any = document.getElementById('Gauge');
     const myChart = echarts.init(chartDom);
     let option = {
@@ -169,25 +172,25 @@ const Welcome: React.FC = () => {
           },
           data: [
             {
-              value: 9.99,
+              value: val,
             },
           ],
         },
       ],
     };
-    setInterval(function () {
-      myChart.setOption({
-        series: [
-          {
-            data: [
-              {
-                value: +(Math.random() * 10).toFixed(2),
-              },
-            ],
-          },
-        ],
-      });
-    }, 4000);
+    // setInterval(function () {
+    //   myChart.setOption({
+    //     series: [
+    //       {
+    //         data: [
+    //           {
+    //             value: +(Math.random() * 10).toFixed(2),
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   });
+    // }, 4000);
     myChart.setOption(option);
   };
   DistributionElectricity = (index: number) => {
@@ -378,13 +381,21 @@ const Welcome: React.FC = () => {
   const electricityChange = (index: number) => {
     setElectricityChangeValue(index);
   };
+  const historyChange = (index: number) => {
+    setHistoryChangeValue(index);
+  };
   const modelHandleChange = (val: number) => {
     setWorkingModeData(val);
     command({
       WorkingMode: val,
-      id: currentUser.terminals[locationIndex ? locationIndex : 0].id,
+      id: initialState.currentUser.terminals[
+        initialState.locationIndex ? initialState.locationIndex : 0
+      ].id,
     });
   };
+  // console.log(initialState);
+  console.log(moment().startOf('day').format('X'));
+
   return (
     // <PageContainer ghost>
     <div className={styles.container}>
@@ -421,11 +432,11 @@ const Welcome: React.FC = () => {
                   ].WorkingMode
                 }
                 style={{ width: 100 }}
-                // value={
-                //   initialState?.currentUser.terminals[
-                //     initialState.locationIndex ? initialState.locationIndex : 0
-                //   ].WorkingMode
-                // }
+                value={
+                  initialState?.currentUser.terminals[
+                    initialState.locationIndex ? initialState.locationIndex : 0
+                  ].WorkingMode
+                }
                 bordered={false}
                 onChange={modelHandleChange}
                 options={[
@@ -468,7 +479,7 @@ const Welcome: React.FC = () => {
               {
                 <Select
                   defaultValue={electricityChangeValue}
-                  style={{ width: 100 }}
+                  style={{ width: 85 }}
                   onChange={electricityChange}
                   bordered={false}
                   options={[
@@ -484,6 +495,7 @@ const Welcome: React.FC = () => {
                 type="text"
                 size="small"
                 shape="circle"
+                style={{ marginRight: '2rem' }}
                 disabled={electricityChangeValue !== 1}
                 onClick={() => {
                   setSeeElectricity(!seeElectricity);
@@ -496,6 +508,19 @@ const Welcome: React.FC = () => {
                   )
                 }
               />
+              {
+                <Select
+                  defaultValue={historyChangeValue}
+                  style={{ width: 85 }}
+                  onChange={historyChange}
+                  bordered={false}
+                  options={[
+                    { value: 1, label: 'Day' },
+                    { value: 2, label: 'Month' },
+                    { value: 3, label: 'Year' },
+                  ]}
+                />
+              }
             </>
           }
         >

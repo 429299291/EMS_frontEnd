@@ -45,7 +45,7 @@ export default [
   {
     path: '/test',
     name: 'test',
-    icon: 'AppleFilled',
+    icon: 'CodepenOutlined',
     component: './Test',
   },
   {

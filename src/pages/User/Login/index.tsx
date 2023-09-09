@@ -105,7 +105,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
-      const msg = await login({ ...values, type });
+      const msg = await login({ ...values, type }); //token
       if (msg.code === 200) {
         // if (msg.status !== 'ok') {
         const defaultLoginSuccessMessage = intl.formatMessage({
@@ -114,6 +114,7 @@ const Login: React.FC = () => {
         });
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo({ values });
+        localStorage.setItem('token', msg.access_token);
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
         return;

@@ -15,6 +15,7 @@ declare namespace API {
     title?: string;
     group?: string;
     tags?: { key?: string; label?: string }[];
+    terminals: { id: string; WorkingMode: number; location: any; supplier: string }[];
     // notifyCount?: number;
     // unreadCount?: number;
     country?: string;
@@ -34,7 +35,14 @@ declare namespace API {
     status?: string;
     type?: string;
     code?: number;
+    access_token: string;
     currentAuthority?: string;
+  };
+
+  type getHomeElectricity = {
+    id: string;
+    startTime: number;
+    endTime: number;
   };
 
   type PageParams = {
