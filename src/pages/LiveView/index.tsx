@@ -143,26 +143,47 @@ const LiveView: React.FC = () => {
       </div>
     );
   };
+  console.log(initialState?.locationIndex);
+
   const contentMaster = (liveViewData: mqttDto) => {
     return (
       <div>
-        {/* <p>ID:{liveViewData.id}</p> */}
-        <p>终端ID:{initialState?.currentUser?.terminals[initialState.locationIndex].id}</p>
+        <p>
+          终端ID:
+          {
+            initialState?.currentUser?.terminals[
+              initialState.locationIndex ? initialState.locationIndex : 0
+            ].id
+          }
+        </p>
         <p>主机名:{liveViewData.name}</p>
         <p>
           模式:
           {
             WorkingModeStatus[
-              initialState?.currentUser?.terminals[initialState.locationIndex].WorkingMode
+              initialState?.currentUser?.terminals[
+                initialState.locationIndex ? initialState.locationIndex : 0
+              ].WorkingMode
             ]
           }
         </p>
         <p>
           电价:
-          {initialState?.currentUser?.terminals[initialState.locationIndex].location.electrovalency}
+          {
+            initialState?.currentUser?.terminals[
+              initialState.locationIndex ? initialState.locationIndex : 0
+            ].location.electrovalency
+          }
           <DollarTwoTone style={{ marginLeft: '3px' }} />
         </p>
-        <p>供应商:{initialState?.currentUser?.terminals[initialState.locationIndex].supplier}</p>
+        <p>
+          供应商:
+          {
+            initialState?.currentUser?.terminals[
+              initialState.locationIndex ? initialState.locationIndex : 0
+            ].supplier
+          }
+        </p>
         <p>时间:{moment(liveViewData.timeStamp * 1000).format('YYYY-MM-DD HH:mm:ss')}</p>
       </div>
     );

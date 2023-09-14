@@ -1,4 +1,12 @@
-import { BATdata, EVdata, GRIDdata, HOMEdata, PVdata, WorkingModeStatusColor } from '@/constants';
+import {
+  BATdata,
+  EVdata,
+  GRIDdata,
+  HOMEdata,
+  PVdata,
+  timeLine,
+  WorkingModeStatusColor,
+} from '@/constants';
 import { getHomeElectricity } from '@/services/dashboard/dashboard';
 import { useModel } from '@umijs/max';
 import { Button, Card, Progress, Select } from 'antd';
@@ -17,36 +25,37 @@ import styles from './Welcome.less';
 
 const Welcome: React.FC = () => {
   // const dispatch = useDispatch();
-  const [
-    randomNumber,
-    // , setRandomNumber
-  ] = useState(68);
   const [electricityChangeValue, setElectricityChangeValue] = useState(1);
   const [historyChangeValue, setHistoryChangeValue] = useState(1);
   const [seeElectricity, setSeeElectricity] = useState(false);
   const [workingModeData, setWorkingModeData] = useState(0);
+  const [homeElectricityDatas, setHomeElectricityDatas] = useState();
   const { initialState } = useModel('@@initialState');
   // const { currentUser, locationIndex } = initialState;
   let ElectricityConsumptionChart: any;
   let GaugeChart: any;
   let DistributionElectricity: any;
   let weatherHandle: any;
+  let getHomeElectricityfun: any;
   useEffect(() => {
     // ElectricityConsumptionChart();
     // GaugeChart();
-    DistributionElectricity(electricityChangeValue);
+    DistributionElectricity(electricityChangeValue, homeElectricityDatas);
   }, [electricityChangeValue, seeElectricity]);
   useEffect(() => {
-    getHomeElectricity({
-      id: initialState?.currentUser?.terminals[
-        initialState.locationIndex ? initialState.locationIndex : 0
-      ].id,
-      startTime: parseInt(moment().startOf('day').format('X')),
-      endTime: parseInt(moment().endOf('day').format('X')),
-    });
+    // const HomeElectricityDatas = getHomeElectricity({
+    //   id: initialState?.currentUser?.terminals[
+    //     initialState.locationIndex ? initialState.locationIndex : 0
+    //   ].id,
+    //   startTime: parseInt(moment().startOf('day').format('X')),
+    //   endTime: parseInt(moment().endOf('day').format('X')),
+    // });
+    if (initialState?.currentUser?.terminals.length) {
+      getHomeElectricityfun();
+    }
   }, [initialState?.locationIndex]);
   useEffect(() => {
-    ElectricityConsumptionChart();
+    // ElectricityConsumptionChart(homeElectricityDatas);
     GaugeChart(initialState?.liveView?.PV[0].power);
     // DistributionElectricity(electricityChangeValue);
     // getDashboard({});
@@ -63,7 +72,7 @@ const Welcome: React.FC = () => {
   //   clearInterval(learnInterval);
   //   setRandomNumber(Math.ceil(Math.random() * 10) + 80);
   // }, 5000);
-  ElectricityConsumptionChart = () => {
+  ElectricityConsumptionChart = (homeElectricityDatas: any) => {
     const chartDom: any = document.getElementById('ElectricityConsumption');
     const myChart = echarts.init(chartDom);
     let option: any = {};
@@ -105,9 +114,17 @@ const Welcome: React.FC = () => {
             show: false,
           },
           data: [
-            { value: 1048, name: 'Grid' },
-            { value: 735, name: 'Battery' },
-            { value: 580, name: 'Solar' },
+            { value: homeElectricityDatas ? homeElectricityDatas.gridDataOut : 0, name: 'Grid' },
+            {
+              value: homeElectricityDatas ? homeElectricityDatas.batteryDataOut : 0,
+              name: 'Battery',
+            },
+            { value: homeElectricityDatas ? homeElectricityDatas.solarData : 0, name: 'Solar' },
+            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '4' },
+            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '5' },
+            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '6' },
+            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '7' },
+            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '8' },
           ],
         },
       ],
@@ -117,6 +134,8 @@ const Welcome: React.FC = () => {
   GaugeChart = (val: number = 0) => {
     const chartDom: any = document.getElementById('Gauge');
     const myChart = echarts.init(chartDom);
+    console.log(timeLine.length);
+
     let option = {
       series: [
         {
@@ -193,16 +212,18 @@ const Welcome: React.FC = () => {
     // }, 4000);
     myChart.setOption(option);
   };
-  DistributionElectricity = (index: number) => {
+  DistributionElectricity = (index: number, homeElectricityDatas) => {
+    console.log(timeLine);
+
     const chartDom: any = document.getElementById('distributionElectricity');
     const myChart: any = echarts.init(chartDom);
-    let option = {
+    let option: any = {
       tooltip: {
         order: 'valueDesc',
         trigger: 'axis',
       },
       // legend: {
-      //   data: ['06:00', '12:00', '18:00']
+      //   data:seeElectricity!==true? ['Home', 'BAT', 'PV', 'EV', 'Grid']:null
       // },
       // grid: {
       //   left: 0,
@@ -213,6 +234,7 @@ const Welcome: React.FC = () => {
       xAxis: {
         type: 'category',
         nameLocation: 'middle',
+        data: timeLine,
         boundaryGap: ['80%', '0%'],
       },
       yAxis: {
@@ -230,22 +252,23 @@ const Welcome: React.FC = () => {
           symbolSize: 0,
           sampling: 'average',
           itemStyle: {
-            color: '#3e6be2',
+            color: '#677ae5',
           },
           stack: 'a',
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: 'rgba(58,77,233,0.8)',
+                color: 'rgba(103,122,229,0.6)',
               },
               {
                 offset: 1,
-                color: 'rgba(58,77,233,0.3)',
+                color: 'rgba(103,122,229,0)',
               },
             ]),
           },
-          data: HOMEdata,
+          // data: HOMEdata,
+          data: homeElectricityDatas ? homeElectricityDatas.HOMEdata : HOMEdata,
         },
         {
           name: 'BAT',
@@ -256,21 +279,21 @@ const Welcome: React.FC = () => {
           symbolSize: 0,
           sampling: 'average',
           itemStyle: {
-            color: '#0bab5c',
+            color: '#20bb87',
           },
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: 'rgba(59,187,124,0.7)',
+                color: 'rgba(59,187,124,0.6)',
               },
               {
                 offset: 1,
-                color: 'rgba(59,187,124,0.2)',
+                color: 'rgba(59,187,124,0)',
               },
             ]),
           },
-          data: BATdata,
+          data: homeElectricityDatas ? homeElectricityDatas.BATdata : BATdata,
         },
         {
           name: 'PV', //光伏
@@ -281,21 +304,25 @@ const Welcome: React.FC = () => {
           symbolSize: 0,
           sampling: 'average',
           itemStyle: {
-            color: '#fcbf01',
+            color: '#f7b733',
           },
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: 'rgba(252,203,51,0.8)',
+                color: 'rgba(252,203,51,0.6)',
               },
               {
                 offset: 1,
-                color: 'rgba(252,203,51,0.3)',
+                color: 'rgba(252,203,51,0)',
               },
             ]),
           },
-          data: PVdata,
+          data: homeElectricityDatas
+            ? homeElectricityDatas.PVdata !== 0
+              ? homeElectricityDatas.PVdata
+              : null
+            : PVdata,
         },
         {
           name: 'EV',
@@ -312,15 +339,15 @@ const Welcome: React.FC = () => {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: 'rgba(247,119,118,0.8)',
+                color: 'rgba(247,119,118,0.6)',
               },
               {
                 offset: 1,
-                color: 'rgba(247,119,118,0.3)',
+                color: 'rgba(247,119,118,0)',
               },
             ]),
           },
-          data: EVdata,
+          data: homeElectricityDatas ? homeElectricityDatas.EVdata : EVdata,
         },
         {
           name: 'Grid',
@@ -331,21 +358,21 @@ const Welcome: React.FC = () => {
           symbolSize: 0,
           sampling: 'average',
           itemStyle: {
-            color: '#77797b',
+            color: 'rgba(65,66,68,0.6)',
           },
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: 'rgba(95,96,98,0.8)',
+                color: 'rgba(65,66,68,0.6)',
               },
               {
                 offset: 1,
-                color: 'rgba(95,96,98,0.3)',
+                color: 'rgba(65,66,68,0)',
               },
             ]),
           },
-          data: GRIDdata,
+          data: homeElectricityDatas ? homeElectricityDatas.GRIDdata : GRIDdata,
         },
       ],
     };
@@ -371,6 +398,22 @@ const Welcome: React.FC = () => {
       myChart.setOption(option);
     }
   };
+  getHomeElectricityfun = async () => {
+    const datad = await getHomeElectricity({
+      id: initialState?.currentUser?.terminals[
+        initialState.locationIndex ? initialState.locationIndex : 0
+      ].id,
+      startTime: parseInt(moment().startOf('day').format('X')),
+      endTime: parseInt(moment().endOf('day').format('X')),
+    });
+    if (datad.code === 200) {
+      setHomeElectricityDatas(datad.data);
+      ElectricityConsumptionChart(datad.data);
+      DistributionElectricity(electricityChangeValue, datad.data);
+    } else {
+      setHomeElectricityDatas();
+    }
+  };
   weatherHandle = async () => {
     // getCurrentWeather({
     //   lat:"22.605824",
@@ -393,9 +436,6 @@ const Welcome: React.FC = () => {
       ].id,
     });
   };
-  // console.log(initialState);
-  console.log(moment().startOf('day').format('X'));
-
   return (
     // <PageContainer ghost>
     <div className={styles.container}>
@@ -423,29 +463,31 @@ const Welcome: React.FC = () => {
           title="Self-sufficiency"
           style={{ gridArea: 'bb' }}
           extra={
-            <>
-              <SettingTwoTone spin twoToneColor={WorkingModeStatusColor[workingModeData]} />
-              <Select
-                defaultValue={
-                  initialState?.currentUser.terminals[
-                    initialState.locationIndex ? initialState.locationIndex : 0
-                  ].WorkingMode
-                }
-                style={{ width: 100 }}
-                value={
-                  initialState?.currentUser.terminals[
-                    initialState.locationIndex ? initialState.locationIndex : 0
-                  ].WorkingMode
-                }
-                bordered={false}
-                onChange={modelHandleChange}
-                options={[
-                  { value: 0, label: '自发自用' },
-                  { value: 1, label: '经济' },
-                  { value: 2, label: '应急' },
-                ]}
-              />
-            </>
+            initialState?.currentUser?.terminals.length > 0 && (
+              <>
+                <SettingTwoTone spin twoToneColor={WorkingModeStatusColor[workingModeData]} />
+                <Select
+                  defaultValue={
+                    initialState?.currentUser.terminals[
+                      initialState.locationIndex ? initialState.locationIndex : 0
+                    ].WorkingMode
+                  }
+                  style={{ width: 100 }}
+                  value={
+                    initialState?.currentUser.terminals[
+                      initialState.locationIndex ? initialState.locationIndex : 0
+                    ].WorkingMode
+                  }
+                  bordered={false}
+                  onChange={modelHandleChange}
+                  options={[
+                    { value: 0, label: '自发自用' },
+                    { value: 1, label: '经济' },
+                    { value: 2, label: '应急' },
+                  ]}
+                />
+              </>
+            )
           }
         >
           <p>Everything is working fine in your system</p>
@@ -460,7 +502,12 @@ const Welcome: React.FC = () => {
             <Progress
               type="circle"
               strokeWidth={15}
-              percent={randomNumber}
+              percent={(homeElectricityDatas
+                ? ((homeElectricityDatas?.homeData - homeElectricityDatas?.gridDataOut) /
+                    homeElectricityDatas?.homeData) *
+                  100
+                : 0
+              ).toFixed(2)}
               strokeColor={{ '0%': '#ccc', '100%': '#24d081' }}
             />
             <p style={{ marginTop: '2rem' }}>
@@ -543,13 +590,19 @@ const Welcome: React.FC = () => {
         >
           <div className={styles.co2}>
             <div className={styles.co2div}>
-              <p className={styles.title}>2.7 kg CO2</p>
-              <p className={styles.p}>Corresponds to 32 Car km</p>
+              <p className={styles.title}>{homeElectricityDatas?.solarData} kg CO2</p>
+              <p className={styles.p}>
+                Corresponds to {(homeElectricityDatas?.solarData * 6).toFixed(2)} Car km
+              </p>
               <p className={styles.des}>Savings today</p>
             </div>
             <div className={styles.co2div}>
-              <p className={styles.title}>1.1 t CO2</p>
-              <p className={styles.p}>Corresponds to 9.616 Car km</p>
+              <p className={styles.title}>
+                {(homeElectricityDatas?.solarData / 3.4).toFixed(2)} t CO2
+              </p>
+              <p className={styles.p}>
+                Corresponds to {(homeElectricityDatas?.solarData * 3.4 * 6).toFixed(2)} Car km
+              </p>
               <p className={styles.des}>EMS since installation</p>
             </div>
           </div>

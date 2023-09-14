@@ -110,11 +110,13 @@ export const Weather = (props) => {
     ).then((data) => {
       setCurrentWeatherData(data);
     });
-    day5Weather(locationData[initialState?.locationIndex ? initialState.locationIndex : 0]).then(
-      (data) => {
-        setDay5WeatherData(data);
-      },
-    );
+    if (locationData.length) {
+      day5Weather(locationData[initialState?.locationIndex ? initialState.locationIndex : 0]).then(
+        (data) => {
+          setDay5WeatherData(data);
+        },
+      );
+    }
   }, [initialState?.locationIndex]);
 
   return (
