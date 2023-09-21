@@ -143,8 +143,6 @@ const LiveView: React.FC = () => {
       </div>
     );
   };
-  console.log(initialState?.locationIndex);
-
   const contentMaster = (liveViewData: mqttDto) => {
     return (
       <div>
@@ -446,7 +444,11 @@ const LiveView: React.FC = () => {
             stopColor="#000"
             strokeWidth="10"
             d="M10 60 10 180,450 180"
-            className={liveViewData && liveViewData.HOME.critical.power ? styles.line2 : null}
+            className={
+              liveViewData && (liveViewData.HOME.critical.power || liveViewData.HOME.home.power)
+                ? styles.line2
+                : null
+            }
           ></path>
           <path
             fill="transparent"
@@ -454,7 +456,11 @@ const LiveView: React.FC = () => {
             strokeLinecap="round"
             strokeWidth="10"
             d="M10 60 10 180,450 180"
-            className={liveViewData && liveViewData.HOME.critical.power ? styles.line1 : null}
+            className={
+              liveViewData && (liveViewData.HOME.critical.power || liveViewData.HOME.home.power)
+                ? styles.line1
+                : null
+            }
           ></path>
         </svg>
       </Card>

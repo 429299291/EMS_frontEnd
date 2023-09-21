@@ -26,7 +26,7 @@ import styles from './Welcome.less';
 const Welcome: React.FC = () => {
   // const dispatch = useDispatch();
   const [electricityChangeValue, setElectricityChangeValue] = useState(1);
-  const [historyChangeValue, setHistoryChangeValue] = useState(1);
+  const [historyChangeValue, setHistoryChangeValue] = useState<number>();
   const [seeElectricity, setSeeElectricity] = useState(false);
   const [workingModeData, setWorkingModeData] = useState(0);
   const [homeElectricityDatas, setHomeElectricityDatas] = useState();
@@ -40,8 +40,14 @@ const Welcome: React.FC = () => {
   useEffect(() => {
     // ElectricityConsumptionChart();
     // GaugeChart();
+    if (historyChangeValue === 1) {
+      getHomeElectricityfun(
+        parseInt(moment().startOf('month').format('X')),
+        parseInt(moment().endOf('month').format('X')),
+      );
+    }
     DistributionElectricity(electricityChangeValue, homeElectricityDatas);
-  }, [electricityChangeValue, seeElectricity]);
+  }, [electricityChangeValue, seeElectricity, historyChangeValue]);
   useEffect(() => {
     // const HomeElectricityDatas = getHomeElectricity({
     //   id: initialState?.currentUser?.terminals[
@@ -51,7 +57,10 @@ const Welcome: React.FC = () => {
     //   endTime: parseInt(moment().endOf('day').format('X')),
     // });
     if (initialState?.currentUser?.terminals.length) {
-      getHomeElectricityfun();
+      getHomeElectricityfun(
+        parseInt(moment().startOf('day').format('X')),
+        parseInt(moment().endOf('day').format('X')),
+      );
     }
   }, [initialState?.locationIndex]);
   useEffect(() => {
@@ -134,8 +143,6 @@ const Welcome: React.FC = () => {
   GaugeChart = (val: number = 0) => {
     const chartDom: any = document.getElementById('Gauge');
     const myChart = echarts.init(chartDom);
-    console.log(timeLine.length);
-
     let option = {
       series: [
         {
@@ -212,11 +219,30 @@ const Welcome: React.FC = () => {
     // }, 4000);
     myChart.setOption(option);
   };
-  DistributionElectricity = (index: number, homeElectricityDatas) => {
-    console.log(timeLine);
-
+  DistributionElectricity = (index: number, homeElectricityDatas: any) => {
+    //   homeElectricityDatas 传入的可以是日,也可以是月
     const chartDom: any = document.getElementById('distributionElectricity');
     const myChart: any = echarts.init(chartDom);
+    let monthHomeDataFormat: number[];
+    if (homeElectricityDatas?.monthHomeData) {
+      monthHomeDataFormat = Object.values(homeElectricityDatas.monthHomeData).map((val: number) => {
+        return val.toFixed(2);
+      });
+    } else {
+      //  过滤掉无效的0
+      if (homeElectricityDatas) {
+        homeElectricityDatas.BATdata = homeElectricityDatas.BATdata.filter((val: any) => {
+          return val[1] !== 0;
+        });
+        homeElectricityDatas.PVdata = homeElectricityDatas.PVdata.filter((val: any) => {
+          return val[1] !== 0;
+        });
+        homeElectricityDatas.GRIDdata = homeElectricityDatas.GRIDdata.filter((val: any) => {
+          return val[1] !== 0;
+        });
+      }
+    }
+
     let option: any = {
       tooltip: {
         order: 'valueDesc',
@@ -376,6 +402,105 @@ const Welcome: React.FC = () => {
         },
       ],
     };
+    let monthOptions: any = {
+      legend: {
+        data: ['Grid', 'BAT', 'PV'],
+        left: '40%',
+      },
+      brush: {
+        toolbox: ['rect', 'polygon', 'lineX', 'lineY', 'keep', 'clear'],
+        xAxisIndex: 0,
+      },
+      // toolbox: {
+      //   feature: {
+      //     magicType: {
+      //       type: ['stack']
+      //     },
+      //     dataView: {}
+      //   }
+      // },
+      tooltip: {},
+      xAxis: {
+        data:
+          historyChangeValue === 1
+            ? [
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                '10',
+                '11',
+                '12',
+                '13',
+                '14',
+                '15',
+                '16',
+                '17',
+                '18',
+                '19',
+                '20',
+                '21',
+                '22',
+                '23',
+                '24',
+                '25',
+                '26',
+                '27',
+                '28',
+                '29',
+                '30',
+              ]
+            : ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        // name: 'X Axis',
+        axisLine: { onZero: true },
+        splitLine: { show: false },
+        splitArea: { show: false },
+      },
+      yAxis: {},
+      grid: {
+        bottom: 100,
+      },
+      series: [
+        {
+          name: 'PV',
+          type: 'bar',
+          stack: 'one',
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowColor: 'rgba(0,0,0,0.3)',
+            },
+          },
+          data: seeElectricity ? monthHomeDataFormat?.map((val) => val / 2) : [],
+        },
+        {
+          name: 'BAT',
+          type: 'bar',
+          stack: 'one',
+          // emphasis: emphasisStyle,
+          data: seeElectricity ? monthHomeDataFormat?.map((val) => val / 4) : [],
+        },
+        {
+          name: 'Grid',
+          type: 'bar',
+          stack: 'one',
+          // emphasis: emphasisStyle,
+          data: seeElectricity ? monthHomeDataFormat?.map((val) => val / 4) : [],
+        },
+        {
+          name: 'Home',
+          type: 'bar',
+          stack: 'two',
+          // emphasis: emphasisStyle,
+          data: seeElectricity ? [] : monthHomeDataFormat,
+        },
+      ],
+    };
     let optiondata = option;
     if (!seeElectricity) {
       optiondata.series = [option.series[index - 1]];
@@ -394,24 +519,46 @@ const Welcome: React.FC = () => {
       } else if (index === 5) {
         optiondata.series = [option.series[1], option.series[2], option.series[4]];
       }
-
       myChart.setOption(option);
     }
+    if (historyChangeValue) {
+      myChart.setOption(monthOptions);
+    }
   };
-  getHomeElectricityfun = async () => {
-    const datad = await getHomeElectricity({
-      id: initialState?.currentUser?.terminals[
-        initialState.locationIndex ? initialState.locationIndex : 0
-      ].id,
-      startTime: parseInt(moment().startOf('day').format('X')),
-      endTime: parseInt(moment().endOf('day').format('X')),
-    });
-    if (datad.code === 200) {
-      setHomeElectricityDatas(datad.data);
-      ElectricityConsumptionChart(datad.data);
-      DistributionElectricity(electricityChangeValue, datad.data);
+  getHomeElectricityfun = async (start?: any, end?: any) => {
+    let datad: any;
+    if (end - start <= 86400) {
+      //天
+      datad = await getHomeElectricity({
+        id: initialState?.currentUser?.terminals[
+          initialState.locationIndex ? initialState.locationIndex : 0
+        ].id,
+        startTime: start,
+        endTime: end,
+      });
+    } else if (end - start < 2678400) {
+      //月
+      datad = await getHomeElectricity({
+        id: initialState?.currentUser?.terminals[
+          initialState.locationIndex ? initialState.locationIndex : 0
+        ].id,
+        startTime: start,
+        endTime: end,
+      });
     } else {
-      setHomeElectricityDatas();
+      //年
+    }
+    if (datad && datad.code === 200) {
+      if (datad.monthHomeData) {
+        DistributionElectricity(electricityChangeValue, datad);
+      } else if (datad.yearHomeData) {
+      } else {
+        setHomeElectricityDatas(datad.data);
+        ElectricityConsumptionChart(datad.data);
+        DistributionElectricity(electricityChangeValue, datad.data);
+      }
+    } else {
+      setHomeElectricityDatas(null);
     }
   };
   weatherHandle = async () => {
@@ -499,7 +646,7 @@ const Welcome: React.FC = () => {
               alignItems: 'center',
             }}
           >
-            <Progress
+            <Progress //自发自用
               type="circle"
               strokeWidth={15}
               percent={(homeElectricityDatas
@@ -559,12 +706,13 @@ const Welcome: React.FC = () => {
                 <Select
                   defaultValue={historyChangeValue}
                   style={{ width: 85 }}
+                  allowClear
                   onChange={historyChange}
                   bordered={false}
                   options={[
-                    { value: 1, label: 'Day' },
-                    { value: 2, label: 'Month' },
-                    { value: 3, label: 'Year' },
+                    { value: 0, label: 'Day' },
+                    { value: 1, label: 'Month' },
+                    { value: 2, label: 'Year' },
                   ]}
                 />
               }
@@ -590,18 +738,21 @@ const Welcome: React.FC = () => {
         >
           <div className={styles.co2}>
             <div className={styles.co2div}>
-              <p className={styles.title}>{homeElectricityDatas?.solarData} kg CO2</p>
+              <p className={styles.title}>
+                {(homeElectricityDatas?.solarData * 0.45).toFixed(2)} kg CO2
+              </p>
               <p className={styles.p}>
-                Corresponds to {(homeElectricityDatas?.solarData * 6).toFixed(2)} Car km
+                Corresponds to {(homeElectricityDatas?.solarData * 6 * 0.45).toFixed(2)} Car km
               </p>
               <p className={styles.des}>Savings today</p>
             </div>
             <div className={styles.co2div}>
               <p className={styles.title}>
-                {(homeElectricityDatas?.solarData / 3.4).toFixed(2)} t CO2
+                {(homeElectricityDatas?.solarData * 3.4 * 0.45).toFixed(2)} t CO2
               </p>
               <p className={styles.p}>
-                Corresponds to {(homeElectricityDatas?.solarData * 3.4 * 6).toFixed(2)} Car km
+                Corresponds to {(homeElectricityDatas?.solarData * 3.4 * 6 * 0.45).toFixed(2)} Car
+                km
               </p>
               <p className={styles.des}>EMS since installation</p>
             </div>
