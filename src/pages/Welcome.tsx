@@ -37,6 +37,7 @@ const Welcome: React.FC = () => {
   let DistributionElectricity: any;
   let weatherHandle: any;
   let getHomeElectricityfun: any;
+
   useEffect(() => {
     // ElectricityConsumptionChart();
     // GaugeChart();
@@ -45,9 +46,20 @@ const Welcome: React.FC = () => {
         parseInt(moment().startOf('month').format('X')),
         parseInt(moment().endOf('month').format('X')),
       );
+    } else if (historyChangeValue === 0) {
+      getHomeElectricityfun(
+        parseInt(moment().startOf('day').format('X')),
+        parseInt(moment().endOf('day').format('X')),
+      );
+    } else {
+      // getHomeElectricityfun(
+      //   parseInt(moment().startOf('year').format('X')),
+      //   parseInt(moment().endOf('year').format('X')),
+      // );
     }
-    DistributionElectricity(electricityChangeValue, homeElectricityDatas);
+    DistributionElectricity(electricityChangeValue, homeElectricityDatas); //用电量
   }, [electricityChangeValue, seeElectricity, historyChangeValue]);
+
   useEffect(() => {
     // const HomeElectricityDatas = getHomeElectricity({
     //   id: initialState?.currentUser?.terminals[
@@ -129,11 +141,6 @@ const Welcome: React.FC = () => {
               name: 'Battery',
             },
             { value: homeElectricityDatas ? homeElectricityDatas.solarData : 0, name: 'Solar' },
-            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '4' },
-            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '5' },
-            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '6' },
-            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '7' },
-            // { value: homeElectricityDatas?homeElectricityDatas.solarData.toFixed(3):0, name: '8' },
           ],
         },
       ],
@@ -551,11 +558,13 @@ const Welcome: React.FC = () => {
     if (datad && datad.code === 200) {
       if (datad.monthHomeData) {
         DistributionElectricity(electricityChangeValue, datad);
+        ElectricityConsumptionChart(datad);
       } else if (datad.yearHomeData) {
       } else {
         setHomeElectricityDatas(datad.data);
         ElectricityConsumptionChart(datad.data);
-        DistributionElectricity(electricityChangeValue, datad.data);
+        DistributionElectricity(electricityChangeValue, datad.data); //用电量
+        ElectricityConsumptionChart(datad.data);
       }
     } else {
       setHomeElectricityDatas(null);
@@ -583,6 +592,12 @@ const Welcome: React.FC = () => {
       ].id,
     });
   };
+  console.log('==========');
+  console.log(
+    (homeElectricityDatas?.homeData - homeElectricityDatas?.gridDataOut) /
+      homeElectricityDatas?.homeData,
+  );
+
   return (
     // <PageContainer ghost>
     <div className={styles.container}>
