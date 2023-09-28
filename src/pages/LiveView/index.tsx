@@ -1,5 +1,5 @@
 import { WorkingModeStatus } from '@/constants';
-import { getMQTT } from '@/tools/mqttclient';
+// import { getMQTT } from '@/tools/mqttclient';
 import { DollarTwoTone } from '@ant-design/icons';
 import { useModel } from '@umijs/max';
 import { Card, message, Popover } from 'antd';
@@ -66,11 +66,19 @@ const LiveView: React.FC = () => {
   //   const { token } = theme.useToken();
   const [liveViewData, setLiveViewData] = useState<mqttDto>();
   const { initialState, setInitialState } = useModel('@@initialState');
+  const currentTopic: any =
+    initialState?.currentUser?.terminals[
+      initialState.locationIndex ? initialState.locationIndex : 0
+    ].id;
+  let preTopic: any;
   let client: any;
   useEffect(() => {
     // 在组件加载后执行的代码
     return () => {
       //销毁执行代码
+      client.unsubscribe('EMS/client/0000009', () => {
+        console.log('unsub');
+      });
       message.destroy();
     };
   }, []);
@@ -81,34 +89,44 @@ const LiveView: React.FC = () => {
       //销毁执行代码
     };
   }, [initialState?.locationIndex]);
-  getMQTT(initialState, mqtt);
-  client = mqtt.connect('mqtt://47.106.120.119:8083', {
-    username: 'ems',
-    password: 'xuheng8888',
-    protocolId: 'MQTT',
-    clientId: 'EMS-12345',
-  });
+  // getMQTT(initialState, mqtt);
+  if (!client) {
+    client = mqtt.connect('mqtt://47.106.120.119:8083', {
+      username: 'ems',
+      password: 'xuheng8888',
+      protocolId: 'MQTT',
+      clientId: 'EMS-yun',
+    });
+  }
 
   client.on('connect', () => {
-    client.subscribeAsync(
-      `EMS/client/${
-        initialState?.currentUser?.terminals[
-          initialState.locationIndex ? initialState.locationIndex : 0
-        ].id
-      }`,
-      (err: any) => {
-        console.log(err);
-      },
-    );
+    if (client._resubscribeTopics && preTopic) {
+      preTopic = Object.keys(client._resubscribeTopics)[0];
+      console.log(preTopic);
+      console.log(typeof preTopic);
+
+      console.log(currentTopic);
+      if (!preTopic.indexOf(currentTopic)) {
+        //  不包含
+      } else {
+        client.unsubscribe(`EMS/client/${preTopic}`, () => {
+          console.log('unsub');
+        });
+      }
+    }
+    client.subscribeAsync(`EMS/client/${currentTopic}`, (err: any) => {
+      console.log(err);
+    });
   });
-  client.on('message', (topic, message) => {
+  client.on('message', (topic: any, message: any) => {
     // message is Buffer
-    console.log('第一接收信息' + JSON.parse(message.toString()));
+    // console.log(topic);
+
+    console.log(message.toString());
+
     setInitialState({ ...initialState, liveView: JSON.parse(message.toString()) });
     setLiveViewData(JSON.parse(message.toString()));
-    client.end();
-
-    // client.unsubscribeAsync()
+    // client.end(true);
   });
   const contentPV = (liveViewData: mqttDto) => {
     return (
@@ -144,6 +162,10 @@ const LiveView: React.FC = () => {
     );
   };
   const contentMaster = (liveViewData: mqttDto) => {
+    const WorkingModeState: number =
+      initialState?.currentUser?.terminals[
+        initialState.locationIndex ? initialState.locationIndex : 0
+      ].WorkingMode;
     return (
       <div>
         <p>
@@ -157,13 +179,7 @@ const LiveView: React.FC = () => {
         <p>主机名:{liveViewData.name}</p>
         <p>
           模式:
-          {
-            WorkingModeStatus[
-              initialState?.currentUser?.terminals[
-                initialState.locationIndex ? initialState.locationIndex : 0
-              ].WorkingMode
-            ]
-          }
+          {WorkingModeStatus[WorkingModeState]}
         </p>
         <p>
           电价:

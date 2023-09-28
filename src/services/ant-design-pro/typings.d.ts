@@ -56,6 +56,14 @@ declare namespace API {
     href?: string;
     avatar?: string;
     name?: string;
+    id: string;
+    location: {
+      location: string;
+      sunrise: string;
+      sunset: string;
+      electrovalency: string;
+    };
+    WorkingMode: number;
     owner?: string;
     desc?: string;
     callNo?: number;

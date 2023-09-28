@@ -1,5 +1,5 @@
 import { deviceStatus, WorkingModeStatus, WorkingModeStatusColor } from '@/constants';
-import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
+import { addRule, removeRule, updateTerminal } from '@/services/ant-design-pro/api';
 import { device } from '@/services/ant-design-pro/device';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
@@ -47,13 +47,10 @@ const handleAdd = async (fields: API.RuleListItem) => {
 const handleUpdate = async (fields: FormValueType) => {
   const hide = message.loading('Configuring');
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
+    await updateTerminal({
+      ...fields,
     });
     hide();
-
     message.success('Configuration is successful');
     return true;
   } catch (error) {
@@ -324,6 +321,8 @@ const Terminal: React.FC = () => {
       </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {
+          console.log(value);
+
           const success = await handleUpdate(value);
           if (success) {
             handleUpdateModalOpen(false);

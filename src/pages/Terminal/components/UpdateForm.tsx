@@ -1,21 +1,16 @@
-import {
-  ProFormDateTimePicker,
-  ProFormRadio,
-  ProFormSelect,
-  ProFormText,
-  ProFormTextArea,
-  StepsForm,
-} from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
-import { Modal } from 'antd';
+import { WorkingModeStatus } from '@/constants';
+import { Button, Drawer, Form, Input, InputNumber, Select } from 'antd';
 import React from 'react';
 
 export type FormValueType = {
-  target?: string;
-  template?: string;
-  type?: string;
-  time?: string;
-  frequency?: string;
+  name: string;
+  id: string;
+  userId: string;
+  status: number;
+  WorkingMode: number;
+  location: {
+    location: string;
+  };
 } & Partial<API.RuleListItem>;
 
 export type UpdateFormProps = {
@@ -26,183 +21,76 @@ export type UpdateFormProps = {
 };
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const intl = useIntl();
+  const [form] = Form.useForm();
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+      number: '${label} is not a valid number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+  form.setFieldsValue(props.values);
   return (
-    <StepsForm
-      stepsProps={{
-        size: 'small',
+    <Drawer
+      title="Update Terminal"
+      placement="right"
+      onClose={() => {
+        props.onCancel();
       }}
-      stepsFormRender={(dom, submitter) => {
-        return (
-          <Modal
-            width={640}
-            bodyStyle={{ padding: '32px 40px 48px' }}
-            destroyOnClose
-            title={intl.formatMessage({
-              id: 'pages.searchTable.updateForm.ruleConfig',
-              defaultMessage: '规则配置',
-            })}
-            open={props.updateModalOpen}
-            footer={submitter}
-            onCancel={() => {
-              props.onCancel();
-            }}
-          >
-            {dom}
-          </Modal>
-        );
-      }}
-      onFinish={props.onSubmit}
+      open={props.updateModalOpen}
     >
-      <StepsForm.StepForm
-        initialValues={{
-          name: props.values.name,
-          desc: props.values.desc,
+      <Form
+        name="nest-messages"
+        form={form}
+        onFinish={(data) => {
+          props.onSubmit({ ...data, id: props.values.id });
         }}
-        title={intl.formatMessage({
-          id: 'pages.searchTable.updateForm.basicConfig',
-          defaultMessage: '基本信息',
-        })}
+        style={{ maxWidth: 600 }}
+        validateMessages={validateMessages}
       >
-        <ProFormText
-          name="name"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleName.nameLabel',
-            defaultMessage: '规则名称',
-          })}
-          width="md"
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.updateForm.ruleName.nameRules"
-                  defaultMessage="请输入规则名称！"
-                />
-              ),
-            },
-          ]}
-        />
-        <ProFormTextArea
-          name="desc"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleDesc.descLabel',
-            defaultMessage: '规则描述',
-          })}
-          placeholder={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleDesc.descPlaceholder',
-            defaultMessage: '请输入至少五个字符',
-          })}
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.updateForm.ruleDesc.descRules"
-                  defaultMessage="请输入至少五个字符的规则描述！"
-                />
-              ),
-              min: 5,
-            },
-          ]}
-        />
-      </StepsForm.StepForm>
-      <StepsForm.StepForm
-        initialValues={{
-          target: '0',
-          template: '0',
-        }}
-        title={intl.formatMessage({
-          id: 'pages.searchTable.updateForm.ruleProps.title',
-          defaultMessage: '配置规则属性',
-        })}
-      >
-        <ProFormSelect
-          name="target"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.object',
-            defaultMessage: '监控对象',
-          })}
-          valueEnum={{
-            0: '表一',
-            1: '表二',
-          }}
-        />
-        <ProFormSelect
-          name="template"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleProps.templateLabel',
-            defaultMessage: '规则模板',
-          })}
-          valueEnum={{
-            0: '规则模板一',
-            1: '规则模板二',
-          }}
-        />
-        <ProFormRadio.Group
-          name="type"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleProps.typeLabel',
-            defaultMessage: '规则类型',
-          })}
-          options={[
-            {
-              value: '0',
-              label: '强',
-            },
-            {
-              value: '1',
-              label: '弱',
-            },
-          ]}
-        />
-      </StepsForm.StepForm>
-      <StepsForm.StepForm
-        initialValues={{
-          type: '1',
-          frequency: 'month',
-        }}
-        title={intl.formatMessage({
-          id: 'pages.searchTable.updateForm.schedulingPeriod.title',
-          defaultMessage: '设定调度周期',
-        })}
-      >
-        <ProFormDateTimePicker
-          name="time"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.schedulingPeriod.timeLabel',
-            defaultMessage: '开始时间',
-          })}
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.updateForm.schedulingPeriod.timeRules"
-                  defaultMessage="请选择开始时间！"
-                />
-              ),
-            },
-          ]}
-        />
-        <ProFormSelect
-          name="frequency"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.object',
-            defaultMessage: '监控对象',
-          })}
-          width="md"
-          valueEnum={{
-            month: '月',
-            week: '周',
-          }}
-        />
-      </StepsForm.StepForm>
-    </StepsForm>
+        <p>ID:{props.values.id}</p>
+        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+          <Input defaultValue={props.values.name} />
+        </Form.Item>
+        <Form.Item name="status" label="status" rules={[{ type: 'number', min: 0, max: 3 }]}>
+          <InputNumber defaultValue={props.values.status} />
+        </Form.Item>
+        <Form.Item name={['location', 'location']} label="location">
+          <Input defaultValue={props?.values?.location?.location} />
+        </Form.Item>
+        <Form.Item name={['location', 'electrovalency']} label="electrovalency">
+          <Input defaultValue={props?.values?.location?.electrovalency} />
+        </Form.Item>
+        <Form.Item name={['location', 'sunrise']} label="sunrise">
+          <Input defaultValue={props?.values?.location?.sunrise} />
+        </Form.Item>
+        <Form.Item name={['location', 'sunset']} label="sunset">
+          <Input defaultValue={props?.values?.location?.sunset} />
+        </Form.Item>
+        <Form.Item
+          name="WorkingMode"
+          label="WorkingMode"
+          rules={[{ type: 'number', min: 0, max: 3 }]}
+        >
+          <Select
+            defaultValue={props.values.WorkingMode}
+            style={{ width: 120 }}
+            options={WorkingModeStatus.map((province, index) => ({
+              label: province,
+              value: index,
+            }))}
+          />
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 8 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </Drawer>
   );
 };
 

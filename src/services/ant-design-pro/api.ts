@@ -79,13 +79,18 @@ export async function rule(
 }
 
 /** 新建规则 PUT /api/rule */
+export async function updateTerminal(options?: { [key: string]: any }) {
+  return request<API.RuleListItem>('/api/terminal', {
+    method: 'PUT',
+    data: { ...options },
+  });
+}
 export async function updateRule(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+  return request<API.RuleListItem>('/api/terminal', {
     method: 'PUT',
     ...(options || {}),
   });
 }
-
 /** 新建规则 POST /api/rule */
 export async function addRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {

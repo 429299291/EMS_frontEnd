@@ -280,8 +280,6 @@ const Account: React.FC = () => {
       ],
     },
   ];
-  console.log(account);
-
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>

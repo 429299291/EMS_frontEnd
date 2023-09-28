@@ -46,6 +46,7 @@ export default [
     path: '/test',
     name: 'test',
     icon: 'CodepenOutlined',
+    access: 'canTest',
     component: './Test',
   },
   {
