@@ -321,8 +321,7 @@ const Terminal: React.FC = () => {
       </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {
-          console.log(value);
-
+          value.location = { ...currentRow?.location, ...value?.location };
           const success = await handleUpdate(value);
           if (success) {
             handleUpdateModalOpen(false);
