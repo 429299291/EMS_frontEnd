@@ -142,7 +142,7 @@ export const Weather = (props) => {
             }}
           >
             <p>
-              {props.terminals.length > 0
+              {props.terminals?.length > 0
                 ? props.terminals[initialState?.locationIndex ? initialState?.locationIndex : 0]
                     .location.sunrise
                 : ''}

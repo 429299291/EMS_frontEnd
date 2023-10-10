@@ -26,7 +26,7 @@ import styles from './Welcome.less';
 const Welcome: React.FC = () => {
   // const dispatch = useDispatch();
   const [electricityChangeValue, setElectricityChangeValue] = useState(1);
-  const [historyChangeValue, setHistoryChangeValue] = useState<number>();
+  const [historyChangeValue, setHistoryChangeValue] = useState<number>(0);
   const [seeElectricity, setSeeElectricity] = useState(false);
   const [workingModeData, setWorkingModeData] = useState(0);
   const [homeElectricityDatas, setHomeElectricityDatas] = useState();
@@ -52,10 +52,10 @@ const Welcome: React.FC = () => {
         parseInt(moment().endOf('day').format('X')),
       );
     } else {
-      // getHomeElectricityfun(
-      //   parseInt(moment().startOf('year').format('X')),
-      //   parseInt(moment().endOf('year').format('X')),
-      // );
+      getHomeElectricityfun(
+        parseInt(moment().startOf('year').format('X')),
+        parseInt(moment().endOf('year').format('X')),
+      );
     }
     DistributionElectricity(electricityChangeValue, homeElectricityDatas); //用电量
   }, [electricityChangeValue, seeElectricity, historyChangeValue]);
@@ -230,9 +230,15 @@ const Welcome: React.FC = () => {
     //   homeElectricityDatas 传入的可以是日,也可以是月
     const chartDom: any = document.getElementById('distributionElectricity');
     const myChart: any = echarts.init(chartDom);
-    let monthHomeDataFormat: number[];
+    let monthYearHomeDataFormat: string[];
     if (homeElectricityDatas?.monthHomeData) {
-      monthHomeDataFormat = Object.values(homeElectricityDatas.monthHomeData).map((val: number) => {
+      monthYearHomeDataFormat = Object.values(homeElectricityDatas.monthHomeData).map(
+        (val: any) => {
+          return val.toFixed(2);
+        },
+      );
+    } else if (homeElectricityDatas?.yearHomeData) {
+      monthYearHomeDataFormat = Object.values(homeElectricityDatas.yearHomeData).map((val: any) => {
         return val.toFixed(2);
       });
     } else {
@@ -249,7 +255,6 @@ const Welcome: React.FC = () => {
         });
       }
     }
-
     let option: any = {
       tooltip: {
         order: 'valueDesc',
@@ -483,28 +488,28 @@ const Welcome: React.FC = () => {
               shadowColor: 'rgba(0,0,0,0.3)',
             },
           },
-          data: seeElectricity ? monthHomeDataFormat?.map((val) => val / 2) : [],
+          data: seeElectricity ? monthYearHomeDataFormat?.map((val) => val / 2) : [],
         },
         {
           name: 'BAT',
           type: 'bar',
           stack: 'one',
           // emphasis: emphasisStyle,
-          data: seeElectricity ? monthHomeDataFormat?.map((val) => val / 4) : [],
+          data: seeElectricity ? monthYearHomeDataFormat?.map((val) => val / 4) : [],
         },
         {
           name: 'Grid',
           type: 'bar',
           stack: 'one',
           // emphasis: emphasisStyle,
-          data: seeElectricity ? monthHomeDataFormat?.map((val) => val / 4) : [],
+          data: seeElectricity ? monthYearHomeDataFormat?.map((val) => val / 4) : [],
         },
         {
           name: 'Home',
           type: 'bar',
           stack: 'two',
           // emphasis: emphasisStyle,
-          data: seeElectricity ? [] : monthHomeDataFormat,
+          data: seeElectricity ? [] : monthYearHomeDataFormat,
         },
       ],
     };
@@ -554,12 +559,21 @@ const Welcome: React.FC = () => {
       });
     } else {
       //年
+      datad = await getHomeElectricity({
+        id: initialState?.currentUser?.terminals[
+          initialState.locationIndex ? initialState.locationIndex : 0
+        ].id,
+        startTime: start,
+        endTime: end,
+      });
     }
     if (datad && datad.code === 200) {
       if (datad.monthHomeData) {
         DistributionElectricity(electricityChangeValue, datad);
         ElectricityConsumptionChart(datad);
       } else if (datad.yearHomeData) {
+        DistributionElectricity(electricityChangeValue, datad);
+        ElectricityConsumptionChart(datad);
       } else {
         setHomeElectricityDatas(datad.data);
         ElectricityConsumptionChart(datad.data);
@@ -592,12 +606,6 @@ const Welcome: React.FC = () => {
       ].id,
     });
   };
-  console.log('==========');
-  console.log(
-    (homeElectricityDatas?.homeData - homeElectricityDatas?.gridDataOut) /
-      homeElectricityDatas?.homeData,
-  );
-
   return (
     // <PageContainer ghost>
     <div className={styles.container}>
@@ -721,7 +729,6 @@ const Welcome: React.FC = () => {
                 <Select
                   defaultValue={historyChangeValue}
                   style={{ width: 85 }}
-                  allowClear
                   onChange={historyChange}
                   bordered={false}
                   options={[
