@@ -1,5 +1,4 @@
 import { WorkingModeStatus } from '@/constants';
-// import { getMQTT } from '@/tools/mqttclient';
 import { DollarTwoTone } from '@ant-design/icons';
 import { useModel } from '@umijs/max';
 import { Card, message, Popover } from 'antd';
@@ -70,64 +69,44 @@ const LiveView: React.FC = () => {
     initialState?.currentUser?.terminals[
       initialState.locationIndex ? initialState.locationIndex : 0
     ].id;
-  let preTopic: any;
+  const terminalslen: any = initialState?.currentUser?.terminals;
   let client: any;
   useEffect(() => {
     // 在组件加载后执行的代码
     return () => {
       //销毁执行代码
-      client.unsubscribe('EMS/client/0000009', () => {
-        console.log('unsub');
-      });
       message.destroy();
     };
   }, []);
   useEffect(() => {
     // 在组件加载后执行的代码
+    if (!client) {
+      client = mqtt.connect('mqtt://47.106.120.119:8083', {
+        username: 'ems',
+        password: 'xuheng8888',
+        protocolId: 'MQTT',
+        clientId: 'EMS-yun',
+      });
+    }
+    client.on('connect', () => {
+      for (let i = 0; i < terminalslen.length; i++) {
+        client.unsubscribe(`EMS/client/${terminalslen[i].id}`, () => {});
+      }
 
+      client.subscribe(`EMS/client/${currentTopic}`, () => {
+        console.log('订阅' + currentTopic);
+      });
+    });
+    client.on('message', (topic: any, message: any) => {
+      setInitialState({ ...initialState, liveView: JSON.parse(message.toString()) });
+      setLiveViewData(JSON.parse(message.toString()));
+    });
     return () => {
       //销毁执行代码
+      client.end();
     };
-  }, [initialState?.locationIndex]);
-  // getMQTT(initialState, mqtt);
-  if (!client) {
-    client = mqtt.connect('mqtt://47.106.120.119:8083', {
-      username: 'ems',
-      password: 'xuheng8888',
-      protocolId: 'MQTT',
-      clientId: 'EMS-yun',
-    });
-  }
+  }, [currentTopic]);
 
-  client.on('connect', () => {
-    if (client._resubscribeTopics && preTopic) {
-      preTopic = Object.keys(client._resubscribeTopics)[0];
-      console.log(preTopic);
-      console.log(typeof preTopic);
-
-      console.log(currentTopic);
-      if (!preTopic.indexOf(currentTopic)) {
-        //  不包含
-      } else {
-        client.unsubscribe(`EMS/client/${preTopic}`, () => {
-          console.log('unsub');
-        });
-      }
-    }
-    client.subscribeAsync(`EMS/client/${currentTopic}`, (err: any) => {
-      console.log(err);
-    });
-  });
-  client.on('message', (topic: any, message: any) => {
-    // message is Buffer
-    // console.log(topic);
-
-    console.log(message.toString());
-
-    setInitialState({ ...initialState, liveView: JSON.parse(message.toString()) });
-    setLiveViewData(JSON.parse(message.toString()));
-    // client.end(true);
-  });
   const contentPV = (liveViewData: mqttDto) => {
     return (
       <div>
@@ -233,8 +212,6 @@ const LiveView: React.FC = () => {
   } else {
     message.destroy();
   }
-  console.log('live view data' + liveViewData);
-
   return (
     <>
       <Card

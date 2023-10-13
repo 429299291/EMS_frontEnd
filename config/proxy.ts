@@ -16,6 +16,7 @@ export default {
     '/api': {
       target: 'http://47.106.120.119:3000/',
       // target: 'http://localhost:3000/',
+      // target: 'http://192.168.0.49:3000/',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

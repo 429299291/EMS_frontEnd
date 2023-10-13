@@ -34,7 +34,7 @@ export const Location = (currentUser: any) => {
       label: data.location.location,
     });
   });
-  const locationHandleChange = (val: number) => {
+  const locationHandleChange = (val: number = 0) => {
     setInitialState({
       ...initialState,
       locationIndex: val,

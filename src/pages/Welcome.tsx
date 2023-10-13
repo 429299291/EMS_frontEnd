@@ -95,6 +95,9 @@ const Welcome: React.FC = () => {
   // }, 5000);
   ElectricityConsumptionChart = (homeElectricityDatas: any) => {
     const chartDom: any = document.getElementById('ElectricityConsumption');
+    if (!chartDom) {
+      return false;
+    }
     const myChart = echarts.init(chartDom);
     let option: any = {};
     option = {
@@ -229,6 +232,9 @@ const Welcome: React.FC = () => {
   DistributionElectricity = (index: number, homeElectricityDatas: any) => {
     //   homeElectricityDatas 传入的可以是日,也可以是月
     const chartDom: any = document.getElementById('distributionElectricity');
+    if (!chartDom) {
+      return false;
+    }
     const myChart: any = echarts.init(chartDom);
     let monthYearHomeDataFormat: string[];
     if (homeElectricityDatas?.monthHomeData) {

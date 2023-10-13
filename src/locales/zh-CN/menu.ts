@@ -3,6 +3,7 @@ export default {
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',
   'menu.admin': '管理页',
+  'menu.terminal': 'Terminal',
   'menu.about': 'About',
   'menu.liveView': 'Live View',
   'menu.admin.sub-page': '二级管理页',
