@@ -1,6 +1,11 @@
 import { account } from '@/services/ant-design-pro/account';
 import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
-import { CloseCircleOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
+import {
+  CloseCircleOutlined,
+  PlusOutlined,
+  SyncOutlined,
+  WarningOutlined,
+} from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -154,8 +159,16 @@ const Account: React.FC = () => {
         return dom.map((data: any) => {
           return (
             <Tag
-              icon={data.status === 0 ? <SyncOutlined spin /> : <CloseCircleOutlined />}
-              color={data.status === 0 ? 'blue' : 'error'}
+              icon={
+                data.status === 0 ? (
+                  <SyncOutlined spin />
+                ) : data.status === 1 ? (
+                  <WarningOutlined />
+                ) : (
+                  <CloseCircleOutlined />
+                )
+              }
+              color={data.status === 0 ? 'blue' : data.status === 1 ? 'warning' : 'error'}
               key={data.id}
             >
               {data.name}

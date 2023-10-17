@@ -83,7 +83,7 @@ export default [
   {
     name: 'list.table-list',
     icon: 'ApiOutlined',
-    access: 'canSuperAdmin',
+    access: 'canmor',
     path: '/list',
     component: './TableList',
   },

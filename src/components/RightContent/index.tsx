@@ -77,7 +77,7 @@ export const Question = () => {
     </div>
   );
 };
-export const Weather = (props) => {
+export const Weather = () => {
   const [currentWeatherData, setCurrentWeatherData]: any = useState();
   const [day5WeatherData, setDay5WeatherData]: any = useState();
   const { initialState } = useModel('@@initialState');
@@ -141,12 +141,9 @@ export const Weather = (props) => {
               paddingTop: '10px',
             }}
           >
-            <p>
-              {props.terminals?.length > 0
-                ? props.terminals[initialState?.locationIndex ? initialState?.locationIndex : 0]
-                    .location.sunrise
-                : ''}
-            </p>
+            {currentWeatherData && (
+              <p>{moment(currentWeatherData.sys.sunrise * 1000).format('HH:MM')}</p>
+            )}
             <p>Sunrise</p>
           </div>
           <WeatherIcon type="icon-richu" style={{ fontSize: 40, padding: '0 2rem' }} />
@@ -161,12 +158,9 @@ export const Weather = (props) => {
               paddingTop: '10px',
             }}
           >
-            <p>
-              {props.terminals.length > 0
-                ? props.terminals[initialState?.locationIndex ? initialState.locationIndex : 0]
-                    .location.sunset
-                : ''}
-            </p>
+            {currentWeatherData && (
+              <p>{moment(currentWeatherData.sys.sunset * 1000).format('HH:MM')}</p>
+            )}
             <p>Sunset</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', margin: '0 0 0 3rem' }}>

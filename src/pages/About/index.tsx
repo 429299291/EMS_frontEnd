@@ -138,19 +138,19 @@ const About: React.FC = () => {
             <InfoCard
               index={1}
               href="https://www.zhudd.vip"
-              title="了解 EMS"
+              title="关于 EMS"
               desc="旭衡电子（深圳）有限公司的产品设计团队在不间断电源，光伏，充电桩领域拥有20年以上的技术沉淀。拥有成熟，稳定的产品开发平台."
             />
             <InfoCard
               index={2}
-              title="了解 EMS"
-              href="https://www.zhudd.vip"
+              title="码云"
+              href="https://e.gitee.com/zml_1/projects/580914/planning"
               desc="我们的产品支持GB/CCS1/CCS2/CHAdeMO多种充电协议，全球销售。Always control 会为您提供完整，多场景全面产品解决方案，适用于家庭/社区、企业/园区，运营商，新能 源车紧急道路救援等，并且配套自主开发能量管理系统（EMS）以及云平台，进行微网间能量智能调度，实时监控与维护，远程运行策略更新，实现用户效益最大化，使用智能与便捷化"
             />
             <InfoCard
               index={3}
-              title="了解 EMS"
-              href="https://www.zhudd.vip"
+              title="MQTT协议"
+              href="https://docs.qq.com/doc/DS0xJT3V1dnFFc0lt?u=e34e3fe399e741daa01b3da54cd776ec"
               desc="我们遵循“奋进”“创新”“务实”“客户至上”的原则，坚持“以人为本”。旭衡拥有大量的专业人才，提倡以诚待人，义利兼顾的商业道德。旭衡的使命是推动清洁能源在国内的普及，用技术压缩成本让电能惠及千家万户。旭衡期待与所有客户的相遇，用专业为客户带来产品价值，在我们的共同努力下，共赢未来战略机遇"
             />
           </div>

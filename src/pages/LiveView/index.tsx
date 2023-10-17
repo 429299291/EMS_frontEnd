@@ -81,7 +81,7 @@ const LiveView: React.FC = () => {
   useEffect(() => {
     // 在组件加载后执行的代码
     if (!client) {
-      client = mqtt.connect('mqtt://47.106.120.119:8083', {
+      client = mqtt.connect('mqtts://alwayscontrol.net:8084', {
         username: 'ems',
         password: 'xuheng8888',
         protocolId: 'MQTT',
@@ -111,8 +111,8 @@ const LiveView: React.FC = () => {
     return (
       <div>
         <p>设备ID:{liveViewData.PV[0].id}</p>
-        <p>功率:{liveViewData.PV[0].power}kw</p>
-        <p>电压:{liveViewData.PV[0].volt + 'v'}</p>
+        <p>功率:{liveViewData.PV[0].power.toFixed(2)}kw</p>
+        <p>电压:{liveViewData.PV[0].volt.toFixed(2)}v</p>
       </div>
     );
   };
@@ -120,12 +120,12 @@ const LiveView: React.FC = () => {
     return (
       <div>
         <p>设备ID:{liveViewData.BAT[0].id}</p>
-        <p>功率:{liveViewData.BAT[0].power}kw</p>
-        <p>电压:{liveViewData.BAT[0].volt + 'v'}</p>
+        <p>功率:{Math.abs(liveViewData.BAT[0].power).toFixed(2)}kw</p>
+        <p>电压:{liveViewData.BAT[0].volt.toFixed(2)}v</p>
         <p>电量:{liveViewData.BAT[0].SOC}%</p>
-        <p>健康度:{liveViewData.BAT[0].SOH}%</p>
-        <p>最高温度:{liveViewData.BAT[0].maxTemp}°C</p>
-        <p>最低温度:{liveViewData.BAT[0].minTemp}°C</p>
+        <p>健康度:{liveViewData.BAT[0].SOH.toFixed(2)}%</p>
+        <p>最高温度:{liveViewData.BAT[0].maxTemp.toFixed(2)}°C</p>
+        <p>最低温度:{liveViewData.BAT[0].minTemp.toFixed(2)}°C</p>
       </div>
     );
   };
@@ -133,8 +133,8 @@ const LiveView: React.FC = () => {
     return (
       <div>
         <p>设备ID:{liveViewData.EV[0].id}</p>
-        <p>功率:{liveViewData.EV[0].power}kw</p>
-        <p>电压:{liveViewData.EV[0].volt + 'v'}</p>
+        <p>功率:{liveViewData.EV[0].power.toFixed(2)}kw</p>
+        <p>电压:{liveViewData.EV[0].volt.toFixed(2)}v</p>
         <p>状态:{liveViewData.EV[0].status}</p>
         <p>电流:{liveViewData.EV[0].electricCurrent}</p>
       </div>
@@ -184,18 +184,18 @@ const LiveView: React.FC = () => {
   const contentHOME = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>Critical功率:{liveViewData.HOME.critical.power}kw</p>
-        <p>Critical电压:{liveViewData.HOME.critical.volt + 'v'}</p>
-        <p>家庭功率:{liveViewData.HOME.home.power}kw</p>
-        <p>家庭电压:{liveViewData.HOME.home.volt + 'v'}</p>
+        <p>Critical功率:{liveViewData.HOME.critical.power.toFixed(2)}kw</p>
+        <p>Critical电压:{liveViewData.HOME.critical.volt.toFixed(2)}v</p>
+        <p>家庭功率:{liveViewData.HOME.home.power.toFixed(2)}kw</p>
+        <p>家庭电压:{liveViewData.HOME.home.volt.toFixed(2)}v</p>
       </div>
     );
   };
   const contentGRID = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>功率:{liveViewData.GRID.power}kw</p>
-        <p>电压:{liveViewData.GRID.volt + 'v'}</p>
+        <p>功率:{Math.abs(liveViewData.GRID.power).toFixed(2)}kw</p>
+        <p>电压:{liveViewData.GRID.volt.toFixed(2)}v</p>
       </div>
     );
   };
@@ -226,7 +226,7 @@ const LiveView: React.FC = () => {
         <Popover content={liveViewData ? contentPV(liveViewData) : null} title="Solar">
           <div className={styles.solar}>
             <p>Solar</p>
-            <span>{liveViewData ? liveViewData.PV[0].power + 'kw' : null}</span>
+            <span>{liveViewData ? liveViewData.PV[0].power.toFixed(2) + 'kw' : null}</span>
           </div>
         </Popover>
         <Popover content={liveViewData ? contentBAT(liveViewData) : null} title="Battery">
@@ -239,13 +239,13 @@ const LiveView: React.FC = () => {
             }}
           >
             <p>Battery</p>
-            <span>{liveViewData ? liveViewData.BAT[0].power + 'kw' : null}</span>
+            <span>{liveViewData ? liveViewData.BAT[0].power.toFixed(2) + 'kw' : null}</span>
           </div>
         </Popover>
         <Popover content={liveViewData?.EV ? contentEV(liveViewData) : null} title="EV">
           <div className={styles.ev} style={{ opacity: liveViewData?.EV ? '1' : '0.3' }}>
             <p>EV</p>
-            <span>{liveViewData?.EV && liveViewData.EV[0].power + 'kw'}</span>
+            <span>{liveViewData?.EV && liveViewData.EV[0].power.toFixed(2) + 'kw'}</span>
           </div>
         </Popover>
         <Popover content={liveViewData ? contentMaster(liveViewData) : null} title="Terminal">
@@ -257,7 +257,7 @@ const LiveView: React.FC = () => {
         <Popover content={liveViewData ? contentGRID(liveViewData) : null} title="Grid">
           <div className={styles.grid}>
             <p>Grid</p>
-            <span>{liveViewData ? liveViewData.GRID.power + 'kw' : null}</span>
+            <span>{liveViewData ? liveViewData.GRID.power.toFixed(2) + 'kw' : null}</span>
           </div>
         </Popover>
         <Popover content={liveViewData ? contentHOME(liveViewData) : null} title="House">
@@ -265,7 +265,7 @@ const LiveView: React.FC = () => {
             <p>House</p>
             <span>
               {liveViewData && liveViewData.HOME
-                ? (liveViewData.HOME.home.power + liveViewData.HOME.critical.power).toFixed(3) +
+                ? (liveViewData.HOME.home.power + liveViewData.HOME.critical.power).toFixed(2) +
                   'kw'
                 : null}
             </span>
@@ -343,7 +343,7 @@ const LiveView: React.FC = () => {
             strokeLinecap="round"
             strokeWidth="10"
             d={
-              liveViewData?.EV && liveViewData?.EV[0]?.power > 0
+              liveViewData?.EV && liveViewData?.EV[0]?.power < 0
                 ? 'M0 180 350 180,350 60 '
                 : 'M350 60 350 180,0 180 '
             }
@@ -356,7 +356,7 @@ const LiveView: React.FC = () => {
             stopColor="#000"
             strokeWidth="10"
             d={
-              liveViewData?.EV && liveViewData?.EV[0]?.power > 0
+              liveViewData?.EV && liveViewData?.EV[0]?.power < 0
                 ? 'M0 180 350 180,350 60'
                 : 'M350 60 350 180,0 180'
             }
@@ -370,7 +370,7 @@ const LiveView: React.FC = () => {
             strokeLinecap="round"
             strokeWidth="10"
             d={
-              liveViewData?.EV && liveViewData?.EV[0]?.power > 0
+              liveViewData?.EV && liveViewData?.EV[0]?.power < 0
                 ? 'M0 180 350 180,350 60'
                 : 'M350 60 350 180,0 180'
             }
