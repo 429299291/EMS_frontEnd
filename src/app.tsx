@@ -2,7 +2,7 @@ import Footer from '@/components/Footer';
 import { Location, Weather } from '@/components/RightContent';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import { history, Link, RunTimeLayoutConfig } from '@umijs/max';
+import { history, Link, RunTimeLayoutConfig, SelectLang } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestErrorConfig';
@@ -59,7 +59,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         terminals={initialState?.currentUser?.terminals}
       />,
       <Location currentUser={initialState?.currentUser} key="location" />,
-      // <SelectLang key="SelectLang" />,   国际化
+      <SelectLang key="SelectLang" />,
     ],
     // actionsRender: () => [<Weather key="doc" />,<Location key="location"/>],
     avatarProps: {
