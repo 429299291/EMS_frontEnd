@@ -93,6 +93,9 @@ const Login: React.FC = () => {
   const fetchUserInfo = async (values: any) => {
     const userInfo = await initialState?.fetchUserInfo?.(values);
     if (userInfo) {
+      localStorage.setItem('currentUserInfo', `${JSON.stringify(userInfo)}`);
+    }
+    if (userInfo) {
       flushSync(() => {
         setInitialState((s: any) => ({
           ...s,
@@ -103,10 +106,12 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (values: API.LoginParams) => {
+    // let currentUser:any
     try {
       // 登录
       const msg = await login({ ...values, type }); //token
       if (msg.code === 200) {
+        localStorage.setItem('token', msg.access_token);
         // if (msg.status !== 'ok') {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
@@ -114,7 +119,7 @@ const Login: React.FC = () => {
         });
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo({ values });
-        localStorage.setItem('token', msg.access_token);
+        // localStorage.setItem("currentUser",`${currentUser}`)
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
         return;
@@ -128,7 +133,6 @@ const Login: React.FC = () => {
         id: 'pages.login.failure',
         defaultMessage: '登录失败，请重试！',
       });
-      console.log(error);
       message.error(defaultLoginFailureMessage);
     }
   };

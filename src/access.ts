@@ -2,7 +2,10 @@
  * @see https://umijs.org/zh-CN/plugins/plugin-access
  * */
 export default function access(initialState: { currentUser?: API.CurrentUser } | undefined) {
-  const { currentUser } = initialState ?? {};
+  let { currentUser } = initialState ?? {};
+  if (!currentUser && localStorage.getItem('currentUserInfo')) {
+    currentUser = JSON.parse(localStorage.getItem('currentUserInfo'));
+  }
   return {
     // canAdmin: currentUser && currentUser.access === 'admin',
     // canAdmin: currentUser && currentUser.identity === 'admin',

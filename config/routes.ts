@@ -12,6 +12,13 @@
  */
 export default [
   {
+    path: '/welcome',
+    name: 'welcome',
+    icon: 'DashboardOutlined',
+    access: 'canDashboard',
+    component: './Welcome',
+  },
+  {
     path: '/user',
     layout: false,
     routes: [
@@ -21,13 +28,6 @@ export default [
         component: './User/Login',
       },
     ],
-  },
-  {
-    path: '/welcome',
-    name: 'welcome',
-    icon: 'DashboardOutlined',
-    access: 'canDashboard',
-    component: './Welcome',
   },
   {
     path: '/liveView',

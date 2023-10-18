@@ -17,9 +17,10 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   loading?: boolean;
-  locationIndex: number;
-  liveView: any;
-  fetchUserInfo?: (values?: any) => Promise<API.CurrentUser | undefined>;
+  locationIndex?: number;
+  liveView?: any;
+  // fetchUserInfo?: (values?: any) => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: any;
 }> {
   const fetchUserInfo = async (values?: any) => {
     try {
@@ -34,15 +35,15 @@ export async function getInitialState(): Promise<{
     return undefined;
   };
   // 如果不是登录页面，执行
-  const { location } = history;
-  if (location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo();
-    return {
-      fetchUserInfo,
-      currentUser,
-      settings: defaultSettings as Partial<LayoutSettings>,
-    };
-  }
+  // const { location } = history;
+  // if (location.pathname !== loginPath) {
+  //   const currentUser:API.CurrentUser = await fetchUserInfo();
+  //   return {
+  //     fetchUserInfo,
+  //     currentUser,
+  //     settings: defaultSettings as Partial<LayoutSettings>,
+  //   };
+  // }
   return {
     fetchUserInfo,
     settings: defaultSettings as Partial<LayoutSettings>,
@@ -51,6 +52,9 @@ export async function getInitialState(): Promise<{
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
+  if (!initialState?.currentUser && localStorage.getItem('currentUserInfo')) {
+    initialState.currentUser = JSON.parse(localStorage.getItem('currentUserInfo'));
+  }
   return {
     actionsRender: () => [
       <Weather
@@ -75,7 +79,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      // 如果没有登录，重定向到 login 重要
+      // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }

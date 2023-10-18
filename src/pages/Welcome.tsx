@@ -29,7 +29,7 @@ const Welcome: React.FC = () => {
   const [historyChangeValue, setHistoryChangeValue] = useState<number>(0);
   const [seeElectricity, setSeeElectricity] = useState(false);
   const [workingModeData, setWorkingModeData] = useState(0);
-  const [homeElectricityDatas, setHomeElectricityDatas] = useState();
+  const [homeElectricityDatas, setHomeElectricityDatas] = useState<any>();
   const { initialState } = useModel('@@initialState');
   // const { currentUser, locationIndex } = initialState;
   let ElectricityConsumptionChart: any;
@@ -494,21 +494,21 @@ const Welcome: React.FC = () => {
               shadowColor: 'rgba(0,0,0,0.3)',
             },
           },
-          data: seeElectricity ? monthYearHomeDataFormat?.map((val) => val / 2) : [],
+          data: seeElectricity ? monthYearHomeDataFormat?.map((val: any) => val / 2) : [],
         },
         {
           name: 'BAT',
           type: 'bar',
           stack: 'one',
           // emphasis: emphasisStyle,
-          data: seeElectricity ? monthYearHomeDataFormat?.map((val) => val / 4) : [],
+          data: seeElectricity ? monthYearHomeDataFormat?.map((val: any) => val / 4) : [],
         },
         {
           name: 'Grid',
           type: 'bar',
           stack: 'one',
           // emphasis: emphasisStyle,
-          data: seeElectricity ? monthYearHomeDataFormat?.map((val) => val / 4) : [],
+          data: seeElectricity ? monthYearHomeDataFormat?.map((val: any) => val / 4) : [],
         },
         {
           name: 'Home',
@@ -649,11 +649,11 @@ const Welcome: React.FC = () => {
                     ].WorkingMode
                   }
                   style={{ width: 100 }}
-                  value={
-                    initialState?.currentUser.terminals[
-                      initialState.locationIndex ? initialState.locationIndex : 0
-                    ].WorkingMode
-                  }
+                  // value={
+                  //   initialState?.currentUser.terminals[
+                  //     initialState.locationIndex ? initialState.locationIndex : 0
+                  //   ].WorkingMode
+                  // }
                   bordered={false}
                   onChange={modelHandleChange}
                   options={[

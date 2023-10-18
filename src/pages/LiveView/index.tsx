@@ -239,7 +239,11 @@ const LiveView: React.FC = () => {
             }}
           >
             <p>Battery</p>
-            <span>{liveViewData ? liveViewData.BAT[0].power.toFixed(2) + 'kw' : null}</span>
+            <span>
+              {liveViewData
+                ? Math.abs(parseFloat(liveViewData.BAT[0].power.toFixed(2))) + 'kw'
+                : null}
+            </span>
           </div>
         </Popover>
         <Popover content={liveViewData?.EV ? contentEV(liveViewData) : null} title="EV">
@@ -257,7 +261,11 @@ const LiveView: React.FC = () => {
         <Popover content={liveViewData ? contentGRID(liveViewData) : null} title="Grid">
           <div className={styles.grid}>
             <p>Grid</p>
-            <span>{liveViewData ? liveViewData.GRID.power.toFixed(2) + 'kw' : null}</span>
+            <span>
+              {liveViewData
+                ? Math.abs(parseFloat(liveViewData.GRID.power.toFixed(2))) + 'kw'
+                : null}
+            </span>
           </div>
         </Popover>
         <Popover content={liveViewData ? contentHOME(liveViewData) : null} title="House">
