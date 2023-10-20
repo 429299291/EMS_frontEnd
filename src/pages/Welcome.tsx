@@ -8,7 +8,7 @@ import {
   WorkingModeStatusColor,
 } from '@/constants';
 import { getHomeElectricity } from '@/services/dashboard/dashboard';
-import { useModel } from '@umijs/max';
+import { FormattedMessage, useModel } from '@umijs/max';
 import { Button, Card, Progress, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import { connect, useDispatch } from '@umijs/plugins/libs/dva';
@@ -626,9 +626,13 @@ const Welcome: React.FC = () => {
         }}
       >
         <Card
-          title="Electricity consumption"
+          title={<FormattedMessage id="pages.home.ElectricityConsumption" />}
           style={{ gridArea: 'aa' }}
-          extra={<a href="#">More</a>}
+          extra={
+            <a href="#">
+              <FormattedMessage id="menu.more" />
+            </a>
+          }
         >
           <div
             id="ElectricityConsumption"
@@ -636,7 +640,7 @@ const Welcome: React.FC = () => {
           ></div>
         </Card>
         <Card
-          title="Self-sufficiency"
+          title={<FormattedMessage id="pages.home.SelfSufficiency" />}
           style={{ gridArea: 'bb' }}
           extra={
             initialState?.currentUser?.terminals.length > 0 && (
@@ -648,25 +652,27 @@ const Welcome: React.FC = () => {
                       initialState.locationIndex ? initialState.locationIndex : 0
                     ].WorkingMode
                   }
-                  style={{ width: 100 }}
-                  // value={
-                  //   initialState?.currentUser.terminals[
-                  //     initialState.locationIndex ? initialState.locationIndex : 0
-                  //   ].WorkingMode
-                  // }
+                  style={{ width: 150 }}
+                  value={
+                    initialState?.currentUser.terminals[
+                      initialState.locationIndex ? initialState.locationIndex : 0
+                    ].WorkingMode
+                  }
                   bordered={false}
                   onChange={modelHandleChange}
                   options={[
-                    { value: 0, label: '自发自用' },
-                    { value: 1, label: '经济' },
-                    { value: 2, label: '应急' },
+                    { value: 0, label: <FormattedMessage id="pages.home.selfus" /> },
+                    { value: 1, label: <FormattedMessage id="pages.home.economic" /> },
+                    { value: 2, label: <FormattedMessage id="pages.home.emergency" /> },
                   ]}
                 />
               </>
             )
           }
         >
-          <p>Everything is working fine in your system</p>
+          <p>
+            <FormattedMessage id="pages.home.P" />
+          </p>
           <div
             style={{
               display: 'flex',
@@ -691,11 +697,20 @@ const Welcome: React.FC = () => {
             </p>
           </div>
         </Card>
-        <Card title="Inverter Power" style={{ gridArea: 'cc' }} extra={<a href="#">More</a>}>
+        <Card
+          title={<FormattedMessage id="pages.home.IntervalPower" />}
+          style={{ gridArea: 'cc' }}
+          extra={
+            <a href="#">
+              <FormattedMessage id="menu.more" />
+            </a>
+          }
+        >
           <div id="Gauge" style={{ width: '100%', height: '13rem', alignItems: 'center' }}></div>
         </Card>
         <Card
-          title="Distribution of Electricity"
+          //title="Distribution of Electricity"
+          title={<FormattedMessage id="pages.home.DistributionofElectricity" />}
           style={{ gridArea: 'dd' }}
           extra={
             <>
@@ -706,11 +721,11 @@ const Welcome: React.FC = () => {
                   onChange={electricityChange}
                   bordered={false}
                   options={[
-                    { value: 1, label: 'Home' },
-                    { value: 2, label: 'BAT' },
-                    { value: 3, label: 'PV' },
-                    { value: 4, label: 'EV' },
-                    { value: 5, label: 'Grid' },
+                    { value: 1, label: <FormattedMessage id="pages.home.Home" /> },
+                    { value: 2, label: <FormattedMessage id="pages.home.BAT" /> },
+                    { value: 3, label: <FormattedMessage id="pages.home.PV" /> },
+                    { value: 4, label: <FormattedMessage id="pages.home.EV" /> },
+                    { value: 5, label: <FormattedMessage id="pages.home.Grid" /> },
                   ]}
                 />
               }
@@ -738,9 +753,9 @@ const Welcome: React.FC = () => {
                   onChange={historyChange}
                   bordered={false}
                   options={[
-                    { value: 0, label: 'Day' },
-                    { value: 1, label: 'Month' },
-                    { value: 2, label: 'Year' },
+                    { value: 0, label: <FormattedMessage id="pages.home.Day" /> },
+                    { value: 1, label: <FormattedMessage id="pages.home.Month" /> },
+                    { value: 2, label: <FormattedMessage id="pages.home.Year" /> },
                   ]}
                 />
               }
@@ -753,7 +768,8 @@ const Welcome: React.FC = () => {
           ></div>
         </Card>
         <Card
-          title="CO2 savings of the system"
+          // title="CO2 savings of the system"
+          title={<FormattedMessage id="pages.home.CO2Savings" />}
           style={{
             backgroundImage:
               "url('https://ems-public.oss-cn-beijing.aliyuncs.com/%E6%A0%91%E5%8F%B6')",

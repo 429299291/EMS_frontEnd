@@ -1,7 +1,12 @@
 export default {
-  'menu.welcome': 'Welcome',
+  'menu.welcome': 'DashBoard',
   'menu.more-blocks': 'More Blocks',
+  'menu.about': 'About',
+  'menu.liveView': 'LiveView',
+  'menu.test': 'Test',
+  'menu.terminal': 'Terminal',
   'menu.home': 'Home',
+  'menu.more': 'More',
   'menu.admin': 'Admin',
   'menu.admin.sub-page': 'Sub-Page',
   'menu.login': 'Login',

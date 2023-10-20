@@ -1,11 +1,12 @@
 import { WorkingModeStatus } from '@/constants';
 import { DollarTwoTone } from '@ant-design/icons';
-import { useModel } from '@umijs/max';
+import { FormattedMessage, useModel } from '@umijs/max';
 import { Card, message, Popover } from 'antd';
 import moment from 'moment';
 import * as mqtt from 'mqtt';
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
+//import { FormattedMessage, useModel } from '@umijs/max';
 
 interface mqttDto {
   name: string;
@@ -110,33 +111,64 @@ const LiveView: React.FC = () => {
   const contentPV = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>设备ID:{liveViewData.PV[0].id}</p>
-        <p>功率:{liveViewData.PV[0].power.toFixed(2)}kw</p>
-        <p>电压:{liveViewData.PV[0].volt.toFixed(2)}v</p>
+        <p>
+          <FormattedMessage id="pages.home.device" />:{liveViewData.PV[0].id}
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.power" />:{liveViewData.PV[0].power.toFixed(2)}kw
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.voltage" />:{liveViewData.PV[0].volt.toFixed(2)}v
+        </p>
       </div>
     );
   };
   const contentBAT = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>设备ID:{liveViewData.BAT[0].id}</p>
-        <p>功率:{Math.abs(liveViewData.BAT[0].power).toFixed(2)}kw</p>
-        <p>电压:{liveViewData.BAT[0].volt.toFixed(2)}v</p>
-        <p>电量:{liveViewData.BAT[0].SOC}%</p>
-        <p>健康度:{liveViewData.BAT[0].SOH.toFixed(2)}%</p>
-        <p>最高温度:{liveViewData.BAT[0].maxTemp.toFixed(2)}°C</p>
-        <p>最低温度:{liveViewData.BAT[0].minTemp.toFixed(2)}°C</p>
+        <p>
+          <FormattedMessage id="pages.home.device" />:{liveViewData.BAT[0].id}
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.power" />:
+          {Math.abs(liveViewData.BAT[0].power).toFixed(2)}kw
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.voltage" />:{liveViewData.BAT[0].volt.toFixed(2)}v
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.electricity" />:{liveViewData.BAT[0].SOC}%
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.health" />:{liveViewData.BAT[0].SOH.toFixed(2)}%
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.MAX temp" />:{liveViewData.BAT[0].maxTemp.toFixed(2)}°C
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.MIN temp" />:{liveViewData.BAT[0].minTemp.toFixed(2)}°C
+        </p>
       </div>
     );
   };
   const contentEV = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>设备ID:{liveViewData.EV[0].id}</p>
-        <p>功率:{liveViewData.EV[0].power.toFixed(2)}kw</p>
-        <p>电压:{liveViewData.EV[0].volt.toFixed(2)}v</p>
-        <p>状态:{liveViewData.EV[0].status}</p>
-        <p>电流:{liveViewData.EV[0].electricCurrent}</p>
+        <p>
+          <FormattedMessage id="pages.home.device" />:{liveViewData.EV[0].id}
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.power" />:{liveViewData.EV[0].power.toFixed(2)}kw
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.voltage" />:{liveViewData.EV[0].volt.toFixed(2)}v
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.status" />:{liveViewData.EV[0].status}
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.current" />:{liveViewData.EV[0].electricCurrent}
+        </p>
       </div>
     );
   };
@@ -148,20 +180,21 @@ const LiveView: React.FC = () => {
     return (
       <div>
         <p>
-          终端ID:
+          <FormattedMessage id="pages.home.terminal" />:
           {
             initialState?.currentUser?.terminals[
               initialState.locationIndex ? initialState.locationIndex : 0
             ].id
           }
         </p>
-        <p>主机名:{liveViewData.name}</p>
         <p>
-          模式:
-          {WorkingModeStatus[WorkingModeState]}
+          <FormattedMessage id="pages.home.host" />:{liveViewData.name}
         </p>
         <p>
-          电价:
+          <FormattedMessage id="pages.home.mode" />:{WorkingModeStatus[WorkingModeState]}
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.price" />:
           {
             initialState?.currentUser?.terminals[
               initialState.locationIndex ? initialState.locationIndex : 0
@@ -170,32 +203,52 @@ const LiveView: React.FC = () => {
           <DollarTwoTone style={{ marginLeft: '3px' }} />
         </p>
         <p>
-          供应商:
+          <FormattedMessage id="pages.home.vender" />:
           {
             initialState?.currentUser?.terminals[
               initialState.locationIndex ? initialState.locationIndex : 0
             ].supplier
           }
         </p>
-        <p>时间:{moment(liveViewData.timeStamp * 1000).format('YYYY-MM-DD HH:mm:ss')}</p>
+        <p>
+          <FormattedMessage id="pages.home.time" />:
+          {moment(liveViewData.timeStamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
+        </p>
       </div>
     );
   };
   const contentHOME = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>Critical功率:{liveViewData.HOME.critical.power.toFixed(2)}kw</p>
-        <p>Critical电压:{liveViewData.HOME.critical.volt.toFixed(2)}v</p>
-        <p>家庭功率:{liveViewData.HOME.home.power.toFixed(2)}kw</p>
-        <p>家庭电压:{liveViewData.HOME.home.volt.toFixed(2)}v</p>
+        <p>
+          <FormattedMessage id="pages.home.critical" />
+          <FormattedMessage id="pages.home.power" />:{liveViewData.HOME.critical.power.toFixed(2)}kw
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.critical" />
+          <FormattedMessage id="pages.home.voltage" />:{liveViewData.HOME.critical.volt.toFixed(2)}v
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.HOme" />
+          <FormattedMessage id="pages.home.power" />:{liveViewData.HOME.home.power.toFixed(2)}kw
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.HOme" />
+          <FormattedMessage id="pages.home.voltage" />:{liveViewData.HOME.home.volt.toFixed(2)}v
+        </p>
       </div>
     );
   };
   const contentGRID = (liveViewData: mqttDto) => {
     return (
       <div>
-        <p>功率:{Math.abs(liveViewData.GRID.power).toFixed(2)}kw</p>
-        <p>电压:{liveViewData.GRID.volt.toFixed(2)}v</p>
+        <p>
+          <FormattedMessage id="pages.home.power" />:{Math.abs(liveViewData.GRID.power).toFixed(2)}
+          kw
+        </p>
+        <p>
+          <FormattedMessage id="pages.home.voltage" />:{liveViewData.GRID.volt.toFixed(2)}v
+        </p>
       </div>
     );
   };
@@ -223,13 +276,21 @@ const LiveView: React.FC = () => {
               : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
         }}
       >
-        <Popover content={liveViewData ? contentPV(liveViewData) : null} title="Solar">
+        <Popover
+          content={liveViewData ? contentPV(liveViewData) : null}
+          title={<FormattedMessage id="pages.home.solar" />}
+        >
           <div className={styles.solar}>
-            <p>Solar</p>
+            <p>
+              <FormattedMessage id="pages.home.solar" />
+            </p>
             <span>{liveViewData ? liveViewData.PV[0].power.toFixed(2) + 'kw' : null}</span>
           </div>
         </Popover>
-        <Popover content={liveViewData ? contentBAT(liveViewData) : null} title="Battery">
+        <Popover
+          content={liveViewData ? contentBAT(liveViewData) : null}
+          title={<FormattedMessage id="pages.home.BAT" />}
+        >
           <div
             className={styles.battery}
             style={{
@@ -238,17 +299,20 @@ const LiveView: React.FC = () => {
                 "url('https://ems-public.oss-cn-beijing.aliyuncs.com/battery.png') no-repeat center/60%",
             }}
           >
-            <p>Battery</p>
-            <span>
-              {liveViewData
-                ? Math.abs(parseFloat(liveViewData.BAT[0].power.toFixed(2))) + 'kw'
-                : null}
-            </span>
+            <p>
+              <FormattedMessage id="pages.home.BAT" />
+            </p>
+            <span>{liveViewData ? liveViewData.BAT[0].power.toFixed(2) + 'kw' : null}</span>
           </div>
         </Popover>
-        <Popover content={liveViewData?.EV ? contentEV(liveViewData) : null} title="EV">
+        <Popover
+          content={liveViewData?.EV ? contentEV(liveViewData) : null}
+          title={<FormattedMessage id="pages.home.EV" />}
+        >
           <div className={styles.ev} style={{ opacity: liveViewData?.EV ? '1' : '0.3' }}>
-            <p>EV</p>
+            <p>
+              <FormattedMessage id="pages.home.EV" />
+            </p>
             <span>{liveViewData?.EV && liveViewData.EV[0].power.toFixed(2) + 'kw'}</span>
           </div>
         </Popover>
@@ -258,19 +322,25 @@ const LiveView: React.FC = () => {
             <span>{liveViewData ? WorkingModeStatus[liveViewData.WorkingMode] : null}</span> */}
           </div>
         </Popover>
-        <Popover content={liveViewData ? contentGRID(liveViewData) : null} title="Grid">
+        <Popover
+          content={liveViewData ? contentGRID(liveViewData) : null}
+          title={<FormattedMessage id="pages.home.Grid" />}
+        >
           <div className={styles.grid}>
-            <p>Grid</p>
-            <span>
-              {liveViewData
-                ? Math.abs(parseFloat(liveViewData.GRID.power.toFixed(2))) + 'kw'
-                : null}
-            </span>
+            <p>
+              <FormattedMessage id="pages.home.Grid" />
+            </p>
+            <span>{liveViewData ? liveViewData.GRID.power.toFixed(2) + 'kw' : null}</span>
           </div>
         </Popover>
-        <Popover content={liveViewData ? contentHOME(liveViewData) : null} title="House">
+        <Popover
+          content={liveViewData ? contentHOME(liveViewData) : null}
+          title={<FormattedMessage id="pages.home.Home" />}
+        >
           <div className={styles.house}>
-            <p>House</p>
+            <p>
+              <FormattedMessage id="pages.home.Home" />
+            </p>
             <span>
               {liveViewData && liveViewData.HOME
                 ? (liveViewData.HOME.home.power + liveViewData.HOME.critical.power).toFixed(2) +
