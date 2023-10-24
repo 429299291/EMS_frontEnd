@@ -1,5 +1,5 @@
-import { WorkingModeStatus } from '@/constants';
-import { Button, Drawer, Form, Input, InputNumber, Select } from 'antd';
+import { deviceStatus, WorkingModeStatus } from '@/constants';
+import { Button, Drawer, Form, Input, Select } from 'antd';
 import React from 'react';
 
 export type FormValueType = {
@@ -56,19 +56,21 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           <Input defaultValue={props.values.name} />
         </Form.Item>
         <Form.Item name="status" label="status" rules={[{ type: 'number', min: 0, max: 3 }]}>
-          <InputNumber defaultValue={props.values.status} />
+          {/* <InputNumber defaultValue={props.values.status} /> */}
+          <Select
+            defaultValue={props.values.WorkingMode}
+            style={{ width: 120 }}
+            options={deviceStatus.map((province, index) => ({
+              label: province,
+              value: index,
+            }))}
+          />
         </Form.Item>
         <Form.Item name={['location', 'location']} label="location">
           <Input defaultValue={props?.values?.location?.location} />
         </Form.Item>
         <Form.Item name={['location', 'electrovalency']} label="electrovalency">
           <Input defaultValue={props?.values?.location?.electrovalency} />
-        </Form.Item>
-        <Form.Item name={['location', 'sunrise']} label="sunrise">
-          <Input defaultValue={props?.values?.location?.sunrise} />
-        </Form.Item>
-        <Form.Item name={['location', 'sunset']} label="sunset">
-          <Input defaultValue={props?.values?.location?.sunset} />
         </Form.Item>
         <Form.Item
           name="WorkingMode"
@@ -84,7 +86,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             }))}
           />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8 }}>
+        <Form.Item wrapperCol={{ offset: 0 }}>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>

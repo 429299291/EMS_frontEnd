@@ -152,7 +152,7 @@ const Terminal: React.FC = () => {
       valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.home.Email" defaultMessage="Status" />,
+      title: <FormattedMessage id="pages.home.status" defaultMessage="Status" />,
       dataIndex: 'status',
       search: false,
       render: (val: any) => {
