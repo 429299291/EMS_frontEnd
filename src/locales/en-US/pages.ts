@@ -115,4 +115,16 @@ export default {
   'pages.home.gitee': 'Gitee',
   'pages.home.mqtt': 'MQTT Protocol',
   'pages.home.MORE': 'More',
+  //表单名
+  'pages.home.Name': 'Name',
+  'pages.home.ID': 'ID',
+  'pages.home.Identity': 'Identity',
+  'pages.home.supplier': 'Supplier',
+  'pages.home.workingmode': 'workingmode',
+  'pages.home.Email': 'Email',
+  'pages.home.Location': 'Location',
+  'pages.home.Terminal': 'Terminal',
+  'pages.home.Permissions': 'Permissions',
+  //底部
+  'pages.foot.document': 'API document',
 };

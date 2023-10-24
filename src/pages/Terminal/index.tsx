@@ -109,7 +109,7 @@ const Terminal: React.FC = () => {
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: <FormattedMessage id="pages.account.name" defaultMessage="Name" />,
+      title: <FormattedMessage id="pages.home.Name" defaultMessage="Name" />,
       dataIndex: 'name',
       // tip: 'The rule name is the unique key',
       render: (dom, entity) => {
@@ -126,7 +126,7 @@ const Terminal: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.WorkingMode" defaultMessage="WorkingMode" />,
+      title: <FormattedMessage id="pages.home.workingmode" defaultMessage="WorkingMode" />,
       dataIndex: 'WorkingMode',
       search: false,
       render: (val: any) => {
@@ -147,12 +147,12 @@ const Terminal: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.identity" defaultMessage="Id" />,
+      title: <FormattedMessage id="pages.home.Identity" defaultMessage="Id" />,
       dataIndex: 'id',
       valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.account.email" defaultMessage="Status" />,
+      title: <FormattedMessage id="pages.home.Email" defaultMessage="Status" />,
       dataIndex: 'status',
       search: false,
       render: (val: any) => {
@@ -160,7 +160,7 @@ const Terminal: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.location" defaultMessage="Location" />,
+      title: <FormattedMessage id="pages.home.Location" defaultMessage="Location" />,
       dataIndex: 'location',
       valueType: 'textarea',
       render: (dom: any) => {
@@ -168,13 +168,13 @@ const Terminal: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.supplier" defaultMessage="Supplier" />,
+      title: <FormattedMessage id="pages.home.supplier" defaultMessage="Supplier" />,
       dataIndex: 'supplier',
       valueType: 'textarea',
       search: false,
     },
     {
-      title: <FormattedMessage id="pages.account.supplier" defaultMessage="Time" />,
+      title: <FormattedMessage id="pages.home.time" defaultMessage="Time" />,
       dataIndex: 'date',
       search: false,
       render: (dom: any) => {

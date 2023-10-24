@@ -17,10 +17,11 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl } from '@umijs/max';
-import { Button, Drawer, message, Tag } from 'antd';
+import { Button, Drawer, message, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
+const { Paragraph } = Typography;
 
 /**
  * @en-US Add node
@@ -50,11 +51,7 @@ const handleAdd = async (fields: API.RuleListItem) => {
 const handleUpdate = async (fields: FormValueType) => {
   const hide = message.loading('Configuring');
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
+    await updateRule(fields);
     hide();
 
     message.success('Configuration is successful');
@@ -100,9 +97,7 @@ const Account: React.FC = () => {
    * @zh-CN 分布更新窗口的弹窗
    * */
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
-
   const [showDetail, setShowDetail] = useState<boolean>(false);
-
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
@@ -115,7 +110,7 @@ const Account: React.FC = () => {
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: <FormattedMessage id="pages.account.name" defaultMessage="Name" />,
+      title: <FormattedMessage id="pages.home.Name" defaultMessage="Name" />,
       dataIndex: 'name',
       // tip: 'The rule name is the unique key',
       render: (dom, entity) => {
@@ -132,18 +127,27 @@ const Account: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.identity" defaultMessage="Identity" />,
+      title: <FormattedMessage id="pages.home.Identity" defaultMessage="Identity" />,
       dataIndex: 'identity',
       search: false,
       valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.account.email" defaultMessage="Email" />,
+      title: <FormattedMessage id="pages.home.ID" defaultMessage="ID" />,
+      dataIndex: 'id',
+      search: false,
+      valueType: 'textarea',
+      render: (dom) => {
+        return <Paragraph copyable>{dom}</Paragraph>;
+      },
+    },
+    {
+      title: <FormattedMessage id="pages.home.Email" defaultMessage="Email" />,
       dataIndex: 'email',
       valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.account.location" defaultMessage="Location" />,
+      title: <FormattedMessage id="pages.home.Location" defaultMessage="Location" />,
       dataIndex: 'location',
       valueType: 'textarea',
       search: false,
@@ -152,7 +156,7 @@ const Account: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.devices" defaultMessage="Terminal" />,
+      title: <FormattedMessage id="pages.home.Terminal" defaultMessage="Terminal" />,
       dataIndex: 'terminals',
       search: false,
       render: (dom: any) => {
@@ -178,7 +182,7 @@ const Account: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.account.accessPermissions" defaultMessage="Permissions" />,
+      title: <FormattedMessage id="pages.home.Permissions" defaultMessage="Permissions" />,
       dataIndex: 'accessPermissions',
       search: false,
       // valueType: 'textarea',

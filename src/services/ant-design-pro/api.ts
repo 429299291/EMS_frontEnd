@@ -51,10 +51,12 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
 }
 
 /** 此处后端没有提供注释 GET /api/notices */
-export async function getNotices(options?: { [key: string]: any }) {
-  return request<API.NoticeIconList>('/api/notices', {
-    method: 'GET',
-    ...(options || {}),
+export async function sendNotices(options: any) {
+  console.log(options);
+
+  return request<API.NoticeIconList>('/api/email/notification', {
+    method: 'POST',
+    data: options,
   });
 }
 
@@ -85,10 +87,10 @@ export async function updateTerminal(options?: { [key: string]: any }) {
     data: { ...options },
   });
 }
-export async function updateRule(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/terminal', {
-    method: 'PUT',
-    ...(options || {}),
+export async function updateRule(options: any) {
+  return request<API.RuleListItem>(`/api/user/update/${options.id}`, {
+    method: 'POST',
+    data: { ...options },
   });
 }
 /** 新建规则 POST /api/rule */

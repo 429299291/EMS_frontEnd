@@ -6,6 +6,7 @@ export const WeatherIcon = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_4138863_sdutv2oe6j.js', // weather icon
 });
 export const deviceStatus = ['正常', '故障', '修复中', '离线'];
+export const Identitys = ['superAdmin', 'admin', 'nomal', 'visitor'];
 export const WorkingModeStatus = ['自发自用', '经济', '应急'];
 export const WorkingModeStatusColor = ['green', 'gold', 'blue'];
 export const timeLine = [

@@ -87,7 +87,7 @@ export default {
   'pages.home.device': '设备ID',
   'pages.home.power': '功率',
   'pages.home.voltage': '电压',
-  'pages.home.critical': '临界',
+  'pages.home.critical': '关键',
   'pages.home.electricity': '电量',
   'pages.home.health': '健康度',
   'pages.home.MAX temp': '最高温度',
@@ -113,4 +113,16 @@ export default {
   'pages.home.gitee': '码云',
   'pages.home.mqtt': 'MQTT协议',
   'pages.home.MORE': '了解更多',
+  //表单名
+  'pages.home.Name': '姓名',
+  'pages.home.workingmode': '工作模式',
+  'pages.home.ID': 'ID',
+  'pages.home.supplier': '供应商',
+  'pages.home.Identity': '身份',
+  'pages.home.Email': '邮箱',
+  'pages.home.Location': '地区',
+  'pages.home.Terminal': '终端',
+  'pages.home.Permissions': '权限',
+  //底部
+  'pages.foot.document': 'API 协议文档',
 };

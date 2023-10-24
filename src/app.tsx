@@ -2,7 +2,7 @@ import Footer from '@/components/Footer';
 import { Location, Weather } from '@/components/RightContent';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import { history, Link, RunTimeLayoutConfig, SelectLang } from '@umijs/max';
+import { FormattedMessage, history, Link, RunTimeLayoutConfig, SelectLang } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestErrorConfig';
@@ -108,7 +108,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       ? [
           <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
             <LinkOutlined />
-            <span>API 协议文档</span>
+            <FormattedMessage id="pages.foot.document" defaultMessage="document" />
           </Link>,
         ]
       : [],

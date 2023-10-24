@@ -1,21 +1,19 @@
-import {
-  ProFormDateTimePicker,
-  ProFormRadio,
-  ProFormSelect,
-  ProFormText,
-  ProFormTextArea,
-  StepsForm,
-} from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
-import { Modal } from 'antd';
-import React from 'react';
+import { Identitys } from '@/constants';
+import { sendNotices } from '@/services/ant-design-pro/api';
+import { SoundOutlined } from '@ant-design/icons';
+import { Button, Drawer, Form, Input, InputNumber, Select, Tag } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import React, { useState } from 'react';
 
 export type FormValueType = {
-  target?: string;
-  template?: string;
-  type?: string;
-  time?: string;
-  frequency?: string;
+  name: string;
+  id: string;
+  userId: string;
+  status: number;
+  WorkingMode: number;
+  location: {
+    location: string;
+  };
 } & Partial<API.RuleListItem>;
 
 export type UpdateFormProps = {
@@ -25,184 +23,130 @@ export type UpdateFormProps = {
   values: Partial<API.RuleListItem>;
 };
 
-const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const intl = useIntl();
+const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
+  const [form] = Form.useForm();
+  const [formNotification] = Form.useForm();
+  const [noticeVisible, setNoticeVisible] = useState<boolean>(false);
+
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+      number: '${label} is not a valid number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+  form.setFieldsValue(props.values);
   return (
-    <StepsForm
-      stepsProps={{
-        size: 'small',
+    <Drawer
+      title="Update Account"
+      placement="right"
+      width={500}
+      onClose={() => {
+        props.onCancel();
       }}
-      stepsFormRender={(dom, submitter) => {
-        return (
-          <Modal
-            width={640}
-            bodyStyle={{ padding: '32px 40px 48px' }}
-            destroyOnClose
-            title={intl.formatMessage({
-              id: 'pages.searchTable.updateForm.ruleConfig',
-              defaultMessage: '规则配置',
-            })}
-            open={props.updateModalOpen}
-            footer={submitter}
-            onCancel={() => {
-              props.onCancel();
-            }}
-          >
-            {dom}
-          </Modal>
-        );
-      }}
-      onFinish={props.onSubmit}
+      open={props.updateModalOpen}
     >
-      <StepsForm.StepForm
-        initialValues={{
-          name: props.values.name,
-          desc: props.values.desc,
+      <Form
+        name="nest-messages"
+        form={form}
+        onFinish={(data) => {
+          props.onSubmit({ ...data, id: props.values.id });
         }}
-        title={intl.formatMessage({
-          id: 'pages.searchTable.updateForm.basicConfig',
-          defaultMessage: '基本信息',
-        })}
+        style={{ maxWidth: 600 }}
+        validateMessages={validateMessages}
       >
-        <ProFormText
-          name="name"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleName.nameLabel',
-            defaultMessage: '规则名称',
-          })}
-          width="md"
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.updateForm.ruleName.nameRules"
-                  defaultMessage="请输入规则名称！"
-                />
-              ),
-            },
-          ]}
-        />
-        <ProFormTextArea
-          name="desc"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleDesc.descLabel',
-            defaultMessage: '规则描述',
-          })}
-          placeholder={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleDesc.descPlaceholder',
-            defaultMessage: '请输入至少五个字符',
-          })}
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.updateForm.ruleDesc.descRules"
-                  defaultMessage="请输入至少五个字符的规则描述！"
-                />
-              ),
-              min: 5,
-            },
-          ]}
-        />
-      </StepsForm.StepForm>
-      <StepsForm.StepForm
-        initialValues={{
-          target: '0',
-          template: '0',
-        }}
-        title={intl.formatMessage({
-          id: 'pages.searchTable.updateForm.ruleProps.title',
-          defaultMessage: '配置规则属性',
-        })}
-      >
-        <ProFormSelect
-          name="target"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.object',
-            defaultMessage: '监控对象',
-          })}
-          valueEnum={{
-            0: '表一',
-            1: '表二',
+        <p>ID:{props.values.id}</p>
+        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+          <Input defaultValue={props.values.name} style={{ width: '170px' }} />
+        </Form.Item>
+        <Form.Item name="balance" label="balance" rules={[{ type: 'number', max: 10000000 }]}>
+          <InputNumber defaultValue={0} style={{ width: '170px' }} />
+        </Form.Item>
+        <Form.Item name="phone" label="phone" rules={[{ type: 'string', min: 11, max: 11 }]}>
+          <Input defaultValue={props.values.status} style={{ width: '170px' }} />
+        </Form.Item>
+        <Form.Item name="age" label="age" rules={[{ type: 'number', min: 1, max: 111 }]}>
+          <InputNumber defaultValue={props.values.status} />
+        </Form.Item>
+        <Form.Item name={['location', 'location']} label="location">
+          <Input defaultValue={props?.values?.location?.location} style={{ width: '170px' }} />
+        </Form.Item>
+        <Form.Item name="identity" label="identity">
+          <Select
+            defaultValue={props.values.WorkingMode}
+            style={{ width: 120 }}
+            options={Identitys.map((province, index) => ({
+              label: province,
+              value: index,
+            }))}
+          />
+        </Form.Item>
+        <Form.Item name="accessPermissions" label="Access Permissions">
+          <p>
+            {props?.values?.accessPermissions?.map((data) => {
+              return (
+                <Tag color={data === 'superAdmin' ? 'warning' : '#55acee'} key={data.id}>
+                  {data}
+                </Tag>
+              );
+            })}
+          </p>
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 0 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+          <Button
+            style={{ marginLeft: '2rem' }}
+            onClick={() => {
+              setNoticeVisible(!noticeVisible);
+            }}
+            type="primary"
+          >
+            <SoundOutlined />
+            {noticeVisible ? 'Hide Notice' : 'Notice'}
+          </Button>
+        </Form.Item>
+      </Form>
+      {/* 通知 */}
+      {noticeVisible && (
+        <Form
+          name="nest-messages"
+          form={formNotification}
+          onFinish={(data) => {
+            sendNotices({ ...data, email: props.values.email });
           }}
-        />
-        <ProFormSelect
-          name="template"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleProps.templateLabel',
-            defaultMessage: '规则模板',
-          })}
-          valueEnum={{
-            0: '规则模板一',
-            1: '规则模板二',
-          }}
-        />
-        <ProFormRadio.Group
-          name="type"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleProps.typeLabel',
-            defaultMessage: '规则类型',
-          })}
-          options={[
-            {
-              value: '0',
-              label: '强',
-            },
-            {
-              value: '1',
-              label: '弱',
-            },
-          ]}
-        />
-      </StepsForm.StepForm>
-      <StepsForm.StepForm
-        initialValues={{
-          type: '1',
-          frequency: 'month',
-        }}
-        title={intl.formatMessage({
-          id: 'pages.searchTable.updateForm.schedulingPeriod.title',
-          defaultMessage: '设定调度周期',
-        })}
-      >
-        <ProFormDateTimePicker
-          name="time"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.schedulingPeriod.timeLabel',
-            defaultMessage: '开始时间',
-          })}
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.updateForm.schedulingPeriod.timeRules"
-                  defaultMessage="请选择开始时间！"
-                />
-              ),
-            },
-          ]}
-        />
-        <ProFormSelect
-          name="frequency"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.object',
-            defaultMessage: '监控对象',
-          })}
-          width="md"
-          valueEnum={{
-            month: '月',
-            week: '周',
-          }}
-        />
-      </StepsForm.StepForm>
-    </StepsForm>
+          style={{ maxWidth: 600 }}
+          validateMessages={validateMessages}
+        >
+          <Form.Item name="type" label="Type" rules={[{ required: true }]}>
+            <Select
+              defaultValue={0}
+              style={{ width: '140px' }}
+              options={[
+                { value: 0, label: 'remind' },
+                { value: 1, label: 'notify' },
+                { value: 2, label: 'warn' },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item name="title" label="Title" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="message" label="Message" rules={[{ required: true }]}>
+            <TextArea rows={4} placeholder="maxLength is 255" maxLength={255} />
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 11 }}>
+            <Button type="primary" htmlType="submit">
+              Post notice
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
+    </Drawer>
   );
 };
 

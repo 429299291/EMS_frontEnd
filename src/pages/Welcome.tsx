@@ -652,12 +652,11 @@ const Welcome: React.FC = () => {
                       initialState.locationIndex ? initialState.locationIndex : 0
                     ].WorkingMode
                   }
-                  style={{ width: 150 }}
-                  value={
-                    initialState?.currentUser.terminals[
-                      initialState.locationIndex ? initialState.locationIndex : 0
-                    ].WorkingMode
-                  }
+                  // value={
+                  //   initialState?.currentUser.terminals[
+                  //     initialState.locationIndex ? initialState.locationIndex : 0
+                  //   ].WorkingMode
+                  // }
                   bordered={false}
                   onChange={modelHandleChange}
                   options={[
@@ -717,7 +716,7 @@ const Welcome: React.FC = () => {
               {
                 <Select
                   defaultValue={electricityChangeValue}
-                  style={{ width: 85 }}
+                  // style={{ width: 85 }}
                   onChange={electricityChange}
                   bordered={false}
                   options={[
